@@ -1,0 +1,8 @@
+﻿C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\Header.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\IHeader.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\IRespuesta.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\ResComun.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\ResException.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\Respuesta.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\RespuestaTransaccion.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\ServiceSettings.cs

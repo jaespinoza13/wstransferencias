@@ -1,0 +1,12 @@
+﻿C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\Controllers\WeatherForecastController.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\Controllers\wsTransferenciasController.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\Program.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\WeatherForecast.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\obj\Debug\net6.0\wsTransferencias.GlobalUsings.g.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\obj\Debug\net6.0\wsTransferencias.AssemblyInfo.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\obj\Debug\net6.0\wsTransferencias.MvcApplicationPartsAssemblyInfo.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\appsettings.Development.json
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\appsettings.json
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\20211204.txt
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\Properties\launchSettings.json

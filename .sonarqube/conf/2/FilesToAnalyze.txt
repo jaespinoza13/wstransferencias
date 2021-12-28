@@ -1,0 +1,4 @@
+﻿C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Dto\ConjuntoDatos.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Dto\Converting.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Dto\ReqBeneficiarios.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Dto\ResBeneficiarios.cs

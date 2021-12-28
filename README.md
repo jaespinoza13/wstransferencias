@@ -1,3 +1,2 @@
-# wsTransferencias
+# WsTransferencias
 
-Servicio de transferencias

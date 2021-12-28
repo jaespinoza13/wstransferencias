@@ -1,0 +1,2 @@
+﻿C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Log\InfoLog.cs
+C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Log\LogServicios.cs

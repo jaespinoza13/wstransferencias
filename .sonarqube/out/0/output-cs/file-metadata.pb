@@ -1,0 +1,12 @@
+P
+GC:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\Header.csutf-8Q
+HC:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\IHeader.csutf-8T
+KC:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\IRespuesta.csutf-8R
+IC:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\ResComun.csutf-8V
+MC:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\ResException.csutf-8S
+JC:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\Respuesta.csutf-8^
+UC:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\RespuestaTransaccion.csutf-8Y
+PC:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\ServiceSettings.csutf-8‚
+wC:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\obj\Debug\net6.0\wsTransferencias.Model.GlobalUsings.g.csutf-8ˆ
+}C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.csutf-8€
+uC:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Model\obj\Debug\net6.0\wsTransferencias.Model.AssemblyInfo.csutf-8

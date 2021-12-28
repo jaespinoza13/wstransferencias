@@ -1,0 +1,9 @@
+i
+`C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\Controllers\WeatherForecastController.csutf-8j
+aC:\SistemasMego\wsTransferencias_net_6\wsTransferencias\Controllers\wsTransferenciasController.csutf-8K
+BC:\SistemasMego\wsTransferencias_net_6\wsTransferencias\Program.csutf-8S
+JC:\SistemasMego\wsTransferencias_net_6\wsTransferencias\WeatherForecast.csutf-8v
+kC:\SistemasMego\wsTransferencias_net_6\wsTransferencias\obj\Debug\net6.0\wsTransferencias.GlobalUsings.g.csutf-8‚
+wC:\SistemasMego\wsTransferencias_net_6\wsTransferencias\obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.csutf-8t
+iC:\SistemasMego\wsTransferencias_net_6\wsTransferencias\obj\Debug\net6.0\wsTransferencias.AssemblyInfo.csutf-8‡
+|C:\SistemasMego\wsTransferencias_net_6\wsTransferencias\obj\Debug\net6.0\wsTransferencias.MvcApplicationPartsAssemblyInfo.csutf-8
