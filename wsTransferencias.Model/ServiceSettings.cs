@@ -26,6 +26,14 @@ namespace wsTransferencias.Model
         public string update_beneficiarios { get; set; }
         public string delete_beneficiarios { get; set; }
         public string listado_beneficiarios { get; set; }
-      
+
+        public string servicio_banred { get; set; }
+        public string user_ws_banred { get; set; }
+        public string pass_ws_banred { get; set; }
+
+        public string codigo_error_datos_incorrectos_banred { get; set; }
+        public string codigo_error_datos_incorrectos_coopmego { get; set; }
+        public string msj_error_validacion { get; set; }
+
     }
 }

@@ -27,21 +27,42 @@ namespace wsTransferencias.Neg
 
                     case "BENEFICIARIOS":
                         jsonString = JsonSerializer.Serialize(sol_tran);
-                        var req_beneficiarios = JsonSerializer.Deserialize<ReqBeneficiarios>(jsonString);                        
-                        respuesta = new BeneficiariosNeg(serviceSettings).procesar_datos_beneficiarios(req_beneficiarios,str_operacion);
+                        var req_beneficiarios = JsonSerializer.Deserialize<ReqBeneficiarios>(jsonString);
+                        respuesta = new BeneficiariosNeg(serviceSettings).procesar_datos_beneficiarios(req_beneficiarios, str_operacion);
                         break;
                     case "VALIDAR_REGISTRO_BENEFICIARIOS":
                         jsonString = JsonSerializer.Serialize(sol_tran);
                         var valida_beneficiarios = JsonSerializer.Deserialize<ReqBeneficiarios>(jsonString);
-                        respuesta = new BeneficiariosNeg(serviceSettings).validar_registro_beneficiarios(valida_beneficiarios, str_operacion); 
+                        respuesta = new BeneficiariosNeg(serviceSettings).validar_registro_beneficiarios(valida_beneficiarios, str_operacion);
 
                         break;
-                    default:
+                    case "VALIDA_TRANSFERENCIA":
+
+                        jsonString = JsonSerializer.Serialize(sol_tran);
+                        var valida_transferencia = JsonSerializer.Deserialize<ReqValidacionTransferenciaDto>(jsonString);
+                        respuesta = new TransferenciasNeg(serviceSettings).validar_transferencia(valida_transferencia, str_operacion);
+
+                        break;
+                    case "ADD_TRANSFERENCIA":
+
+
+                        jsonString = JsonSerializer.Serialize(sol_tran);
+                        var add_transferencia = JsonSerializer.Deserialize <ReqTransferencia>(jsonString);
+                        respuesta = new TransferenciasNeg(serviceSettings).add_transferencia(add_transferencia, str_operacion);
+
+                        break;
+                        //case "GET_CONSULTA_TRANSFERENCIAS":
+                        //    respuesta = get_consulta_transferencias(sol_tran);
+                        //    break;
+                        //case "GET_REIMPRESION_COMPROBANTE":
+                        //    respuesta = get_reimpresion_comprobante(sol_tran);
+                        //break;
+                        default:
                         break;
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ResException resException = new ResException()
                 {
