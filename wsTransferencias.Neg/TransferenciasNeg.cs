@@ -61,10 +61,11 @@ namespace wsTransferencias.Neg
             return respuesta;
         }
 
-        public ResTransferencia add_transferencia(ReqTransferencia req_transferencia, string str_operacion)
+        public object add_transferencia(ReqTransferencia req_transferencia, string str_operacion)
         {
             //RespuestaTransaccion respuesta = null;
-            ResTransferencia respuesta = new ResTransferencia();
+
+            var respuesta = new object();
             try
             {             
 
@@ -72,10 +73,12 @@ namespace wsTransferencias.Neg
                 {
                     case "TRN_MIS_CUENTAS_COOPMEGO":
                     case "TRN_OTRAS_CUENTAS_COOPMEGO":
-                        //respuesta = validar_transfer_interna(sol_tran);
+                        respuesta = new ResAddTransferenciaInterna();
+                        respuesta = add_transfer_interna(req_transferencia, str_operacion);
                         break;
 
                     case "TRN_EXTERNAS":
+                        respuesta = new ResTransferencia();
                         respuesta = add_transf_interbancarias(req_transferencia, str_operacion);
                         break;
 
@@ -559,6 +562,8 @@ namespace wsTransferencias.Neg
         }
 
         #endregion
+
+        #region "Transferencias internas"
         public ResValTransferenciaInterna validar_transfer_interna(ReqValidacionTransferenciaDto req_validar_transferencia, string str_operacion)
         {
             var respuesta = new ResValTransferenciaInterna();
@@ -584,6 +589,32 @@ namespace wsTransferencias.Neg
             return respuesta;
         }
 
+        public ResAddTransferenciaInterna add_transfer_interna(ReqTransferencia req_add_transferencia, string str_operacion)
+        {
+            var respuesta = new ResAddTransferenciaInterna();
+            respuesta.LlenarResHeader(req_add_transferencia);
+            req_add_transferencia.str_id_transaccion = ServiceLogs.SaveHeaderLogs<ReqTransferencia>(req_add_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);
+            respuesta.str_id_transaccion = req_add_transferencia.str_id_transaccion;
+
+            try
+            {
+                RespuestaTransaccion res_tran = new TransferenciasDat(_serviceSettings).add_transferencia_interna(req_add_transferencia);
+
+                respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals("000")) ? "OK" : "ERR";
+                respuesta.str_res_codigo = res_tran.codigo;
+                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+            }
+            catch (Exception exception)
+            {
+                ServiceLogs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception);
+                throw;
+            }
+
+            ServiceLogs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);
+            return respuesta;
+        }
+
+        #endregion
 
     }
 }
