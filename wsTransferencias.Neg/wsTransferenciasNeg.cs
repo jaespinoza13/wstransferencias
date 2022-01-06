@@ -51,13 +51,16 @@ namespace wsTransferencias.Neg
                         respuesta = new TransferenciasNeg(serviceSettings).add_transferencia(add_transferencia, str_operacion);
 
                         break;
-                        //case "GET_CONSULTA_TRANSFERENCIAS":
-                        //    respuesta = get_consulta_transferencias(sol_tran);
-                        //    break;
-                        //case "GET_REIMPRESION_COMPROBANTE":
-                        //    respuesta = get_reimpresion_comprobante(sol_tran);
-                        //break;
-                        default:
+                    case "GET_CONSULTA_TRANSFERENCIAS":
+                        string str_get_parametros = JsonSerializer.Serialize(sol_tran);
+                        var req_get_parametros = JsonSerializer.Deserialize<ReqGetTransferencias>(str_get_parametros)!;
+                        respuesta = new TransferenciasNeg(serviceSettings).get_consulta_transferencias(req_get_parametros, str_operacion);
+                        break;
+                  
+                    //case "GET_REIMPRESION_COMPROBANTE":
+                    //    respuesta = get_reimpresion_comprobante(sol_tran);
+                    //break;
+                    default:
                         break;
 
                 }

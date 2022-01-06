@@ -259,6 +259,32 @@ namespace wsTransferencias.Neg
 
         #endregion
 
+        public ResGetTransferencias get_consulta_transferencias(ReqGetTransferencias req_get_tranferencias, string str_operacion)
+        {
+            var respuesta = new ResGetTransferencias();
+            respuesta.LlenarResHeader(req_get_tranferencias);
+            req_get_tranferencias.str_id_transaccion = ServiceLogs.SaveHeaderLogs<ReqGetTransferencias>(req_get_tranferencias, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);
+            respuesta.str_id_transaccion = req_get_tranferencias.str_id_transaccion;
+
+            try
+            {
+                RespuestaTransaccion res_tran = new TransferenciasDat(_serviceSettings).get_consulta_transferencias(req_get_tranferencias);
+
+                respuesta.lst_tranferencias = Utils.Utils.ConvertConjuntoDatosToListClass<Transferencias>((ConjuntoDatos)res_tran.cuerpo);
+
+                respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals("000")) ? "OK" : "ERR";
+                respuesta.str_res_codigo = res_tran.codigo;
+                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+            }
+            catch (Exception exception)
+            {
+                ServiceLogs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception);
+                throw;
+            }
+
+            ServiceLogs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);
+            return respuesta;
+        }
 
         #region Métodos pago directo
 
