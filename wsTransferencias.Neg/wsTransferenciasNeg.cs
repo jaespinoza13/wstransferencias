@@ -51,13 +51,20 @@ namespace wsTransferencias.Neg
                         respuesta = new TransferenciasNeg(serviceSettings).add_transferencia(add_transferencia, str_operacion);
 
                         break;
-                        //case "GET_CONSULTA_TRANSFERENCIAS":
-                        //    respuesta = get_consulta_transferencias(sol_tran);
-                        //    break;
-                        //case "GET_REIMPRESION_COMPROBANTE":
-                        //    respuesta = get_reimpresion_comprobante(sol_tran);
-                        //break;
-                        default:
+                    case "GET_CTAS_BENEFICIARIO":
+
+                        jsonString = JsonSerializer.Serialize(sol_tran);
+                        var get_ctas_beneficiario = JsonSerializer.Deserialize<ReqCuentasBeneficiario>(jsonString);
+                        respuesta = new BeneficiariosNeg(serviceSettings).get_ctas_beneficiario(get_ctas_beneficiario, str_operacion);
+
+                        break;
+                    //case "GET_CONSULTA_TRANSFERENCIAS":
+                    //    respuesta = get_consulta_transferencias(sol_tran);
+                    //    break;
+                    //case "GET_REIMPRESION_COMPROBANTE":
+                    //    respuesta = get_reimpresion_comprobante(sol_tran);
+                    //break;
+                    default:
                         break;
 
                 }

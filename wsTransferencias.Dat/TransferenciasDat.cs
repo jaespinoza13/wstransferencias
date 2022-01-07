@@ -130,6 +130,7 @@ namespace wsTransferencias.Dat
                 infoLog.str_operacion = req_transferencia.str_id_servicio;
 
                 LogServicios.RegistrarTramas(str_salida_error, infoLog, str_ruta);
+                throw;
             }
             return respuesta;
         }
@@ -223,6 +224,7 @@ namespace wsTransferencias.Dat
                 infoLog.str_operacion = req_transferencia.str_id_servicio;
 
                 LogServicios.RegistrarTramas(str_salida_error, infoLog, str_ruta);
+                throw;
             }
             return respuesta;
         }
@@ -312,6 +314,7 @@ namespace wsTransferencias.Dat
                 infoLog.str_operacion = req_validar_transferencia.str_id_servicio;
 
                 LogServicios.RegistrarTramas(str_salida_error, infoLog, str_ruta);
+                throw;
             }
             return respuesta;
         }
@@ -369,6 +372,7 @@ namespace wsTransferencias.Dat
                 infoLog.str_operacion = req_transferencia.str_id_servicio;
 
                 LogServicios.RegistrarTramas(str_salida_error, infoLog, str_ruta);
+                throw;
             }
             return respuesta;
         }
@@ -393,35 +397,21 @@ namespace wsTransferencias.Dat
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@mny_monto_transfer", TipoDato = TipoDato.Decimal, ObjValue = req_validar_transferencia.dec_monto_tran.ToString() });
 
                 //Variables de auditoria
-                //ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_id_transaccion.ToString() });
-                //ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_sistema", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.str_id_sistema });
-                //ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_login.ToString() });
-                //ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_perfil", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.str_id_perfil.ToString() });
-                //ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_oficina", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.str_id_oficina.ToString() });
-                //ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_nemonico_canal", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_nemonico_canal.ToString() });
-                //ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_ip_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_ip_dispositivo.ToString() });
-                //ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_sesion", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_sesion.ToString() });
-                //ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_mac_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_mac_dispositivo.ToString() });
-
-
-                //ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_id_transaccion.ToString() });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_sistema", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.str_id_sistema });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_id_transaccion.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_sistema", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.str_id_sistema });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_login.ToString() });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_perfil", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.str_id_perfil.ToString() });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_oficina", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.str_id_oficina.ToString() });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_nem_canal", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_nemonico_canal.ToString() });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_equipo", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_ip_dispositivo.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_perfil", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.str_id_perfil.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_oficina", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.str_id_oficina.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_nemonico_canal", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_nemonico_canal.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_ip_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_ip_dispositivo.ToString() });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_sesion", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_sesion.ToString() });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_mac", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_mac_dispositivo.ToString() });
-
-
-
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_mac_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_mac_dispositivo.ToString() });
 
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_error", TipoDato = TipoDato.VarChar });
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_error_cod", TipoDato = TipoDato.Integer });
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_enviar_banred", TipoDato = TipoDato.Integer });
 
-                ds.NombreSP = "get_val_transf_interbancarias";
+                ds.NombreSP = "get_val_transf_interbancarias2";
                 ds.NombreBD = _settings.BD_megservicios;
 
                 var resultado = objClienteDal.ExecuteDataSet(ds);
@@ -450,6 +440,7 @@ namespace wsTransferencias.Dat
                 infoLog.str_operacion = req_validar_transferencia.str_id_servicio;
 
                 LogServicios.RegistrarTramas(str_salida_error, infoLog, str_ruta);
+                throw;
             }
             return respuesta;
         }
@@ -472,6 +463,12 @@ namespace wsTransferencias.Dat
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_cta_ordenante", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.int_id_cta_ordenante.ToString() });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_cta_beneficiario", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.int_id_cta_beneficiario.ToString() });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@mny_monto_transfer", TipoDato = TipoDato.Decimal, ObjValue = req_transferencia.dec_monto_tran.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_observaciones", TipoDato = TipoDato.VarChar, ObjValue = req_transferencia.str_observaciones.ToString() });
+                //ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@mny_costo_adicional", TipoDato = TipoDato.Money, ObjValue = "0" });
+               //ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_info_adicional", TipoDato = TipoDato.VarChar, ObjValue = req_transferencia.str_info_adicional.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_comprobar_transfer", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.int_id_comprobar_transfer.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_correo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = req_transferencia.str_correo_beneficiario.ToString() });
+
 
                 //Variables de auditoria
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = req_transferencia.str_id_transaccion.ToString() });
@@ -485,9 +482,11 @@ namespace wsTransferencias.Dat
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_mac_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = req_transferencia.str_mac_dispositivo.ToString() });
 
 
-                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_error", TipoDato = TipoDato.VarChar });
-                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_error_cod", TipoDato = TipoDato.Integer });
-                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_enviar_banred", TipoDato = TipoDato.Integer });
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer });
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar });
+
+                ds.NombreSP = "add_transf_interbancarias2";
+                ds.NombreBD = _settings.BD_megservicios;
 
                 var resultado = objClienteDal.ExecuteDataSet(ds);
                 var lst_valores = new List<ParametroSalidaValores>();
@@ -499,8 +498,6 @@ namespace wsTransferencias.Dat
                 respuesta.codigo = str_codigo.ToString().Trim().PadLeft(3, '0');
                 respuesta.cuerpo = Funciones.ObtenerDatos(resultado);
                 respuesta.diccionario.Add("str_error", str_error.ToString());
-
-
 
             }
             catch (Exception exception)
@@ -515,6 +512,7 @@ namespace wsTransferencias.Dat
                 infoLog.str_operacion = req_transferencia.str_id_servicio;
 
                 LogServicios.RegistrarTramas(str_salida_error, infoLog, str_ruta);
+                throw;
             }
             return respuesta;
         }
@@ -620,7 +618,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_error", TipoDato = TipoDato.VarChar });
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_error_cod", TipoDato = TipoDato.Integer });
 
-                ds.NombreSP = "set_envio_transf_por_spi";
+                ds.NombreSP = "set_envio_transf_por_spi2";
                 ds.NombreBD = _settings.BD_megservicios;
 
                 var resultado = objClienteDal.ExecuteNonQuery(ds);
@@ -648,6 +646,7 @@ namespace wsTransferencias.Dat
                 infoLog.str_operacion = req_transferencia.str_id_servicio;
 
                 LogServicios.RegistrarTramas(str_salida_error, infoLog, str_ruta);
+                throw;
             }
             return respuesta;
         }

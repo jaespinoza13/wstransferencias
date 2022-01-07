@@ -402,5 +402,61 @@ namespace wsTransferencias.Dat
             return respuesta;
         }
 
+        public RespuestaTransaccion get_ctas_beneficiario (ReqCuentasBeneficiario obj_beneficiario)
+        {
+            RespuestaTransaccion respuesta = new RespuestaTransaccion();
+
+            try
+            {
+                DatosSolicitud ds = new DatosSolicitud();
+
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_ente.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_nemo_tipo_transferencia", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_nemo_tipo_transferencia.ToString() });            
+
+                //Variables de auditoria
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_id_transaccion.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_sistema", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.str_id_sistema });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_login.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_perfil", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.str_id_perfil.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_oficina", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.str_id_oficina.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_nemonico_canal", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_nemonico_canal.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_ip_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_ip_dispositivo.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_sesion", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_sesion.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_mac_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_mac_dispositivo.ToString() });
+
+
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar });
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer });
+
+                ds.NombreSP = "get_ctas_beneficiario";
+                ds.NombreBD = _settings.BD_megservicios;
+
+                var resultado = objClienteDal.ExecuteNonQuery(ds);
+                var lst_valores = new List<ParametroSalidaValores>();
+
+                foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add(item);
+                var str_codigo = lst_valores.Find(x => x.StrNameParameter == "@int_o_error_cod").ObjValue;
+                var str_error = lst_valores.Find(x => x.StrNameParameter == "@str_o_error").ObjValue.Trim();
+
+                respuesta.codigo = str_codigo.ToString().Trim().PadLeft(3, '0');
+                respuesta.cuerpo = resultado.NumAfectados;
+                respuesta.diccionario.Add("str_error", str_error.ToString());
+
+            }
+            catch (Exception exception)
+            {
+                respuesta.codigo = "001";
+                respuesta.diccionario.Add("str_error", exception.ToString());
+
+                infoLog.str_id_transaccion = obj_beneficiario.str_id_transaccion;
+                infoLog.str_tipo = str_salida_error;
+                infoLog.str_objeto = exception;
+                infoLog.str_metodo = MethodBase.GetCurrentMethod()!.Name;
+                infoLog.str_operacion = obj_beneficiario.str_id_servicio;
+
+                LogServicios.RegistrarTramas(str_salida_error, infoLog, str_ruta);
+            }
+            return respuesta;
+        }
     }
 }

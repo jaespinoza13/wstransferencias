@@ -113,12 +113,9 @@ namespace wsTransferencias.Neg
                         //ReqTransferencia req_cabecera = (ReqTransferencia)req_validar_transferencia.;
                         ReqTransferencia obj_transferencia = JsonConvert.DeserializeObject<ReqTransferencia>(JsonConvert.SerializeObject(req_validar_transferencia));
 
-
-                        Cabecera cabecera = llenar_cabecera(obj_transferencia);
-                        //LogServicios.RegistrarTramas("s: validaciones_pago_directo >", sol_tran, ruta_log);
+                        Cabecera cabecera = llenar_cabecera(obj_transferencia);                       
                         respuesta_validaciones_pago_directo = validaciones_pago_directo(respuesta, cabecera);
-                        //LogServicios.RegistrarTramas("r:validaciones_pago_directo < ", respuesta_validaciones_pago_directo, ruta_log);
-
+                      
                         if (respuesta_validaciones_pago_directo.codigo == "0000" || respuesta_validaciones_pago_directo.codigo == "000")
                         {
                             return respuesta;
@@ -126,26 +123,16 @@ namespace wsTransferencias.Neg
                         else
                         {
                             RespuestaTransaccion respuesta_cambio_tipo_transfer = new RespuestaTransaccion();
-                            //Se actualiza el registro para que la transacción se enviada por SPI
-                            //LogServicios.RegistrarTramas("s: set_envio_transf_por_spi >", sol_tran, ruta_log);
+                            //Se actualiza el registro para que la transacción se enviada por SPI                            
                             respuesta_cambio_tipo_transfer = new TransferenciasDat(_serviceSettings).set_envio_transf_por_spi(obj_transferencia);
-                            //LogServicios.RegistrarTramas("r:set_envio_transf_por_spi < ", respuesta_cambio_tipo_transfer, ruta_log);
-
+                           
                             if (respuesta_cambio_tipo_transfer.codigo == "000")
                             {
-                                //Se actualiza el campo in_enviar_banred para estblecer que la transf. será enviada por SPI.
-                                //datos_validados.int_enviar_banred = 0;
-                                // respuesta.cuerpo = datos_validados;
                                 respuesta.int_enviar_banred = 0;
                             }
 
                             if (respuesta_validaciones_pago_directo.codigo == _serviceSettings.codigo_error_datos_incorrectos_banred)//ConfigurationManager.AppSettings.Get("codigo_error_datos_incorrectos_banred"))
-                            {
-                                //RespuestaTransaccion respuesta_error_validacion = new RespuestaTransaccion();
-
-                                //respuesta_error_validacion.codigo = ConfigurationManager.AppSettings.Get("codigo_error_datos_incorrectos_coopmego");
-                                //respuesta_error_validacion.diccionario.Add("ERROR", ConfigurationManager.AppSettings.Get("msj_error_validacion"));
-                                //return respuesta_error_validacion;
+                            {                               
 
                                 ResTransferencia respuesta_error_validacion = new ResTransferencia();
                                 respuesta_error_validacion.str_res_codigo = _serviceSettings.codigo_error_datos_incorrectos_coopmego;
@@ -189,19 +176,6 @@ namespace wsTransferencias.Neg
 
                 if (res_tran.codigo.Equals("000"))
                 {
-                    //Mapear los datos obtenidos a una clase
-                    //DataSet ds_datos_respuesta = (DataSet)respuesta.cuerpo;
-
-                    ////Datos de la cuenta
-                    //DataTable dt_datos_validados = ds_datos_respuesta.Tables[0];
-                    //List<TransferenciaDto> list_datos_validados = new Mapper<TransferenciaDto>().Map(dt_datos_validados);
-                    //TransferenciaDto datos_validados = list_datos_validados.First();
-
-                    ////Datos del débito
-                    //DataTable dt_datos_debito = ds_datos_respuesta.Tables[1];
-                    //List<TransferenciaDto> list_datos_debito = new Mapper<TransferenciaDto>().Map(dt_datos_debito);
-                    //TransferenciaDto datos_debito = list_datos_debito.First();
-
                     ConjuntoDatos ds_datos_respuesta = (ConjuntoDatos)res_tran.cuerpo;
                     ResTransferencia datos_validados = new ResTransferencia();
                     ResTransferencia datos_debito = new ResTransferencia();
@@ -223,25 +197,24 @@ namespace wsTransferencias.Neg
                     datos_validados.str_fecha_transac = datos_debito.str_fecha_transac;
 
                     respuesta = datos_validados;
-
-                    //int int_enviar_banred = Convert.ToInt32(respuesta.diccionario["str_enviar_banred"]);
+                                      
 
                     if (datos_validados.int_enviar_banred == 1 && datos_validados.int_estado == 4) //Se debe tratar de enviar por banred
                     {
                         RespuestaTransaccion respuesta_pago_banred = new RespuestaTransaccion();
 
                         Cabecera cabecera = llenar_cabecera(req_transferencia);
-
-                        // LogServicios.RegistrarTramas("s: ejecutar_pago_directo >", sol_tran, ruta_log);
-                        respuesta_pago_banred = ejecutar_pago_directo(datos_validados, cabecera);
-                        // LogServicios.RegistrarTramas("r:ejecutar_pago_directo < ", respuesta_pago_banred, ruta_log);
-
+                        
+                        respuesta_pago_banred = ejecutar_pago_directo(datos_validados, cabecera);                      
 
                         //respuesta.cuerpo = datos_validados;
                         respuesta = datos_validados;
                     }
                     else
                     {
+                        respuesta.str_res_estado_transaccion = res_tran.codigo.Equals("000") ? "OK" : "ERR";
+                        respuesta.str_res_codigo = res_tran.codigo;
+                        respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
                         return respuesta;
                     }
                 }
@@ -392,12 +365,8 @@ namespace wsTransferencias.Neg
                 sol_tran.cuerpo = datos_para_validacion_banred;
                 sol_tran.cabecera = cabecera;
 
-                //Enviar a validar con Banred
-                //LogServicios.RegistrarTramas("s:> Envio_banred_validar: ", sol_tran, ruta_log);
-                //RespuestaTransaccion respuesta_banred = new RespuestaTransaccion();
                 respuesta = ProcesarSolicitud(sol_tran, "");
-                //LogServicios.RegistrarTramas("r:< Envio_banred_validar: ", respuesta, ruta_log);
-
+               
             }
             catch (Exception exception)
             {
@@ -413,11 +382,11 @@ namespace wsTransferencias.Neg
             try
             {
 
-                string url = _serviceSettings.servicio_banred; //ConfigurationManager.AppSettings["ws_servicio_banred"];
+                string url = _serviceSettings.servicio_banred; 
                 string content_type = ApplicationContenTypes.JSON_UTF8;
 
-                string str_usuario = _serviceSettings.user_ws_banred; //ConfigurationManager.AppSettings["usuario_servicio_banred"];
-                string str_contrasenia = _serviceSettings.pass_ws_banred; //ConfigurationManager.AppSettings["clave_servicio_banred"];
+                string str_usuario = _serviceSettings.user_ws_banred; 
+                string str_contrasenia = _serviceSettings.pass_ws_banred; 
 
                 RestClient rest_client = new RestClient(url, content_type, str_usuario, str_contrasenia);
 
@@ -452,26 +421,12 @@ namespace wsTransferencias.Neg
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
             {
-                /* 
-                LogServicios.RegistrarTramas("s:> validaciones_pago_directo: ", sol_tran, ruta_log);
-                TransferenciaDto datos_transferencia = (TransferenciaDto)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(sol_tran.cuerpo), (typeof(TransferenciaDto)));
-
-                PagoDirectoDat pago_dat = new PagoDirectoDat();
-                respuesta = pago_dat.validaciones_pago_directo(datos_transferencia, sol_tran.cabecera);
-                LogServicios.RegistrarTramas("r:< validaciones_pago_directo: ", respuesta, ruta_log);
-                */
+               
 
                 respuesta.cuerpo = datos_validados; //Se asigna nuevamente para que no se requiera deserealizarlo en un list TransferenciaDto
 
-                //  Transaccion datos_para_validacion_banred = new Transaccion();
-
-                //datos_para_validacion_banred.str_tipo_tran = "CON";
-                //Revisar la obtención de este campo "int_secuencial"
-
+             
                 Transaccion datos_para_validacion_banred = new Transaccion();
-
-                //datos_para_validacion_banred.str_tipo_tran = "CON";
-                //Revisar la obtención de este campo "int_secuencial"
                 datos_para_validacion_banred.int_secuencial = datos_validados.int_secuencial;
 
                 datos_para_validacion_banred.int_fi_aut = datos_validados.int_fi_aut;
@@ -514,12 +469,9 @@ namespace wsTransferencias.Neg
                 SolicitudTransaccion sol_tran = new SolicitudTransaccion();
                 sol_tran.cuerpo = datos_para_validacion_banred;
                 sol_tran.cabecera = cabecera;
-
-                //Enviar a validar con Banred
-               // LogServicios.RegistrarTramas("s:> Envio_banred_validar: ", sol_tran, ruta_log);
+                               
                 RespuestaTransaccion respuesta_banred = new RespuestaTransaccion();
-                respuesta_banred = ProcesarSolicitud(sol_tran, "");
-               // LogServicios.RegistrarTramas("r:< Envio_banred_validar: ", respuesta_banred, ruta_log);
+                respuesta_banred = ProcesarSolicitud(sol_tran, "");              
 
             }
             catch (Exception exception)

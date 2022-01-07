@@ -181,5 +181,35 @@ namespace wsTransferencias.Neg
             Utils.ServiceLogs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);
             return respuesta;
         }
+
+
+        public ResCuentasBeneficiario get_ctas_beneficiario(ReqCuentasBeneficiario req_cuentas_beneficiario, string str_operacion)
+        {
+            var respuesta = new ResCuentasBeneficiario();
+            respuesta.LlenarResHeader(req_cuentas_beneficiario);
+            req_cuentas_beneficiario.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqCuentasBeneficiario>(req_cuentas_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);
+            respuesta.str_id_transaccion = req_cuentas_beneficiario.str_id_transaccion;
+
+            try
+            {
+
+                RespuestaTransaccion res_tran = new BeneficiariosDat(_serviceSettings).get_ctas_beneficiario(req_cuentas_beneficiario);
+                respuesta.str_res_estado_transaccion = res_tran.codigo.Equals("000") ? "OK" : "ERR";
+                respuesta.str_res_codigo = res_tran.codigo;
+                respuesta.lst_cuentas_beneficiario = Utils.Utils.ConvertConjuntoDatosToListClass<ResCuentasBeneficiario.CuentasBeneficiario>((ConjuntoDatos)res_tran.cuerpo);
+                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+
+            }
+            catch (Exception exception)
+            {
+                Utils.ServiceLogs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception);
+                throw;
+            }
+
+            Utils.ServiceLogs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);
+            return respuesta;
+        }
+
+
     }
 }

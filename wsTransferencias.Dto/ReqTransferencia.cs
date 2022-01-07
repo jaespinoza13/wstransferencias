@@ -58,5 +58,6 @@ namespace wsTransferencias.Dto
         public int int_estado { get; set; }
         public int int_enviar_banred { get; set; }
         public string str_nemonico_tipo_transferencia { get; set; }
+        public string str_correo_beneficiario { get; set; }
     }
 }
