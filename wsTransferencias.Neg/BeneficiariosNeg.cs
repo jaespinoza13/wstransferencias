@@ -48,85 +48,30 @@ namespace wsTransferencias.Neg
 
 
                 if (req_beneficiarios.str_operacion == _serviceSettings.add_beneficiarios)
-                {
-                    //infoLog.str_tipo = str_entrada;
-                    //infoLog.str_operacion = str_operacion;
-                    //infoLog.str_objeto = req_beneficiarios;
-                    //infoLog.str_metodo = "add_cuentas_beneficiarios";
-                    //LogServicios.RegistrarTramas(str_entrada, infoLog, str_ruta);
+                {                   
                           
                     res_tran = new BeneficiariosDat(_serviceSettings).add_cuentas_beneficiarios(req_beneficiarios);
-
-                    //infoLog.str_tipo = str_salida;
-                    //infoLog.str_operacion = str_operacion;
-                    //infoLog.str_objeto = req_beneficiarios;
-                    //infoLog.str_metodo = "add_cuentas_beneficiarios";
-                    //LogServicios.RegistrarTramas(str_salida, infoLog, str_ruta);
+                   
                 }
                 else if (req_beneficiarios.str_operacion == _serviceSettings.update_beneficiarios)
                 {
-
-                    //infoLog.str_tipo = str_entrada;
-                    //infoLog.str_operacion = str_operacion;
-                    //infoLog.str_objeto = req_beneficiarios;
-                    //infoLog.str_metodo = "update_cuentas_beneficiarios";
-                    //LogServicios.RegistrarTramas(str_entrada, infoLog, str_ruta);
                   
                     res_tran = new BeneficiariosDat(_serviceSettings).update_cuentas_beneficiarios(req_beneficiarios);                    
                    
-                    //infoLog.str_tipo = str_salida;
-                    //infoLog.str_operacion = str_operacion;
-                    //infoLog.str_objeto = req_beneficiarios;
-                    //infoLog.str_metodo = "update_cuentas_beneficiarios";
-                    //LogServicios.RegistrarTramas(str_salida, infoLog, str_ruta);
-
+               
                 }
                 else if (req_beneficiarios.str_operacion == _serviceSettings.delete_beneficiarios)
-                {                    
-                    //infoLog.str_tipo = str_salida;
-                    //infoLog.str_operacion = str_operacion;
-                    //infoLog.str_objeto = req_beneficiarios;
-                    //infoLog.str_metodo = "delete_cuentas_beneficiarios";
-                    //LogServicios.RegistrarTramas(str_entrada, infoLog, str_ruta);
-
+                {                   
+                    
                     res_tran = new BeneficiariosDat(_serviceSettings).delete_cuentas_beneficiarios(req_beneficiarios); 
                     
-                    //infoLog.str_tipo = str_entrada;
-                    //infoLog.str_operacion = str_operacion;
-                    //infoLog.str_objeto = req_beneficiarios;
-                    //infoLog.str_metodo = "delete_cuentas_beneficiarios";
-                    //LogServicios.RegistrarTramas(str_salida, infoLog, str_ruta);
-
 
                 }
                 else if (req_beneficiarios.str_operacion == _serviceSettings.listado_beneficiarios)
                 {
-                    //infoLog.str_tipo = str_salida;
-                    //infoLog.str_operacion = str_operacion;
-                    //infoLog.str_objeto = req_beneficiarios;
-                    //infoLog.str_metodo = "get_datos_beneficiarios";
-                    //LogServicios.RegistrarTramas(str_entrada, infoLog, str_ruta); 
-                    
+                                      
                     res_tran = new BeneficiariosDat(_serviceSettings).get_datos_beneficiarios(req_beneficiarios); 
                     
-                    //infoLog.str_tipo = str_entrada;
-                    //infoLog.str_operacion = str_operacion;
-                    //infoLog.str_objeto = req_beneficiarios;
-                    //infoLog.str_metodo = "get_datos_beneficiarios";
-                    //LogServicios.RegistrarTramas(str_salida, infoLog, str_ruta);
-                                        
-                    //ConjuntoDatos ds_posicion_consolidada = (ConjuntoDatos)res_tran.cuerpo;
-
-                    //List<Beneficiario> lst_beneficiarios = new List<Beneficiario>();
-
-                    //foreach (var item in ds_posicion_consolidada.lst_tablas[0].lst_filas)
-                    //{
-                    //    Beneficiario obj = (Beneficiario)Converting.MapDictToObj(item.nombre_valor, typeof(Beneficiario));
-                    //    lst_beneficiarios.Add(obj);
-                    //}
-
-                    //respuesta = Utils.Utils.ConvertConjuntoDatosToListClass<ResBeneficiarios>((ConjuntoDatos)res_tran.cuerpo);
-
                     respuesta.lst_beneficiarios = Utils.Utils.ConvertConjuntoDatosToListClass<Beneficiario>((ConjuntoDatos)res_tran.cuerpo);
                 }
 
@@ -148,14 +93,7 @@ namespace wsTransferencias.Neg
 
         public ResBeneficiarios validar_registro_beneficiarios(ReqBeneficiarios validar_beneficiarios, string str_operacion)
         {
-            //var respuesta = new ResBeneficiarios();
-            //respuesta.LlenarResHeader(validar_beneficiarios);
-            //infoLog.str_tipo = str_entrada;
-            //infoLog.str_operacion = str_operacion;
-            //infoLog.str_objeto = validar_beneficiarios;
-            //infoLog.str_metodo = "validar_registro_beneficiarios";
-            //LogServicios.RegistrarTramas(str_entrada, infoLog, str_ruta);
-
+            
             var respuesta = new ResBeneficiarios();
             respuesta.LlenarResHeader(validar_beneficiarios);
             validar_beneficiarios.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqBeneficiarios>(validar_beneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);
