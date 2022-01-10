@@ -256,7 +256,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar });
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer });
 
-                ds.NombreSP = "get_datos_beneficiarios_v2";
+                ds.NombreSP = "get_datos_beneficiarios2";
                 ds.NombreBD = _settings.BD_megservicios;
 
                 var resultado = objClienteDal.ExecuteDataSet(ds);
