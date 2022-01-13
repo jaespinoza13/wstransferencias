@@ -11,7 +11,6 @@ namespace wsTransferencias.Dto
     {      
 
     }
-
   
     
 }

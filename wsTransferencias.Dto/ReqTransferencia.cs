@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using wsTransferencias.Model;
+﻿using wsTransferencias.Model;
 
 namespace wsTransferencias.Dto
 {
@@ -40,8 +35,6 @@ namespace wsTransferencias.Dto
         public int int_secuencial_cobis { get; set; }
         public string str_info_adicional { get; set; }
         public decimal dec_monto_tran { get; set; }
-        //[Column("dcm_monto_transfer")]
-        //public decimal dcm_monto_transfer { get; set; }
         public int int_id_cta_beneficiario { get; set; }
 
         public decimal dec_comision { get; set; }

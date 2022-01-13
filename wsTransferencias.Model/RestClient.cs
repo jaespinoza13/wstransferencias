@@ -11,9 +11,9 @@ namespace wsTransferencias.Model
 {
     public class RestClient
     {
-        private Dictionary<string, string> headers = new Dictionary<string, string>();
-        private string url_request;
-        private string content_type;
+        private readonly Dictionary<string, string> headers = new Dictionary<string, string>();
+        private readonly string url_request;
+        private readonly string content_type;
 
         public RestClient(string url_request, string content_type)
         {
@@ -44,7 +44,9 @@ namespace wsTransferencias.Model
         {
             try
             {
+#pragma warning disable SYSLIB0014 // El tipo o el miembro están obsoletos
                 HttpWebRequest web_request = (HttpWebRequest)WebRequest.Create(url_request);
+#pragma warning restore SYSLIB0014 // El tipo o el miembro están obsoletos
                 web_request.Method = "POST";
                 web_request.ContentType = content_type;
 
@@ -76,8 +78,7 @@ namespace wsTransferencias.Model
             }
             catch (Exception ex)
             {
-                //Log.LogServicios.RegistrarTramas()
-                throw;
+                throw new ArgumentNullException(ex.ToString());
             }
         }
 
@@ -105,9 +106,9 @@ namespace wsTransferencias.Model
                 };
                 string json_in = JsonConvert.SerializeObject(obj_info_entrada, serializerSettings);
 
-                Dictionary<string, string> parametros = (Dictionary<string, string>)JsonConvert.DeserializeObject(json_in, typeof(Dictionary<string, string>));
+                var parametros = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(json_in);
 
-                var httpContent = new FormUrlEncodedContent(parametros);
+                var httpContent = new FormUrlEncodedContent(parametros!);
 
                 HttpResponseMessage response = client.PostAsync("", httpContent).Result;
                 if (response.IsSuccessStatusCode)
@@ -116,13 +117,12 @@ namespace wsTransferencias.Model
                 }
                 else
                 {
-                    throw new Exception(string.Format("{0},({1})", (int)response.StatusCode, response.Content.ReadAsStringAsync().Result));
+                    throw new Exception(string.Format("{0},({1})", (int)response.StatusCode, response.Content.ReadAsStringAsync()!.Result));
                 }
             }
             catch (Exception ex)
             {
-                //Log.LogServicios.RegistrarTramas()
-                throw;
+                throw new ArgumentNullException(ex.ToString());
             }
         }
 
@@ -134,7 +134,9 @@ namespace wsTransferencias.Model
         {
             try
             {
+#pragma warning disable SYSLIB0014 // El tipo o el miembro están obsoletos
                 HttpWebRequest web_request = (HttpWebRequest)WebRequest.Create(url_request);
+#pragma warning restore SYSLIB0014 // El tipo o el miembro están obsoletos
                 web_request.Method = "GET";
                 web_request.ContentType = content_type;
 
@@ -144,10 +146,6 @@ namespace wsTransferencias.Model
                     web_request.Headers.Add(item.Key, item.Value);
                 }
 
-                //JsonSerializerSettings serializerSettings = new JsonSerializerSettings
-                //{
-                //    NullValueHandling = NullValueHandling.Ignore
-                //};                
 
                 //Send a request and wait for response.
                 HttpWebResponse response = (HttpWebResponse)web_request.GetResponse();
@@ -159,8 +157,7 @@ namespace wsTransferencias.Model
             }
             catch (Exception ex)
             {
-                //Log.LogServicios.RegistrarTramas()
-                throw;
+                throw new ArgumentNullException(ex.ToString());
             }
         }
     }

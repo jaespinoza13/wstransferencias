@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace wsTransferencias.Log
 {
-    public class LogServicios
+    public static class LogServicios
     {
         private static object objetoBloqueo = new object();
         private static object objetoBloqueoJson = new object();
@@ -29,7 +29,7 @@ namespace wsTransferencias.Log
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                throw new ArgumentNullException(ex.ToString());
             }
 
         }
@@ -39,19 +39,26 @@ namespace wsTransferencias.Log
             {
                 lock (objetoBloqueoJson)
                 {
-                    string fileName = rutaArchivo + DateTime.Now.ToString("yyyyMMdd") + ".txt";
+                    if (!File.Exists(rutaArchivo))
+                    {
+                        Directory.CreateDirectory(rutaArchivo);
+                    }
+                    string fileName = Path.Combine(rutaArchivo, DateTime.Now.ToString("yyyyMMdd") + ".txt");
+
+                    
                     using (var fs = File.Open(fileName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
                     {
                         using (var writer = new StreamWriter(fs))
                         {
                             writer.WriteLine(DateTime.Now.ToString("HHmmssff") + " " + str_tipo + JsonConvert.SerializeObject(obj) + " ");
                         }
+                        fs.Close();
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                throw new ArgumentNullException(ex.ToString());
             }
 
         }

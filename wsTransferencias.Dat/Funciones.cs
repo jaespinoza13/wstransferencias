@@ -1,17 +1,16 @@
 ﻿using AccesoDatosGrpcAse.Neg;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using wsTransferencias.Dto;
-using Fila = AccesoDatosGrpcAse.Neg.Fila;
 
 namespace wsTransferencias.Dat
 {
-    public class Funciones
+    public static class Funciones
     {
-        public static ConjuntoDatos ObtenerDatos(DatosRespuesta resultado)
+        /// <summary>
+        /// Obtiene el conjunto de datos formateados
+        /// </summary>
+        /// <param name="resultado"></param>
+        /// <returns></returns>
+        public static ConjuntoDatos ObtenerDatos ( DatosRespuesta resultado )
         {
             ConjuntoDatos cd = new ConjuntoDatos();
             var lst_tablas = new List<Tabla>();
@@ -24,9 +23,9 @@ namespace wsTransferencias.Dat
 
                     for (int j = 0; j < resultado.ListaTablas[k].ListaFilas[i].ListaColumnas.Count; j++)
                     {
+
                         fila.nombre_valor.Add(resultado.ListaTablas[k].ListaFilas[i].ListaColumnas[j].NombreCampo, resultado.ListaTablas[k].ListaFilas[i].ListaColumnas[j].Valor);
                     }
-
                     lst_filas.Add(new Dto.Fila { nombre_valor = fila.nombre_valor });
                 }
                 lst_tablas.Add(new Tabla { lst_filas = lst_filas });
@@ -34,5 +33,8 @@ namespace wsTransferencias.Dat
             cd.lst_tablas = lst_tablas;
             return cd;
         }
+
+
+       
     }
 }

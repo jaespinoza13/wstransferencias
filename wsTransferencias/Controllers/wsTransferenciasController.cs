@@ -3,27 +3,33 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using wsTransferencias.Model;
 using wsTransferencias.Neg;
+using wsTransferencias.Neg.Utils;
 
 namespace wsTransferencias.Controllers
 {
-    [Route("api/[controller]")]
+    [Route( "api/[controller]" )]
     [ApiController]
-    public class wsTransferenciasController : ControllerBase
+    public class WsTransferenciasController : ControllerBase
     {
-        private readonly ServiceSettings serviceSettings;
-        public wsTransferenciasController(IOptionsMonitor<ServiceSettings> settings)
+        private readonly SettingsApi _settings;
+        public WsTransferenciasController ( IOptionsMonitor<SettingsApi> settings, IWebHostEnvironment webHost )
         {
-            serviceSettings = settings.CurrentValue;
+            _settings = settings.CurrentValue;
+            string path_logs = webHost.WebRootPath + _settings.path_logs_transferencias;
+            _settings.path_logs_transferencias = path_logs;
+            if(DateTime.Compare( DateTime.Now, LoadConfigService.dt_fecha_codigos.AddDays( 1 ) ) > 0 || LoadConfigService.lst_errores.Count <= 0)
+            {
+                LoadConfigService.LoadConfiguration( _settings );
+            }
         }
 
         // POST api/<wsConsultas>
         [HttpPost]
-        public IActionResult Transaccion(Object raw, string str_operacion)
+        public IActionResult Transaccion ( Object raw, string str_operacion )
         {
-            object respuesta = new object();
-            wsTransferenciasNeg objConsultas = new wsTransferenciasNeg(serviceSettings);
-            respuesta = objConsultas.procesarSolicitud(raw, str_operacion);
-            return Ok(respuesta);
+            WsTransferenciasNeg objConsultas = new WsTransferenciasNeg( _settings );
+            object respuesta = objConsultas.procesarSolicitud( raw, str_operacion );
+            return Ok( respuesta );
         }
 
     }

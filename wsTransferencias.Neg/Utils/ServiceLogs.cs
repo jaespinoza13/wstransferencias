@@ -4,19 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using wsTransferencias.Dat;
+using wsTransferencias.Dto;
 using wsTransferencias.Log;
 using wsTransferencias.Model;
 
 namespace wsTransferencias.Neg.Utils
 {
-    public class ServiceLogs
+    public static class ServiceLogs
     {
         private static InfoLog infoLog;
-        static ServiceSettings serviceSettings;
-        public ServiceLogs(ServiceSettings settings)
+        static SettingsApi _settingsApi;
+        public static void Init ( SettingsApi settings )
         {
-            serviceSettings = settings;
-            infoLog.str_webservice = "wsConsultas";
+            _settingsApi = settings;
+            infoLog.str_webservice = "wsTransferencias";
         }
 
         /// <summary>
@@ -28,7 +29,7 @@ namespace wsTransferencias.Neg.Utils
         /// <param name="str_clase"></param>
         /// <returns></returns>
         /// 
-        public static string SaveHeaderLogs<T>(T transaction, String str_operacion, String str_metodo, String str_clase)
+        public static string SaveHeaderLogs<T> ( T transaction, String str_operacion, String str_metodo, String str_clase )
         {
             string str_id_transaccion = String.Empty;
 
@@ -38,11 +39,11 @@ namespace wsTransferencias.Neg.Utils
             infoLog.str_metodo = str_metodo;
             infoLog.str_fecha = DateTime.Now;
 
-            RespuestaTransaccion res_tran_logs = new LogsMongoDat(serviceSettings).GuardarCabeceraMongo(transaction);
-            str_id_transaccion = res_tran_logs.codigo.Equals("000") ? (String)res_tran_logs.cuerpo : Utils.GeneraCadenaAleatoria();
+            RespuestaTransaccion res_tran_logs = new LogsMongoDat( _settingsApi ).GuardarCabeceraMongo( transaction );
+            str_id_transaccion = res_tran_logs.codigo.Equals( "000" ) ? (String) res_tran_logs.cuerpo : Utils.GeneraCadenaAleatoria();
             infoLog.str_id_transaccion = str_id_transaccion;
             infoLog.str_tipo = "s:<";
-            LogServicios.RegistrarTramas(infoLog.str_tipo, infoLog, serviceSettings.path_logs_consultas);
+            LogServicios.RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_transferencias );
 
             return str_id_transaccion;
         }
@@ -56,7 +57,7 @@ namespace wsTransferencias.Neg.Utils
         /// <param name="str_clase"></param>
         /// <returns></returns>
         /// 
-        public static void SaveResponseLogs(ResComun transaction, String str_operacion, String str_metodo, String str_clase)
+        public static void SaveResponseLogs ( ResComun transaction, String str_operacion, String str_metodo, String str_clase )
         {
             infoLog.str_clase = str_clase;
             infoLog.str_operacion = str_operacion;
@@ -64,11 +65,11 @@ namespace wsTransferencias.Neg.Utils
             infoLog.str_metodo = str_metodo;
             infoLog.str_fecha = DateTime.Now;
 
-            RespuestaTransaccion res_tran_logs = new LogsMongoDat(serviceSettings).GuardarRespuestaMongo(transaction);
-            string str_id_transaccion = res_tran_logs.codigo.Equals("000") ? (String)res_tran_logs.cuerpo : Utils.GeneraCadenaAleatoria();
+            RespuestaTransaccion res_tran_logs = new LogsMongoDat( _settingsApi ).GuardarRespuestaMongo( transaction );
+            string str_id_transaccion = res_tran_logs.codigo.Equals( "000" ) ? (String) res_tran_logs.cuerpo : Utils.GeneraCadenaAleatoria();
             infoLog.str_id_transaccion = str_id_transaccion;
             infoLog.str_tipo = "r:>";
-            LogServicios.RegistrarTramas(infoLog.str_tipo, infoLog, serviceSettings.path_logs_consultas);
+            LogServicios.RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_transferencias );
         }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace wsTransferencias.Neg.Utils
         /// <param name="obj_error"></param>
         /// <returns></returns>
         /// 
-        public static void SaveExceptionLogs(ResComun transaction, String str_operacion, String str_metodo, String str_clase, Object obj_error)
+        public static void SaveExceptionLogs ( ResComun transaction, String str_operacion, String str_metodo, String str_clase, Object obj_error )
         {
             string str_id_transaccion = String.Empty;
 
@@ -91,11 +92,49 @@ namespace wsTransferencias.Neg.Utils
             infoLog.str_metodo = str_metodo;
             infoLog.str_fecha = DateTime.Now;
 
-            RespuestaTransaccion res_tran_logs = new LogsMongoDat(serviceSettings).GuardarExcepcionesMongo(transaction, obj_error);
-            str_id_transaccion = res_tran_logs.codigo.Equals("000") ? (String)res_tran_logs.cuerpo : Utils.GeneraCadenaAleatoria();
+            RespuestaTransaccion res_tran_logs = new LogsMongoDat( _settingsApi ).GuardarExcepcionesMongo( transaction, obj_error );
+            str_id_transaccion = res_tran_logs.codigo.Equals( "000" ) ? (String) res_tran_logs.cuerpo : Utils.GeneraCadenaAleatoria();
             infoLog.str_id_transaccion = str_id_transaccion;
             infoLog.str_tipo = "e:<";
-            LogServicios.RegistrarTramas(infoLog.str_tipo, infoLog, serviceSettings.path_logs_consultas);
+            LogServicios.RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_transferencias );
+        }
+
+
+        /// <summary>
+        /// Guarda en mongodb la respuesta de la petición
+        /// </summary>
+        /// <param name="Transaccion"></param>
+        /// <param name="str_operacion"></param>
+        /// <param name="str_metodo"></param>
+        /// <param name="str_clase"></param>
+        /// <returns></returns>
+        /// 
+        public static string SaveAmenazasLogs ( ValidacionInyeccion validacion, String str_operacion, String str_metodo, String str_clase )
+        {
+            string str_id_transaccion = String.Empty;
+            var res_tran_logs = new RespuestaTransaccion();
+
+            try
+            {
+                infoLog.str_clase = str_clase;
+                infoLog.str_operacion = str_operacion;
+                infoLog.str_objeto = validacion!;
+                infoLog.str_metodo = str_metodo;
+                infoLog.str_fecha = DateTime.Now;
+
+                res_tran_logs = new LogsMongoDat( _settingsApi! ).GuardarAmenazasMongo( validacion! );
+                str_id_transaccion = res_tran_logs.Equals( "000" ) ? Utils.GeneraCadenaAleatoria() : (String) res_tran_logs.cuerpo;
+                infoLog.str_id_transaccion = str_id_transaccion;
+                infoLog.str_tipo = "s:<";
+                LogServicios.RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_amenazas );
+
+            }
+            catch(Exception)
+            {
+                str_id_transaccion = String.Empty;
+                throw;
+            }
+            return str_id_transaccion;
         }
     }
 }

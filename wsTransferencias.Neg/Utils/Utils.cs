@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using wsTransferencias.Dat;
 using wsTransferencias.Dto;
+using wsTransferencias.Model;
 
 namespace wsTransferencias.Neg.Utils
 {
@@ -16,16 +19,16 @@ namespace wsTransferencias.Neg.Utils
         /// </summary>
         /// <param name="int_longitud"></param>
         /// <returns></returns>
-        public static List<T> ConvertConjuntoDatosToListClass<T>(ConjuntoDatos cuerpo)
+        public static List<T> ConvertConjuntoDatosToListClass<T> ( ConjuntoDatos cuerpo )
         {
             List<T> lst_array = new List<T>();
 
             ConjuntoDatos conjuntoDatos = cuerpo;
 
-            foreach (var item in conjuntoDatos.lst_tablas[0].lst_filas)
+            foreach(var item in conjuntoDatos.lst_tablas[0].lst_filas)
             {
-                T obj = (T)Converting.MapDictToObj(item.nombre_valor, typeof(T));
-                lst_array.Add(obj);
+                T obj = (T) Converting.MapDictToObj( item.nombre_valor, typeof( T ) );
+                lst_array.Add( obj );
             }
 
             return lst_array;
@@ -37,13 +40,13 @@ namespace wsTransferencias.Neg.Utils
         /// </summary>
         /// <param name="int_longitud"></param>
         /// <returns></returns>
-        public static T? ConvertConjuntoDatosToClass<T>(ConjuntoDatos cuerpo)
+        public static T? ConvertConjuntoDatosToClass<T> ( ConjuntoDatos cuerpo )
         {
             ConjuntoDatos conjuntoDatos = cuerpo;
-            T? obj = default(T);
-            foreach (var item in conjuntoDatos.lst_tablas[0].lst_filas)
+            T? obj = default( T );
+            foreach(var item in conjuntoDatos.lst_tablas[0].lst_filas)
             {
-                obj = (T)Converting.MapDictToObj(item.nombre_valor, typeof(T));
+                obj = (T) Converting.MapDictToObj( item.nombre_valor, typeof( T ) );
             }
 
             return obj;
@@ -55,14 +58,138 @@ namespace wsTransferencias.Neg.Utils
         /// Genera un número aleatorio en string
         /// </summary>
         /// <returns></returns>
-        internal static string GeneraCadenaAleatoria()
+        internal static string GeneraCadenaAleatoria ()
         {
             Random random = new Random();
             const string characters = "0123456789";
-            return new string(Enumerable.Repeat(characters, 20)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
+            return new string( Enumerable.Repeat( characters, 20 )
+              .Select( s => s[random.Next( s.Length )] ).ToArray() );
         }
         #endregion
+
+        #region Método "Validar Token de Acceso"
+        /// <summary>
+        /// Valida token de acceso
+        /// </summary>
+        /// <returns></returns>
+        public async static Task<ResComun> ValidarToken ( SettingsApi settings, string str_data )
+        {
+            string parametros = "api/wsAcceso?str_operacion=VALIDAR_TOKEN";
+            var service = new ServiceHttp<ResComun>();
+            ResComun respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_acceso, parametros, settings.auth_ws_acceso );
+            return respuesta;
+
+        }
+        #endregion
+
+
+        #region "Control de peticiones diarias"
+        public static Boolean control_peticion_diaria ( string str_operacion, SettingsApi settings )
+        {
+
+            var var_respuesta = new RespuestaTransaccion();
+            var peticion_diaria = new PeticionDiaria();
+            Boolean respuesta = false;
+
+            string str_fecha_diaria = DateTime.Now.ToString( "yyyy-MM-dd" );
+            string str_filtro = "{'str_fecha_solicitud':'" + str_fecha_diaria + "','str_operacion':'" + str_operacion + "'}";
+
+            try
+            {
+                var_respuesta = new LogsMongoDat( settings! ).buscar_peticiones_diarias( str_filtro );
+
+                if(var_respuesta.codigo == "000")
+                {
+                    var resp_mongo = var_respuesta.cuerpo;
+                    if(resp_mongo != null && resp_mongo.ToString() != "[]")
+                    {
+                        var res_datos_mongo = var_respuesta.cuerpo.ToString()!.Replace( "ObjectId(", " " ).Replace( ")", " " );
+                        res_datos_mongo = res_datos_mongo.Replace( "[", "" ).Replace( "]", "" );
+
+                        peticion_diaria = JsonSerializer.Deserialize<PeticionDiaria>( res_datos_mongo );
+                        if(peticion_diaria!._id != null)
+                        {
+                            int int_act_peticiones = peticion_diaria.int_num_peticion + 1;
+
+                            int respuesta_promedio = new LogsMongoDat( settings! ).obtener_promedio( str_operacion );
+                            var cantidad_maxima = respuesta_promedio * Convert.ToInt32( LoadConfigService.FindParametro( "PRM_MAXIMO_PETICIONES_DIARIAS" )!.str_valor_ini ) / 100;
+
+                            if(settings.valida_peticiones_diarias && int_act_peticiones > cantidad_maxima)
+                            {
+                                respuesta = true;
+                            }
+                            else
+                            {
+                                string str_act_registro = "{$set:{'int_num_peticion':" + int_act_peticiones + "}}";
+                                var_respuesta = new LogsMongoDat( settings! ).actualizar_peticion_diaria( str_filtro, str_act_registro );
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        object obj_sol = new { int_num_peticion = 1, str_operacion, str_fecha_solicitud = str_fecha_diaria };
+                        new LogsMongoDat( settings! ).guardar_promedio_peticion_diaria( str_operacion, str_fecha_diaria );
+                        new LogsMongoDat( settings! ).guardar_peticion_diaria( String.Empty, obj_sol );
+                    }
+                }
+            }
+            catch(Exception)
+            {
+                Console.WriteLine( "" );
+                throw;
+            }
+            return respuesta;
+        }
+        #endregion
+
+
+        #region Método "Validar requiere OTP"
+        /// <summary>
+        /// Valida si la operacion requiere OTP
+        /// </summary>
+        /// <returns></returns>
+        public async static Task<RespuestaTransaccion> ValidaRequiereOtp ( SettingsApi settings, Header header, string str_operacion )
+        {
+
+            var parametros = "api/WsOTP?str_operacion=VALIDA_REQUIERE_OTP";
+            var service = new ServiceHttp<RespuestaTransaccion>();
+
+            var cabecera = new
+            {
+
+                int_id_sistema = Convert.ToInt32( header.str_id_sistema ),
+                int_id_usuario = Convert.ToInt32( header.str_id_usuario ),
+                str_usuario = header.str_login,
+                int_id_perfil = header.str_id_perfil,
+                int_id_oficina = header.str_id_oficina,
+                str_nombre_canal = header.str_app,
+                str_nemonico_canal = header.str_nemonico_canal,
+                str_ip = header.str_ip_dispositivo,
+                str_session = header.str_sesion,
+                str_mac = header.str_mac_dispositivo
+            };
+
+            var cuerpo = new
+            {
+                str_operacion = str_operacion,
+            };
+
+            var raw = new
+            {
+                cabecera = cabecera,
+                cuerpo = cuerpo
+            };
+
+            string str_data = JsonSerializer.Serialize( raw );
+            RespuestaTransaccion respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp );
+
+            return respuesta;
+
+        }
+        #endregion
+
+
 
     }
 }
