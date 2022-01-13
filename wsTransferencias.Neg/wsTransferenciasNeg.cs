@@ -170,7 +170,6 @@ namespace wsTransferencias.Neg
                 {
                     case "TRN_MIS_CUENTAS_COOPMEGO":
                     case "TRN_OTRAS_CUENTAS_COOPMEGO":
-                        //respuesta = new ResAddTransferenciaInterna();
                         respuesta = new TransferenciasNeg( _settingsApi ).add_transfer_interna( req_add_transferencia!, str_operacion );
                         break;
 

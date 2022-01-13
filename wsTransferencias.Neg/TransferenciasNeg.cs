@@ -435,9 +435,9 @@ namespace wsTransferencias.Neg
         #endregion
 
         #region "Transferencias internas"
-        public ResValTransferenciaInterna validar_transfer_interna ( ReqValidacionTransferencia req_validar_transferencia, string str_operacion )
+        public ResComun validar_transfer_interna ( ReqValidacionTransferencia req_validar_transferencia, string str_operacion )
         {
-            var respuesta = new ResValTransferenciaInterna();
+            var respuesta = new ResComun();
             respuesta.LlenarResHeader( req_validar_transferencia );
             req_validar_transferencia.str_id_transaccion = ServiceLogs.SaveHeaderLogs<ReqValidacionTransferencia>( req_validar_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             respuesta.str_id_transaccion = req_validar_transferencia.str_id_transaccion;
@@ -460,9 +460,9 @@ namespace wsTransferencias.Neg
             return respuesta;
         }
 
-        public ResAddTransferenciaInterna add_transfer_interna ( ReqTransferencia req_add_transferencia, string str_operacion )
+        public ResComun add_transfer_interna ( ReqTransferencia req_add_transferencia, string str_operacion )
         {
-            var respuesta = new ResAddTransferenciaInterna();
+            var respuesta = new ResComun();
             respuesta.LlenarResHeader( req_add_transferencia );
             req_add_transferencia.str_id_transaccion = ServiceLogs.SaveHeaderLogs<ReqTransferencia>( req_add_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             respuesta.str_id_transaccion = req_add_transferencia.str_id_transaccion;
