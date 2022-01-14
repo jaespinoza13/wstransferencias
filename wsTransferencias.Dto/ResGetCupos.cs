@@ -7,12 +7,8 @@ using wsTransferencias.Model;
 
 namespace wsTransferencias.Dto
 {
-    public class ResValidacionTransferencias : ResComun
+    public class ResGetCupos:  ResComun
     {
-        public Boolean bl_requiere_otp { get; set; }
+       
     }
-  
-    
 }
-
-

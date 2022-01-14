@@ -435,9 +435,9 @@ namespace wsTransferencias.Neg
         #endregion
 
         #region "Transferencias internas"
-        public ResComun validar_transfer_interna ( ReqValidacionTransferencia req_validar_transferencia, string str_operacion )
+        public ResValidacionTransferencias validar_transfer_interna ( ReqValidacionTransferencia req_validar_transferencia, string str_operacion )
         {
-            var respuesta = new ResComun();
+            var respuesta = new ResValidacionTransferencias();
             respuesta.LlenarResHeader( req_validar_transferencia );
             req_validar_transferencia.str_id_transaccion = ServiceLogs.SaveHeaderLogs<ReqValidacionTransferencia>( req_validar_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             respuesta.str_id_transaccion = req_validar_transferencia.str_id_transaccion;
@@ -447,6 +447,8 @@ namespace wsTransferencias.Neg
                 RespuestaTransaccion res_tran = new TransferenciasDat( _settingsApi ).validar_transfer_interna( req_validar_transferencia );
 
                 respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals( "000" )) ? "OK" : "ERR";
+                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, str_operacion ).Result.codigo.Equals( "1009" );
+
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
             }

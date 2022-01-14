@@ -24,7 +24,7 @@ namespace wsTransferencias.Dat
 
             infoLog.str_clase = GetType().FullName;
             infoLog.str_fecha = DateTime.Now;
-
+            
             var canal = GrpcChannel.ForAddress( serviceSettings.servicio_grpc_sybase );
             objClienteDal = new DALClient( canal );
         }
