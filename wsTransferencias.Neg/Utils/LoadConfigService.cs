@@ -19,8 +19,9 @@ namespace wsTransferencias.Neg.Utils
         {
             try
             {
+                lst_parametros = new List<Parametro>();
                 ReqGetParametros req_get_parametros = new();
-                req_get_parametros.str_nombre = "CODIGOS_ERROR";
+                req_get_parametros.str_nombre = "";
                 req_get_parametros.str_id_sistema = "66";
                 req_get_parametros.str_id_perfil = "1";
                 req_get_parametros.str_id_oficina = "1";
@@ -29,8 +30,12 @@ namespace wsTransferencias.Neg.Utils
                 lst_errores = Utils.ConvertConjuntoDatosToListClass<Parametro>( (ConjuntoDatos) res_tran.cuerpo );
 
                 req_get_parametros.str_nombre = "PARAMETROS_MEGONLINE";
-                RespuestaTransaccion res_tran2 = new ParametrosDat( serviceSettings ).get_parametros( req_get_parametros);
-                lst_parametros = Utils.ConvertConjuntoDatosToListClass<Parametro>( (ConjuntoDatos) res_tran2.cuerpo );
+                RespuestaTransaccion res_tran2 = new ParametrosDat( serviceSettings ).get_parametros( req_get_parametros );
+                lst_parametros.AddRange( Utils.ConvertConjuntoDatosToListClass<Parametro>( (ConjuntoDatos) res_tran2.cuerpo ) );
+
+                req_get_parametros.str_nombre = "CONFIGURACION_BENEFICIARIOS";
+                RespuestaTransaccion res_tran3 = new ParametrosDat( serviceSettings ).get_parametros( req_get_parametros );
+                lst_parametros.AddRange( Utils.ConvertConjuntoDatosToListClass<Parametro>( (ConjuntoDatos) res_tran3.cuerpo ) );
 
                 dt_fecha_codigos = DateTime.Now.Date;
 

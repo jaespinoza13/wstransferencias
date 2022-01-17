@@ -229,7 +229,7 @@ namespace wsTransferencias.Dat
         /// </summary>
         /// <param name="transferencia"></param>
         /// <returns></returns>
-        public RespuestaTransaccion add_transferencia_interna(ReqTransferencia req_add_transferencia_interna)
+        public RespuestaTransaccion add_transferencia_interna(ReqAddTransferencia req_add_transferencia_interna)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
@@ -364,7 +364,7 @@ namespace wsTransferencias.Dat
         /// <param name="transferencia">Objeto de solicitud de transacción para el registro de la transferencia</param>
         /// <param name="cabecera">Objeto de solicitud de transacción para la cabecera</param>
         /// <returns></returns>
-        public RespuestaTransaccion add_transf_interbancarias(ReqTransferencia req_transferencia)
+        public RespuestaTransaccion add_transf_interbancarias(ReqAddTransferencia req_transferencia)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try

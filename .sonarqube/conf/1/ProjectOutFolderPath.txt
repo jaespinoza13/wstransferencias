@@ -1,1 +1,1 @@
-C:\SistemasMego\wsTransferencias_net_6\.sonarqube\out\1
+C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\.sonarqube\out\1

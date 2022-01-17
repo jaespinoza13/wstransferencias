@@ -23,9 +23,9 @@ namespace wsTransferencias.Neg
 
         #region Métodos transferencias interbancarias
 
-        public ResTransferencia get_val_transf_interbancarias ( ReqValidacionTransferencia req_validar_transferencia, string str_operacion )
+        public ResValidacionTransferencias validar_transf_interbancarias ( ReqValidacionTransferencia req_validar_transferencia, string str_operacion )
         {
-            var respuesta = new ResTransferencia();
+            var respuesta = new ResValidacionTransferencias();
             respuesta.LlenarResHeader( req_validar_transferencia );
             req_validar_transferencia.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqValidacionTransferencia>( req_validar_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             respuesta.str_id_transaccion = req_validar_transferencia.str_id_transaccion;
@@ -36,29 +36,29 @@ namespace wsTransferencias.Neg
 
                 if(res_tran.codigo.Equals( "000" ))
                 {
-                    respuesta = Utils.Utils.ConvertConjuntoDatosToClass<ResTransferencia>( (ConjuntoDatos) res_tran.cuerpo );
+                    respuesta.objValidacionTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResValidacionTransferencias.ValidacionTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
 
-                    if(respuesta!.int_enviar_banred == 1)
+                    if(respuesta!.objValidacionTransferencia.int_enviar_banred == 1)
                     {
                         string str_req_validar_transferencia = JsonSerializer.Serialize( req_validar_transferencia );
-                        var obj_transferencia = JsonSerializer.Deserialize<ReqTransferencia>( str_req_validar_transferencia );
+                        //var obj_transferencia = JsonSerializer.Deserialize<ReqTransferencia>( str_req_validar_transferencia );
 
-                        Cabecera cabecera = llenar_cabecera( obj_transferencia! );
+                        Cabecera cabecera = Utils.Utils.llenar_cabecera( req_validar_transferencia! );
                         RespuestaTransaccion respuesta_validaciones_pago_directo = validaciones_pago_directo( respuesta, cabecera );
 
-                        if(respuesta_validaciones_pago_directo.codigo == "0000" || respuesta_validaciones_pago_directo.codigo == "000")
+                        if(respuesta_validaciones_pago_directo.codigo == "0000")
                         {
                             return respuesta;
                         }
                         else
                         {
                             //Se actualiza el registro para que la transacción se enviada por SPI                            
-                            RespuestaTransaccion respuesta_cambio_tipo_transfer = new TransferenciasDat( _settingsApi ).set_envio_transf_por_spi( obj_transferencia! );
+                            //RespuestaTransaccion respuesta_cambio_tipo_transfer = new TransferenciasDat( _settingsApi ).set_envio_transf_por_spi( obj_transferencia! );
 
-                            if(respuesta_cambio_tipo_transfer.codigo == "000")
-                            {
-                                respuesta.int_enviar_banred = 0;
-                            }
+                            //if(respuesta_cambio_tipo_transfer.codigo == "000")
+                            //{
+                            //    respuesta.int_enviar_banred = 0;
+                            //}
 
                             if(respuesta_validaciones_pago_directo.codigo == _settingsApi.codigo_error_datos_incorrectos_banred)
                             {
@@ -68,7 +68,7 @@ namespace wsTransferencias.Neg
                                 respuesta_error_validacion.str_res_info_adicional = _settingsApi.msj_error_validacion;
 
                                 Utils.ServiceLogs.SaveResponseLogs( respuesta_error_validacion, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-                                return respuesta_error_validacion;
+                                // respuesta_error_validacion;
                             }
                         }
                     }
@@ -89,18 +89,18 @@ namespace wsTransferencias.Neg
         }
 
 
-        public ResTransferencia add_transf_interbancarias ( ReqTransferencia req_transferencia, string str_operacion )
+        public ResTransferencia add_transf_interbancarias ( ReqAddTransferencia req_add_transferencia, string str_operacion )
         {
             ResTransferencia respuesta = new ResTransferencia();
             try
             {
                 respuesta = new ResTransferencia();
-                respuesta.LlenarResHeader( req_transferencia );
-                req_transferencia.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqTransferencia>( req_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-                respuesta.str_id_transaccion = req_transferencia.str_id_transaccion;
+                respuesta.LlenarResHeader( req_add_transferencia );
+                req_add_transferencia.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqAddTransferencia>( req_add_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                respuesta.str_id_transaccion = req_add_transferencia.str_id_transaccion;
 
 
-                var res_tran = new TransferenciasDat( _settingsApi ).add_transf_interbancarias( req_transferencia );
+                var res_tran = new TransferenciasDat( _settingsApi ).add_transf_interbancarias( req_add_transferencia );
 
                 if(res_tran.codigo.Equals( "000" ))
                 {
@@ -129,10 +129,7 @@ namespace wsTransferencias.Neg
                     //Se debe tratar de enviar por banred
                     if(datos_validados.int_enviar_banred == 1 && datos_validados.int_estado == 4)
                     {
-
-
-                        Cabecera cabecera = llenar_cabecera( req_transferencia );
-
+                        var cabecera = Utils.Utils.llenar_cabecera( req_add_transferencia );
                         ejecutar_pago_directo( datos_validados, cabecera );
                         respuesta = datos_validados;
                     }
@@ -246,9 +243,6 @@ namespace wsTransferencias.Neg
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
             {
-                var req_transaccion = JsonSerializer.Deserialize<Transaccion>( JsonSerializer.Serialize( sol_tran.cuerpo ) );
-                //Transaccion req_transaccion = (Transaccion) JsonConvert.DeserializeObject( JsonConvert.SerializeObject( sol_tran.cuerpo ), (typeof( Transaccion )) );
-
                 respuesta = conectar_banred( sol_tran );
 
             }
@@ -260,7 +254,7 @@ namespace wsTransferencias.Neg
         }
 
 
-        public RespuestaTransaccion validaciones_pago_directo ( ResTransferencia datos_validados, Cabecera cabecera )
+        public RespuestaTransaccion validaciones_pago_directo ( dynamic datos_validados, Cabecera cabecera )
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
@@ -269,8 +263,6 @@ namespace wsTransferencias.Neg
                 respuesta.cuerpo = datos_validados;
 
                 Transaccion datos_para_validacion_banred = new Transaccion();
-
-
 
                 datos_para_validacion_banred.int_secuencial = datos_validados.int_secuencial;
 
@@ -351,21 +343,7 @@ namespace wsTransferencias.Neg
             return respuesta!;
         }
 
-        public static Cabecera llenar_cabecera ( ReqTransferencia obj )
-        {
-            Cabecera cabecera = new Cabecera();
-            cabecera.int_sistema = Convert.ToInt32( obj.str_id_sistema );
-            cabecera.str_usuario = obj.str_login;
-            cabecera.int_perfil = Convert.ToInt32( obj.str_id_oficina );
-            cabecera.int_oficina = Convert.ToInt32( obj.str_id_oficina );
-            cabecera.str_nemonico_canal = obj.str_nemonico_canal;
-            cabecera.str_ip = obj.str_ip_dispositivo;
-            cabecera.str_session = obj.str_sesion;
-            cabecera.str_mac = obj.str_ip_dispositivo;
-
-            return cabecera;
-        }
-
+       
         public RespuestaTransaccion ejecutar_pago_directo ( ResTransferencia datos_validados, Cabecera cabecera )
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
@@ -457,14 +435,15 @@ namespace wsTransferencias.Neg
             }
 
             ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
             return respuesta;
         }
 
-        public ResComun add_transfer_interna ( ReqTransferencia req_add_transferencia, string str_operacion )
+        public ResComun add_transfer_interna ( ReqAddTransferencia req_add_transferencia, string str_operacion )
         {
             var respuesta = new ResComun();
             respuesta.LlenarResHeader( req_add_transferencia );
-            req_add_transferencia.str_id_transaccion = ServiceLogs.SaveHeaderLogs<ReqTransferencia>( req_add_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            req_add_transferencia.str_id_transaccion = ServiceLogs.SaveHeaderLogs<ReqAddTransferencia>( req_add_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             respuesta.str_id_transaccion = req_add_transferencia.str_id_transaccion;
 
             try
@@ -482,7 +461,9 @@ namespace wsTransferencias.Neg
             }
 
             ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
             return respuesta;
+
         }
 
         #endregion

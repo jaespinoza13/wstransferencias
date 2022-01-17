@@ -1,52 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace wsTransferencias.Neg.Utils
 {
     public static class Converting
     {
-        public static object MapDictToObj(Dictionary<string, object> dict, Type destObject)
+        public static object MapDictToObj ( Dictionary<string, object> dict, Type destObject )
         {
 
-            object returnobj = Activator.CreateInstance(destObject)!;
+            object returnobj = Activator.CreateInstance( destObject )!;
 
-            foreach (string key in dict.Keys)
+            foreach(string key in dict.Keys)
             {
                 object value = dict[key];
 
-                var targetProperty = destObject.GetProperty(key);
-
-                if (targetProperty!.PropertyType == typeof(string))
+                var targetProperty = destObject.GetProperty( key );
+                if(targetProperty != null)
                 {
-                    targetProperty.SetValue(returnobj, value);
-                }
-                else
-                {
-
-                    var parseMethod = targetProperty.PropertyType.GetMethod("TryParse",
-                        BindingFlags.Public | BindingFlags.Static, null,
-                        new[] { typeof(string), targetProperty.PropertyType.MakeByRefType() }, null);
-
-                    if (parseMethod != null)
+                    if(targetProperty!.PropertyType == typeof( string ))
                     {
-                        var parameters = new[] { value, null };
-                        var success = (bool)parseMethod.Invoke(null, parameters)!;
-                        if (success)
-                        {
-                            targetProperty.SetValue(returnobj, parameters[1]);
-                        }
-
+                        targetProperty.SetValue( returnobj, value );
+                    }
+                    else
+                    {
+                        ParceMetod( targetProperty, value, returnobj );
                     }
                 }
-
             }
-
             return returnobj;
         }
 
+        public static void ParceMetod ( PropertyInfo targetProperty, object value, object returnobj )
+        {
+            var parseMethod = targetProperty.PropertyType.GetMethod( "TryParse",
+                               BindingFlags.Public | BindingFlags.Static, null,
+                               new[] { typeof( string ), targetProperty.PropertyType.MakeByRefType() }, null );
+
+            if(parseMethod != null)
+            {
+                var parameters = new[] { value, null };
+                var success = (bool) parseMethod.Invoke( null, parameters )!;
+                if(success)
+                {
+                    targetProperty.SetValue( returnobj, parameters[1] );
+                }
+            }
+        }
     }
 }

@@ -28,21 +28,38 @@ namespace wsTransferencias.Neg
 
             try
             {
-                RespuestaTransaccion res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
-                respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
-                respuesta.str_res_codigo = res_tran.codigo;
-                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                string[] lst_palabras_nombre = req_add_beneficiario.str_nombres.Split( " " );
+
+                if(!ValidacionInyeccionSql.validar_palabras_sql( req_add_beneficiario.str_nombres, "str_nombres", str_operacion, req_add_beneficiario, str_clase ))
+                {
+                    respuesta.str_res_codigo = "1004";
+                }
+                else if(req_add_beneficiario.str_nombres.Length > Convert.ToInt32( LoadConfigService.FindParametro( "LIMITE_MAXIMO_CARACTERES" ).str_valor_ini ))
+                {
+                    respuesta.str_res_codigo = "1010";
+                }
+                else if(lst_palabras_nombre.Length > Convert.ToInt32( LoadConfigService.FindParametro( "LIMITE_MAXIMO_PALABRAS" ).str_valor_ini ))
+                {
+                    respuesta.str_res_codigo = "1011";
+                }
+                else
+                {
+                    RespuestaTransaccion res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
+                    respuesta.str_res_codigo = res_tran.codigo;
+                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                }
+
+                respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
+                Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
+                return respuesta;
             }
             catch(Exception exception)
             {
                 Utils.ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
                 throw;
             }
-
-            Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            return respuesta;
         }
-
 
         public ResBeneficiarios update_beneficiario ( ReqUpdateBeneficiario req_update_beneficiario, string str_operacion )
         {
@@ -65,6 +82,7 @@ namespace wsTransferencias.Neg
             }
 
             Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
             return respuesta;
         }
 
@@ -90,6 +108,7 @@ namespace wsTransferencias.Neg
             }
 
             Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
             return respuesta;
         }
 
@@ -103,7 +122,7 @@ namespace wsTransferencias.Neg
 
             try
             {
-              
+
 
                 var res_tran = new BeneficiariosDat( _settingsApi ).get_datos_beneficiarios( req_get_beneficiario );
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
@@ -118,25 +137,25 @@ namespace wsTransferencias.Neg
             }
 
             Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
             return respuesta;
         }
 
 
-        public ResValidaBeneficiario validar_registro_beneficiarios ( ReqValidaBeneficiario validar_beneficiarios, string str_operacion )
+        public ResValidaBeneficiario validar_registro_beneficiarios ( ReqValidaBeneficiario req_validar_beneficiarios, string str_operacion )
         {
 
             var respuesta = new ResValidaBeneficiario();
-            respuesta.LlenarResHeader( validar_beneficiarios );
-            validar_beneficiarios.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqValidaBeneficiario>( validar_beneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = validar_beneficiarios.str_id_transaccion;
+            respuesta.LlenarResHeader( req_validar_beneficiarios );
+            req_validar_beneficiarios.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqValidaBeneficiario>( req_validar_beneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            respuesta.str_id_transaccion = req_validar_beneficiarios.str_id_transaccion;
 
             try
             {
-                var res_tran = new BeneficiariosDat( _settingsApi ).validar_registro_beneficiarios( validar_beneficiarios );
+                var res_tran = new BeneficiariosDat( _settingsApi ).validar_registro_beneficiarios( req_validar_beneficiarios );
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
-                
-                
-                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, validar_beneficiarios, str_operacion ).Result.codigo.Equals( "1009" );
+
+                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, str_operacion ).Result.codigo.Equals( "1009" );
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
 
@@ -148,6 +167,7 @@ namespace wsTransferencias.Neg
             }
 
             Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
             return respuesta;
         }
 
@@ -176,6 +196,7 @@ namespace wsTransferencias.Neg
             }
 
             Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
             return respuesta;
         }
 

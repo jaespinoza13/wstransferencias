@@ -1,26 +1,28 @@
-¨
-FC:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Log\InfoLog.cs
+Ç
+YC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Log\InfoLog.cs
 
 		 
 
- !
+ !
 
- 
+ (
 
- 
+ 
 
-  
+ $
 
- #
+  
 
- 
+##  
 
-  ¼
-KC:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Log\LogServicios.cs
+(( $
+
+,, !í
+^C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Log\LogServicios.cs
 
 
 
- 
+ $
  + #
  /(( '
 
@@ -30,13 +32,13 @@ KC:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Log\LogServicios.cs
  #. 6
  != ?
 # ) "
-   $ &
+   0 2
 
 $$ *
-$$2 ://W _
-$$C F	//~ 
-$$O Z**& 1
-** #++. 6
-++ !--= ?
---# )// "
-44 66$ &
+$$2 :55W _
+$$C F	55~ (
+$$O Z**% 0,,2 =..3 >
+.. #11. 6
+11 !33= ?77 
+33# )55 "
+;; ==0 2

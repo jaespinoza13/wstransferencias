@@ -134,13 +134,11 @@ namespace wsTransferencias.Neg
                 {
                     case "TRN_MIS_CUENTAS_COOPMEGO":
                     case "TRN_OTRAS_CUENTAS_COOPMEGO":
-                        //respuesta = new ResValidacionTransferencias();
                         respuesta = new TransferenciasNeg( _settingsApi ).validar_transfer_interna( req_valida_transferencia!, str_operacion );
                         break;
 
                     case "TRN_EXTERNAS":
-                        //respuesta = new ResTransferencia();
-                        respuesta = new TransferenciasNeg( _settingsApi ).get_val_transf_interbancarias( req_valida_transferencia!, str_operacion );
+                        respuesta = new TransferenciasNeg( _settingsApi ).validar_transf_interbancarias( req_valida_transferencia!, str_operacion );
                         break;
                 }
 
@@ -164,7 +162,7 @@ namespace wsTransferencias.Neg
             Object respuesta = new();
             try
             {
-                var req_add_transferencia = JsonSerializer.Deserialize<ReqTransferencia>( str_va_transferencia );
+                var req_add_transferencia = JsonSerializer.Deserialize<ReqAddTransferencia>( str_va_transferencia );
 
                 switch(req_add_transferencia!.str_nemonico_tipo_transferencia)
                 {
@@ -174,7 +172,6 @@ namespace wsTransferencias.Neg
                         break;
 
                     case "TRN_EXTERNAS":
-                        //respuesta = new ResTransferencia();
                         respuesta = new TransferenciasNeg( _settingsApi ).add_transf_interbancarias( req_add_transferencia, str_operacion );
                         break;
                 }

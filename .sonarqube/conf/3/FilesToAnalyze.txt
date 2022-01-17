@@ -1,2 +1,5 @@
-﻿C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Dat\BeneficiariosDat.cs
-C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Dat\Funciones.cs
+﻿C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Dat\BeneficiariosDat.cs
+C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Dat\Funciones.cs
+C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Dat\LogsMongoDat.cs
+C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Dat\ParametrosDat.cs
+C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Dat\TransferenciasDat.cs

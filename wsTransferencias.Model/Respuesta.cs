@@ -16,8 +16,6 @@ namespace wsTransferencias.Model
         public int int_res_id_servidor { get; set; }
         public string str_res_info_adicional { get; set; } = string.Empty;
 
-        public void LlenarResComun(string str_res_original_id_msj, string str_res_original_id_servicio, DateTime dt_res_fecha_msj_crea)
-        {
-        }
+
     }
 }

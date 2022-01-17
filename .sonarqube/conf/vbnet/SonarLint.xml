@@ -15,7 +15,7 @@
     </Setting>
     <Setting>
       <Key>sonar.vbnet.analyzeGeneratedCode</Key>
-      <Value>false</Value>
+      <Value>true</Value>
     </Setting>
   </Settings>
   <Rules>

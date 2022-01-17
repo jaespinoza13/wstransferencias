@@ -4,14 +4,14 @@
   <ProjectLanguage>C#</ProjectLanguage>
   <ProjectType>Product</ProjectType>
   <ProjectGuid>1d07802e-0260-4137-a7ac-f3a02d8da52e</ProjectGuid>
-  <FullPath>C:\SistemasMego\wsTransferencias_net_6\wsTransferencias.Dat\wsTransferencias.Dat.csproj</FullPath>
+  <FullPath>C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Dat\wsTransferencias.Dat.csproj</FullPath>
   <IsExcluded>false</IsExcluded>
   <AnalysisResults>
-    <AnalysisResult Id="FilesToAnalyze" Location="C:\SistemasMego\wsTransferencias_net_6\.sonarqube\conf\3\FilesToAnalyze.txt" />
+    <AnalysisResult Id="FilesToAnalyze" Location="C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\.sonarqube\conf\3\FilesToAnalyze.txt" />
   </AnalysisResults>
   <AnalysisSettings>
-    <Property Name="sonar.cs.roslyn.reportFilePaths">C:\SistemasMego\wsTransferencias_net_6\.sonarqube\out\3\Issues.json</Property>
-    <Property Name="sonar.cs.analyzer.projectOutPaths">C:\SistemasMego\wsTransferencias_net_6\.sonarqube\out\3</Property>
+    <Property Name="sonar.cs.roslyn.reportFilePaths">C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\.sonarqube\out\3\Issues.json</Property>
+    <Property Name="sonar.cs.analyzer.projectOutPaths">C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\.sonarqube\out\3</Property>
   </AnalysisSettings>
   <Configuration>Debug</Configuration>
   <Platform>AnyCPU</Platform>
