@@ -296,7 +296,7 @@ namespace wsTransferencias.Dat
         /// <param name="dto">Objeto de solicitu de transacción para validaciones de transferencias exteranas</param>
         /// <param name="cabecera">Objeto para la cabecera de la solicitud de transacción</param>
         /// <returns></returns>
-        public RespuestaTransaccion get_val_transf_interbancarias(ReqValidacionTransferencia req_validar_transferencia)
+        public RespuestaTransaccion val_transf_interbancarias(ReqValidacionTransferencia req_validar_transferencia)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
@@ -324,7 +324,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_error_cod", TipoDato = TipoDato.Integer });
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_enviar_banred", TipoDato = TipoDato.Integer });
 
-                ds.NombreSP = "get_val_transf_interbancarias2";
+                ds.NombreSP = "val_transf_interbancariasv2";
                 ds.NombreBD = _settings.BD_megservicios;
 
                 var resultado = objClienteDal.ExecuteDataSet(ds);

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text.Json;
 using wsTransferencias.Dat;
 using wsTransferencias.Dto;
 using wsTransferencias.Log;
@@ -47,9 +48,9 @@ namespace wsTransferencias.Neg
                     RespuestaTransaccion res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
                     respuesta.str_res_codigo = res_tran.codigo;
                     respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                    respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
                 }
 
-                respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
                 Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                 respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
                 return respuesta;
@@ -122,13 +123,11 @@ namespace wsTransferencias.Neg
 
             try
             {
-
-
                 var res_tran = new BeneficiariosDat( _settingsApi ).get_datos_beneficiarios( req_get_beneficiario );
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-                respuesta.lst_beneficiarios = Utils.Utils.ConvertConjuntoDatosToListClass<ResGetBeneficiario.Beneficiario>( (ConjuntoDatos) res_tran.cuerpo );
+                respuesta.lst_beneficiarios = Utils.Utils.ConvertConjuntoDatosToListClass<Beneficiario>( (ConjuntoDatos) res_tran.cuerpo );
             }
             catch(Exception exception)
             {
@@ -152,12 +151,14 @@ namespace wsTransferencias.Neg
 
             try
             {
+
                 var res_tran = new BeneficiariosDat( _settingsApi ).validar_registro_beneficiarios( req_validar_beneficiarios );
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
-
                 respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, str_operacion ).Result.codigo.Equals( "1009" );
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+
+
 
             }
             catch(Exception exception)
@@ -200,5 +201,88 @@ namespace wsTransferencias.Neg
             return respuesta;
         }
 
+        public ResValidaCuentaPagoDirecto valida_cuenta_pago_directo ( ReqValidaCuentaPagoDirecto req_valida_cuenta, string str_operacion )
+        {
+
+            var respuesta = new ResValidaCuentaPagoDirecto();
+            respuesta.LlenarResHeader( req_valida_cuenta );
+            req_valida_cuenta.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqValidaCuentaPagoDirecto>( req_valida_cuenta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            respuesta.str_id_transaccion = req_valida_cuenta.str_id_transaccion;
+
+            try
+            {
+                var res_obtiene_datos = new BeneficiariosDat( _settingsApi ).obtener_datos_pago_directo( req_valida_cuenta );
+                respuesta.str_res_codigo = res_obtiene_datos.codigo;
+
+                if(res_obtiene_datos.codigo.Equals( "000" ))
+                {
+
+                    var datosValidaCuenta = Utils.Utils.ConvertConjuntoDatosToClass<Transaccion>( (ConjuntoDatos) res_obtiene_datos.cuerpo );
+
+                    datosValidaCuenta!.str_tipo_tran = "CON";
+                    datosValidaCuenta.int_secuencial = Convert.ToInt32( DateTime.Now.ToString( "HHmm" ) );
+                    datosValidaCuenta.dec_monto_tran = 0;
+                    datosValidaCuenta.str_tipo_cuenta_receptor = "05";
+                    datosValidaCuenta.str_cuenta_receptor = req_valida_cuenta.str_num_cuenta;
+                    datosValidaCuenta.str_nom_receptor = String.Empty;
+                    datosValidaCuenta.str_observaciones = String.Empty;
+                    datosValidaCuenta.int_secuencial_cobis = 0;
+                    datosValidaCuenta.str_identificacion_receptor = Convert.ToString( datosValidaCuenta.int_fi_aut );
+
+                    var cabecera = Utils.Utils.llenar_cabecera( req_valida_cuenta );
+
+                    var sol_tran = new SolicitudTransaccion
+                    {
+                        cabecera = cabecera,
+                        cuerpo = datosValidaCuenta
+                    };
+
+                    string str_data = JsonSerializer.Serialize( sol_tran );
+                    var service = new ServiceHttp<RespuestaTransaccion>();
+                    RespuestaTransaccion res_banred = service.PostRestServiceDataAsync( str_data, _settingsApi.servicio_ws_banred, String.Empty, _settingsApi.auth_ws_banred ).Result;
+                    var obj_beneficiario = new Beneficiario();
+                    if(res_banred.codigo.Equals( "000" ) || res_banred.codigo.Equals( "0000" ))
+                    {
+
+                        obj_beneficiario.str_descripcion_tipo_producto = req_valida_cuenta.int_tipo_cuenta.ToString();
+                        obj_beneficiario.str_nombres = res_banred.cuerpo.ToString()!.Trim();
+                        obj_beneficiario.str_num_documento = req_valida_cuenta.str_identificacion;
+                        obj_beneficiario.str_email = req_valida_cuenta.str_email;
+
+                    }
+                    else
+                    {
+                        if(_settingsApi.pago_directo_offline == "1")
+                        {
+                            //Solo para pruebas
+                            res_banred.codigo = "000";
+                            res_banred.diccionario["ERROR"] = string.Empty;
+
+                            obj_beneficiario.str_descripcion_tipo_producto = req_valida_cuenta.int_tipo_cuenta.ToString();
+                            obj_beneficiario.str_nombres = "Usuario MegOnline";
+                            obj_beneficiario.str_num_documento = req_valida_cuenta.str_identificacion;
+                            obj_beneficiario.str_email = req_valida_cuenta.str_email;
+                        }
+                        else
+                        {
+                            //La cuenta no se validó en pago directo
+                            res_banred.codigo = "1012";
+                        }
+                    }
+                    respuesta.str_res_codigo = res_banred.codigo;
+                    respuesta.str_res_estado_transaccion = res_banred.codigo.Equals( "000" ) ? "OK" : "ERR";
+
+                }
+            }
+            catch(Exception exception)
+            {
+                Utils.ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
+                throw;
+            }
+
+            Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
+            return respuesta;
+        }
     }
 }

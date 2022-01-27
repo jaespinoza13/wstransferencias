@@ -23,7 +23,7 @@ namespace wsTransferencias.Neg
 
         #region Métodos transferencias interbancarias
 
-        public ResValidacionTransferencias validar_transf_interbancarias ( ReqValidacionTransferencia req_validar_transferencia, string str_operacion )
+        public ResValidacionTransferencias validar_transferencia_interbancaria ( ReqValidacionTransferencia req_validar_transferencia, string str_operacion )
         {
             var respuesta = new ResValidacionTransferencias();
             respuesta.LlenarResHeader( req_validar_transferencia );
@@ -32,7 +32,7 @@ namespace wsTransferencias.Neg
 
             try
             {
-                var res_tran = new TransferenciasDat( _settingsApi ).get_val_transf_interbancarias( req_validar_transferencia );
+                var res_tran = new TransferenciasDat( _settingsApi ).val_transf_interbancarias( req_validar_transferencia );
 
                 if(res_tran.codigo.Equals( "000" ))
                 {
@@ -41,7 +41,7 @@ namespace wsTransferencias.Neg
                     if(respuesta!.objValidacionTransferencia.int_enviar_banred == 1)
                     {
                         string str_req_validar_transferencia = JsonSerializer.Serialize( req_validar_transferencia );
-                        //var obj_transferencia = JsonSerializer.Deserialize<ReqTransferencia>( str_req_validar_transferencia );
+                        var obj_transferencia = JsonSerializer.Deserialize<ReqTransferencia>( str_req_validar_transferencia );
 
                         Cabecera cabecera = Utils.Utils.llenar_cabecera( req_validar_transferencia! );
                         RespuestaTransaccion respuesta_validaciones_pago_directo = validaciones_pago_directo( respuesta, cabecera );
@@ -53,12 +53,12 @@ namespace wsTransferencias.Neg
                         else
                         {
                             //Se actualiza el registro para que la transacción se enviada por SPI                            
-                            //RespuestaTransaccion respuesta_cambio_tipo_transfer = new TransferenciasDat( _settingsApi ).set_envio_transf_por_spi( obj_transferencia! );
+                            RespuestaTransaccion respuesta_cambio_tipo_transfer = new TransferenciasDat( _settingsApi ).set_envio_transf_por_spi( obj_transferencia! );
 
-                            //if(respuesta_cambio_tipo_transfer.codigo == "000")
-                            //{
-                            //    respuesta.int_enviar_banred = 0;
-                            //}
+                            if(respuesta_cambio_tipo_transfer.codigo == "000")
+                            {
+                                respuesta.objValidacionTransferencia.int_enviar_banred = 0;
+                            }
 
                             if(respuesta_validaciones_pago_directo.codigo == _settingsApi.codigo_error_datos_incorrectos_banred)
                             {
@@ -68,7 +68,6 @@ namespace wsTransferencias.Neg
                                 respuesta_error_validacion.str_res_info_adicional = _settingsApi.msj_error_validacion;
 
                                 Utils.ServiceLogs.SaveResponseLogs( respuesta_error_validacion, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-                                // respuesta_error_validacion;
                             }
                         }
                     }
@@ -181,8 +180,6 @@ namespace wsTransferencias.Neg
             ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             return respuesta;
         }
-
-        #region Métodos pago directo
 
         public RespuestaTransaccion ProcesarSolicitud ( SolicitudTransaccion sol_tran, string str_operacion )
         {
@@ -324,7 +321,7 @@ namespace wsTransferencias.Neg
             try
             {
 
-                string url = _settingsApi.servicio_banred;
+                string url = _settingsApi.servicio_ws_banred;
                 string content_type = ApplicationContenTypes.JSON_UTF8;
 
                 string str_usuario = _settingsApi.user_ws_banred;
@@ -349,7 +346,6 @@ namespace wsTransferencias.Neg
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
             {
-
                 //Se asigna nuevamente para que no se requiera deserealizarlo en un list TransferenciaDto
                 respuesta.cuerpo = datos_validados;
 
@@ -410,7 +406,6 @@ namespace wsTransferencias.Neg
             return respuesta;
         }
 
-        #endregion
 
         #region "Transferencias internas"
         public ResComun validar_transfer_interna ( ReqValidacionTransferencia req_validar_transferencia, string str_operacion )
@@ -439,7 +434,7 @@ namespace wsTransferencias.Neg
             return respuesta;
         }
 
-        public ResComun add_transfer_interna ( ReqAddTransferencia req_add_transferencia, string str_operacion )
+        public ResComun add_transferencia_interna ( ReqAddTransferencia req_add_transferencia, string str_operacion )
         {
             var respuesta = new ResComun();
             respuesta.LlenarResHeader( req_add_transferencia );

@@ -27,6 +27,8 @@ namespace wsTransferencias.Neg
                     case "DELETE_BENEFICIARIOS":
                     case "GET_CUENTAS_BENEFICIARIO":
                     case "VALIDAR_REGISTRO_BENEFICIARIOS":
+                    case "VALIDAR_CUENTA":
+                    case "VALIDA_CUENTA_PD":
                         var str_beneficiarios = JsonSerializer.Serialize( sol_tran );
                         validacion_token = Utils.Utils.ValidarToken( _settingsApi, str_beneficiarios ).Result;
                         respuesta = validacion_token.str_res_codigo.Equals( "000" ) ? ProcesarSolicitudBeneficiarios( str_beneficiarios, str_operacion ) : validacion_token;
@@ -34,8 +36,9 @@ namespace wsTransferencias.Neg
 
                     case "VALIDA_TRANSFERENCIA":
                         string str_valida_transferencia = JsonSerializer.Serialize( sol_tran );
-                        validacion_token = Utils.Utils.ValidarToken( _settingsApi, str_valida_transferencia ).Result;
-                        respuesta = validacion_token.str_res_codigo.Equals( "000" ) ? ProcesarSolicitudValidacionTransferencias( str_valida_transferencia, str_operacion ) : validacion_token;
+                        //validacion_token = Utils.Utils.ValidarToken( _settingsApi, str_valida_transferencia ).Result;
+                        //respuesta = validacion_token.str_res_codigo.Equals( "000" ) ? ProcesarSolicitudValidacionTransferencias( str_valida_transferencia, str_operacion ) : validacion_token;
+                        respuesta = ProcesarSolicitudValidacionTransferencias( str_valida_transferencia, str_operacion );
                         break;
 
                     case "ADD_TRANSFERENCIA":
@@ -107,6 +110,11 @@ namespace wsTransferencias.Neg
                         var valida_beneficiarios = JsonSerializer.Deserialize<ReqValidaBeneficiario>( str_sol_tran );
                         respuesta = new BeneficiariosNeg( _settingsApi ).validar_registro_beneficiarios( valida_beneficiarios!, str_operacion );
                         break;
+
+                    case "VALIDA_CUENTA_PD":
+                        var valida_cuenta_pd = JsonSerializer.Deserialize<ReqValidaCuentaPagoDirecto>( str_sol_tran );
+                        respuesta = new BeneficiariosNeg( _settingsApi ).valida_cuenta_pago_directo( valida_cuenta_pd!, str_operacion );
+                        break;
                 }
             }
             catch(Exception)
@@ -138,7 +146,7 @@ namespace wsTransferencias.Neg
                         break;
 
                     case "TRN_EXTERNAS":
-                        respuesta = new TransferenciasNeg( _settingsApi ).validar_transf_interbancarias( req_valida_transferencia!, str_operacion );
+                        respuesta = new TransferenciasNeg( _settingsApi ).validar_transferencia_interbancaria( req_valida_transferencia!, str_operacion );
                         break;
                 }
 
@@ -168,7 +176,7 @@ namespace wsTransferencias.Neg
                 {
                     case "TRN_MIS_CUENTAS_COOPMEGO":
                     case "TRN_OTRAS_CUENTAS_COOPMEGO":
-                        respuesta = new TransferenciasNeg( _settingsApi ).add_transfer_interna( req_add_transferencia!, str_operacion );
+                        respuesta = new TransferenciasNeg( _settingsApi ).add_transferencia_interna( req_add_transferencia!, str_operacion );
                         break;
 
                     case "TRN_EXTERNAS":
