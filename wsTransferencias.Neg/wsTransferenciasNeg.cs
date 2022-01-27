@@ -21,12 +21,12 @@ namespace wsTransferencias.Neg
             {
                 switch(str_operacion)
                 {
-                    case "ADD_BENEFICIARIOS":
-                    case "GET_BENEFICIARIOS":
-                    case "UPDATE_BENEFICIARIOS":
-                    case "DELETE_BENEFICIARIOS":
+                    case "ADD_BENEFICIARIO":
+                    case "GET_BENEFICIARIO":
+                    case "UPDATE_BENEFICIARIO":
+                    case "DELETE_BENEFICIARIO":
                     case "GET_CUENTAS_BENEFICIARIO":
-                    case "VALIDAR_REGISTRO_BENEFICIARIOS":
+                    case "VALIDAR_REGISTRO_BENEFICIARIO":
                     case "VALIDAR_CUENTA":
                     case "VALIDA_CUENTA_PD":
                         var str_beneficiarios = JsonSerializer.Serialize( sol_tran );
@@ -87,17 +87,17 @@ namespace wsTransferencias.Neg
                 switch(str_operacion)
                 {
 
-                    case "ADD_BENEFICIARIOS":
+                    case "ADD_BENEFICIARIO":
                         var req_add_beneficiario = JsonSerializer.Deserialize<ReqAddBeneficiario>( str_sol_tran );
                         respuesta = new BeneficiariosNeg( _settingsApi ).add_beneficiario( req_add_beneficiario!, str_operacion );
                         break;
 
-                    case "UPDATE_BENEFICIARIOS":
+                    case "UPDATE_BENEFICIARIO":
                         var req_update_beneficiario = JsonSerializer.Deserialize<ReqUpdateBeneficiario>( str_sol_tran );
                         respuesta = new BeneficiariosNeg( _settingsApi ).update_beneficiario( req_update_beneficiario!, str_operacion );
                         break;
 
-                    case "DELETE_BENEFICIARIOS":
+                    case "DELETE_BENEFICIARIO":
                         var req_delete_beneficiario = JsonSerializer.Deserialize<ReqDeleteBeneficiario>( str_sol_tran );
                         respuesta = new BeneficiariosNeg( _settingsApi ).delete_beneficiario( req_delete_beneficiario!, str_operacion );
                         break;
@@ -112,7 +112,7 @@ namespace wsTransferencias.Neg
                         respuesta = new BeneficiariosNeg( _settingsApi ).get_cuentas_beneficiario( get_ctas_beneficiario!, str_operacion );
                         break;
 
-                    case "VALIDAR_REGISTRO_BENEFICIARIOS":
+                    case "VALIDAR_REGISTRO_BENEFICIARIO":
                         var valida_beneficiarios = JsonSerializer.Deserialize<ReqValidaBeneficiario>( str_sol_tran );
                         respuesta = new BeneficiariosNeg( _settingsApi ).validar_registro_beneficiarios( valida_beneficiarios!, str_operacion );
                         break;

@@ -62,7 +62,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer } );
 
-                ds.NombreSP = "add_cuentas_beneficiarios_v2";
+                ds.NombreSP = "add_cuentas_beneficiarios2";
                 ds.NombreBD = _settings.BD_megservicios;
 
                 var resultado = objClienteDal.ExecuteDataSet( ds );
@@ -126,7 +126,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer } );
 
-                ds.NombreSP = "update_cuentas_beneficiarios_v2";
+                ds.NombreSP = "update_cuentas_beneficiarios2";
                 ds.NombreBD = _settings.BD_megservicios;
 
                 var resultado = objClienteDal.ExecuteNonQuery( ds );
@@ -185,7 +185,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer } );
 
-                ds.NombreSP = "delete_cuentas_beneficiarios_v2";
+                ds.NombreSP = "delete_cuentas_beneficiarios2";
                 ds.NombreBD = _settings.BD_megservicios;
 
                 var resultado = objClienteDal.ExecuteNonQuery( ds );
@@ -282,11 +282,11 @@ namespace wsTransferencias.Dat
             {
                 DatosSolicitud ds = new DatosSolicitud();
 
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_codigo_ifi", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.objBeneficiario.str_codigo_ifi } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_producto", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.objBeneficiario.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_cta", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.objBeneficiario.str_num_cta.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_documento", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.objBeneficiario.str_num_documento.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.objBeneficiario.int_ente_registra.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_codigo_ifi", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_codigo_ifi } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_producto", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_tipo_producto.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_cta", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_numero_cuenta.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_documento", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_numero_documento.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_ente_registra.ToString() } );
 
                 //Variables de auditoria
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_id_transaccion.ToString() } );
