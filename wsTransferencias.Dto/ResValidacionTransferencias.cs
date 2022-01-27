@@ -6,7 +6,8 @@ namespace wsTransferencias.Dto
     public class ResValidacionTransferencias : ResComun
     {
         public ValidacionTransferencia objValidacionTransferencia { get; set; }
-
+        public Boolean bl_requiere_otp { get; set; }
+        
         public class ValidacionTransferencia
         {
             public int int_id_cta_beneficiario { get; set; }
@@ -28,6 +29,7 @@ namespace wsTransferencias.Dto
             public int int_enviar_banred { get; set; }
 
         }
+        
     }
    
 }
