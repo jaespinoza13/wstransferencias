@@ -50,7 +50,6 @@ namespace wsTransferencias.Neg
                         respuesta = new TransferenciasNeg( _settingsApi ).get_consulta_transferencias( req_get_parametros, str_operacion );
                         break;
                     case "GET_CUPOS_SOCIOS":
-                      
                     case "SET_CUPOS_SOCIOS":
                         validacion_token = Utils.Utils.ValidarToken( _settingsApi, JsonSerializer.Serialize( sol_tran ) ).Result;
                         respuesta = validacion_token.str_res_codigo.Equals( "000" ) ? ProcesarSolicitudCupos( JsonSerializer.Serialize( sol_tran ), str_operacion ) : validacion_token;

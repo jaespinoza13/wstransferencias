@@ -34,7 +34,7 @@ namespace wsTransferencias.Neg
                 RespuestaTransaccion res_tran = new CuposDat( _settingsApi ).get_cupos( req_get_cupos );
 
                 respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals( "000" )) ? "OK" : "ERR";
-
+                respuesta.lst_cupos=Utils.Utils.ConvertConjuntoDatosToListClass<ResGetCupos.Cupo>( (ConjuntoDatos) res_tran.cuerpo );
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
             }
