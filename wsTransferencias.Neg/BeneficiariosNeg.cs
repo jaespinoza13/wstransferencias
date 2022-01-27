@@ -158,8 +158,6 @@ namespace wsTransferencias.Neg
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
 
-
-
             }
             catch(Exception exception)
             {

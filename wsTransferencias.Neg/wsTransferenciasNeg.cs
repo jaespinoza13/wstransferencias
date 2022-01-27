@@ -102,7 +102,7 @@ namespace wsTransferencias.Neg
                         respuesta = new BeneficiariosNeg( _settingsApi ).delete_beneficiario( req_delete_beneficiario!, str_operacion );
                         break;
 
-                    case "GET_BENEFICIARIOS":
+                    case "GET_BENEFICIARIO":
                         var req_get_beneficiario = JsonSerializer.Deserialize<ReqGetBeneficiario>( str_sol_tran );
                         respuesta = new BeneficiariosNeg( _settingsApi ).get_beneficiario( req_get_beneficiario!, str_operacion );
                         break;
