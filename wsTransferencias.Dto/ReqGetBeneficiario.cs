@@ -5,6 +5,6 @@ namespace wsTransferencias.Dto
 {
     public class ReqGetBeneficiario : Header
     {
-        public int int_ente_registra { get; set; }
+        public int int_ente { get; set; }
     }
 }

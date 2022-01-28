@@ -152,7 +152,7 @@ namespace wsTransferencias.Neg
 
                     case "SET_CUPOS_SOCIOS":
                         //respuesta = new ResTransferencia();
-                       // respuesta = new CuposNeg( _settingsApi ).set_cupos_socios( req_valida_transferencia!, str_operacion );
+                        // respuesta = new CuposNeg( _settingsApi ).set_cupos_socios( req_valida_transferencia!, str_operacion );
                         break;
                 }
 
@@ -169,7 +169,8 @@ namespace wsTransferencias.Neg
             }
 
             return respuesta;
-        }   public Object ProcesarSolicitudValidacionTransferencias ( string str_va_transferencia, string str_operacion )
+        }
+        public Object ProcesarSolicitudValidacionTransferencias ( string str_va_transferencia, string str_operacion )
         {
             Object respuesta = new();
             try
