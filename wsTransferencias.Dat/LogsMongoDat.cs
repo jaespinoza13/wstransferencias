@@ -179,32 +179,7 @@ namespace wsTransferencias.Dat
             return respuesta;
         }
 
-        public RespuestaTransaccion guardar_peticion_diaria ( string filtro, object peticion )
-        {
-            var respuesta = new RespuestaTransaccion();
-            var ds = new DatosSolicitud();
-            try
-            {
 
-                String ser_cabecera = JsonSerializer.Serialize( peticion );
-                ds.StrNameBD = str_servicio;
-                ds.NombreColeccion = "peticiones_diarias";
-                ds.Filter = filtro;
-                ds.SolTran = ser_cabecera;
-
-                DatosRespuesta res = objClienteMongo.insertar_documento( ds );
-
-                respuesta.codigo = "000";
-                respuesta.cuerpo = res.Mensaje;
-            }
-            catch(Exception ex)
-
-            {
-                respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", ex.ToString() );
-            }
-            return respuesta;
-        }
         public RespuestaTransaccion actualizar_peticion_diaria ( string filtro, string peticion )
         {
             var respuesta = new RespuestaTransaccion();
@@ -212,12 +187,12 @@ namespace wsTransferencias.Dat
             try
             {
 
-                ds.StrNameBD = str_servicio;
+                ds.StrNameBD = "wsUtilidades";
                 ds.NombreColeccion = "peticiones_diarias";
                 ds.Filter = filtro;
                 ds.SolTran = peticion;
 
-                DatosRespuesta res = objClienteMongo.actualizar_documento( ds );
+                DatosRespuesta res = objClienteMongo.actualizar_documento_avanzado( ds );
 
                 respuesta.codigo = "000";
                 respuesta.cuerpo = res.Mensaje;

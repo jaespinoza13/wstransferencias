@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -84,20 +85,18 @@ namespace wsTransferencias.Neg.Utils
 
 
         #region "Control de peticiones diarias"
-        public static Boolean control_peticion_diaria ( string str_operacion, SettingsApi settings )
+        public static bool control_peticion_diaria ( string str_operacion, SettingsApi serviceSettings, ResComun respuestaLog )
         {
 
-            var var_respuesta = new RespuestaTransaccion();
-            var peticion_diaria = new PeticionDiaria();
-            Boolean respuesta = false;
+            bool respuesta = true;
 
             string str_fecha_diaria = DateTime.Now.ToString( "yyyy-MM-dd" );
             string str_filtro = "{'str_fecha_solicitud':'" + str_fecha_diaria + "','str_operacion':'" + str_operacion + "'}";
 
             try
             {
-                var_respuesta = new LogsMongoDat( settings! ).buscar_peticiones_diarias( str_filtro );
-
+                RespuestaTransaccion var_respuesta = new LogsMongoDat( serviceSettings! ).buscar_peticiones_diarias( str_filtro );
+                int int_act_peticiones = 1;
                 if(var_respuesta.codigo == "000")
                 {
                     var resp_mongo = var_respuesta.cuerpo;
@@ -105,39 +104,36 @@ namespace wsTransferencias.Neg.Utils
                     {
                         var res_datos_mongo = var_respuesta.cuerpo.ToString()!.Replace( "ObjectId(", " " ).Replace( ")", " " );
                         res_datos_mongo = res_datos_mongo.Replace( "[", "" ).Replace( "]", "" );
-
-                        peticion_diaria = JsonSerializer.Deserialize<PeticionDiaria>( res_datos_mongo );
+                        PeticionDiaria peticion_diaria = JsonSerializer.Deserialize<PeticionDiaria>( res_datos_mongo )!;
                         if(peticion_diaria!._id != null)
                         {
-                            int int_act_peticiones = peticion_diaria.int_num_peticion + 1;
+                            int_act_peticiones = peticion_diaria.int_num_peticion + 1;
 
-                            int respuesta_promedio = new LogsMongoDat( settings! ).obtener_promedio( str_operacion );
+                            int respuesta_promedio = new LogsMongoDat( serviceSettings! ).obtener_promedio( str_operacion );
                             var cantidad_maxima = respuesta_promedio * Convert.ToInt32( LoadConfigService.FindParametro( "PRM_MAXIMO_PETICIONES_DIARIAS" )!.str_valor_ini ) / 100;
 
-                            if(settings.valida_peticiones_diarias && int_act_peticiones > cantidad_maxima)
-                            {
-                                respuesta = true;
-                            }
-                            else
-                            {
-                                string str_act_registro = "{$set:{'int_num_peticion':" + int_act_peticiones + "}}";
-                                var_respuesta = new LogsMongoDat( settings! ).actualizar_peticion_diaria( str_filtro, str_act_registro );
+                            if(serviceSettings.valida_peticiones_diarias && int_act_peticiones > cantidad_maxima)
+                                respuesta = false;
 
-                            }
                         }
                     }
                     else
                     {
-                        object obj_sol = new { int_num_peticion = 1, str_operacion, str_fecha_solicitud = str_fecha_diaria };
-                        new LogsMongoDat( settings! ).guardar_promedio_peticion_diaria( str_operacion, str_fecha_diaria );
-                        new LogsMongoDat( settings! ).guardar_peticion_diaria( String.Empty, obj_sol );
+                        new LogsMongoDat( serviceSettings! ).guardar_promedio_peticion_diaria( str_operacion, str_fecha_diaria );
                     }
+
+                    string str_act_registro = "{$set:{'int_num_peticion':" + int_act_peticiones + ", 'str_fecha_solicitud' : '" + str_fecha_diaria + "',str_operacion:'" + str_operacion + "'}}";
+                    var_respuesta = new LogsMongoDat( serviceSettings! ).actualizar_peticion_diaria( str_filtro, str_act_registro );
+
+
                 }
             }
-            catch(Exception)
+            catch(Exception exception)
             {
-                Console.WriteLine( "" );
-                throw;
+                ServiceLogs.SaveExceptionLogs( respuestaLog, str_operacion, MethodBase.GetCurrentMethod()!.Name, "Utils", exception );
+
+                respuesta = true;
+
             }
             return respuesta;
         }
