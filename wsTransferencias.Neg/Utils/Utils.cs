@@ -206,5 +206,8 @@ namespace wsTransferencias.Neg.Utils
             return cabecera;
         }
         #endregion
+
+
+
     }
 }

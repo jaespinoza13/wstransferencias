@@ -38,6 +38,10 @@ namespace wsTransferencias.Neg
                 {
                     respuesta.objValidacionTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResValidacionTransferencias.ValidacionTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
 
+                    respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, "TRN_EXTERNAS" ).Result.codigo.Equals( "1009" );
+
+
+
                     if(respuesta!.objValidacionTransferencia.int_enviar_banred == 1)
                     {
                         string str_req_validar_transferencia = JsonSerializer.Serialize( req_validar_transferencia );
@@ -417,13 +421,13 @@ namespace wsTransferencias.Neg
 
             try
             {
-                RespuestaTransaccion res_tran = new TransferenciasDat( _settingsApi ).validar_transfer_interna( req_validar_transferencia );
 
+                RespuestaTransaccion res_tran = new TransferenciasDat( _settingsApi ).validar_transfer_interna( req_validar_transferencia );
                 respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals( "000" )) ? "OK" : "ERR";
                 respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, str_operacion ).Result.codigo.Equals( "1009" );
-
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+
             }
             catch(Exception exception)
             {

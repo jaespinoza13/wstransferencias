@@ -154,11 +154,9 @@ namespace wsTransferencias.Neg
 
                 var res_tran = new BeneficiariosDat( _settingsApi ).validar_registro_beneficiarios( req_validar_beneficiarios );
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
-                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, str_operacion ).Result.codigo.Equals( "1009" );
+                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, "ADD_BENEFICIARIO" ).Result.codigo.Equals( "1009" );
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-
-
 
             }
             catch(Exception exception)
