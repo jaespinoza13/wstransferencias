@@ -2,6 +2,7 @@
 
 EXPOSE 80
 
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["wsTransferencias/wsTransferencias.csproj", "wsTransferencias/"]
 COPY ["wsTransferencias.Model/wsTransferencias.Model.csproj", "wsTransferencias.Model/"]
