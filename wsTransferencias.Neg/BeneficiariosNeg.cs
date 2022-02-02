@@ -142,6 +142,8 @@ namespace wsTransferencias.Neg
 
 
         public ResValidaBeneficiario validar_registro_beneficiarios ( ReqValidaBeneficiario req_validar_beneficiarios, string str_operacion )
+
+
         {
 
             var respuesta = new ResValidaBeneficiario();
@@ -151,7 +153,6 @@ namespace wsTransferencias.Neg
 
             try
             {
-
                 var res_tran = new BeneficiariosDat( _settingsApi ).validar_registro_beneficiarios( req_validar_beneficiarios );
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
                 respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, "ADD_BENEFICIARIO" ).Result.codigo.Equals( "1009" );

@@ -83,7 +83,6 @@ namespace wsTransferencias.Neg.Utils
         }
         #endregion
 
-
         #region "Control de peticiones diarias"
         public static bool control_peticion_diaria ( string str_operacion, SettingsApi serviceSettings, ResComun respuestaLog )
         {
@@ -139,6 +138,27 @@ namespace wsTransferencias.Neg.Utils
         }
         #endregion
 
+        #region Método "Llena cabecera"
+        /// <summary>
+        /// Llena header para realizar peticiones a otro servicio
+        /// </summary>
+        /// <returns></returns>
+
+        public static Cabecera llenar_cabecera ( Header header )
+        {
+            Cabecera cabecera = new Cabecera();
+            cabecera.int_sistema = Convert.ToInt32( header.str_id_sistema );
+            cabecera.str_usuario = header.str_login;
+            cabecera.int_perfil = Convert.ToInt32( header.str_id_oficina );
+            cabecera.int_oficina = Convert.ToInt32( header.str_id_oficina );
+            cabecera.str_nemonico_canal = header.str_nemonico_canal;
+            cabecera.str_ip = header.str_ip_dispositivo;
+            cabecera.str_session = header.str_sesion;
+            cabecera.str_mac = header.str_ip_dispositivo;
+
+            return cabecera;
+        }
+        #endregion
 
         #region Método "Validar requiere OTP"
         /// <summary>
@@ -185,29 +205,45 @@ namespace wsTransferencias.Neg.Utils
         }
         #endregion
 
-        #region Método "Llena cabecera"
-        /// <summary>
-        /// Llena header para realizar peticiones a otro servicio
-        /// </summary>
-        /// <returns></returns>
 
-        public static Cabecera llenar_cabecera ( Header header )
+        public async static Task<RespuestaTransaccion> ValidaOtp ( SettingsApi settings, Header header, string str_operacion )
         {
-            Cabecera cabecera = new Cabecera();
-            cabecera.int_sistema = Convert.ToInt32( header.str_id_sistema );
-            cabecera.str_usuario = header.str_login;
-            cabecera.int_perfil = Convert.ToInt32( header.str_id_oficina );
-            cabecera.int_oficina = Convert.ToInt32( header.str_id_oficina );
-            cabecera.str_nemonico_canal = header.str_nemonico_canal;
-            cabecera.str_ip = header.str_ip_dispositivo;
-            cabecera.str_session = header.str_sesion;
-            cabecera.str_mac = header.str_ip_dispositivo;
 
-            return cabecera;
+            var parametros = "api/WsOTP?str_operacion=VALIDA_OTP";
+            var service = new ServiceHttp<RespuestaTransaccion>();
+
+            var cabecera = new
+            {
+
+                int_id_sistema = Convert.ToInt32( header.str_id_sistema ),
+                int_id_usuario = Convert.ToInt32( header.str_id_usuario ),
+                str_usuario = header.str_login,
+                int_id_perfil = header.str_id_perfil,
+                int_id_oficina = header.str_id_oficina,
+                str_nombre_canal = header.str_app,
+                str_nemonico_canal = header.str_nemonico_canal,
+                str_ip = header.str_ip_dispositivo,
+                str_session = header.str_sesion,
+                str_mac = header.str_mac_dispositivo
+            };
+
+            var cuerpo = new
+            {
+                str_operacion = str_operacion,
+            };
+
+            var raw = new
+            {
+                cabecera = cabecera,
+                cuerpo = cuerpo
+            };
+
+            string str_data = JsonSerializer.Serialize( raw );
+            RespuestaTransaccion respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp );
+
+            return respuesta;
+
         }
-        #endregion
-
-
 
     }
 }

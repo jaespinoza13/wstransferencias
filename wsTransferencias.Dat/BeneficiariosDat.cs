@@ -45,7 +45,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_email", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_email.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_alias_cta", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_alias_cta.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_tipo_beneficiario.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_ente_registra.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_ente.ToString() } );
 
                 //Variables de auditoria
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_id_transaccion.ToString() } );
@@ -108,7 +108,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_email", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_email.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_alias_cta", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_alias_cta.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_tipo_beneficiario.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_ente_registra.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_ente.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_id.ToString() } );
 
                 //Variables de auditoria
@@ -167,7 +167,7 @@ namespace wsTransferencias.Dat
                 DatosSolicitud ds = new DatosSolicitud();
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_id.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_ente_registra.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_ente.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_motivo_elimina", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_motivo_elimina.ToString() } );
 
                 //Variables de auditoria
@@ -286,7 +286,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_producto", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_tipo_producto.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_cta", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_numero_cuenta.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_documento", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_numero_documento.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_ente_registra.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_ente.ToString() } );
 
                 //Variables de auditoria
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_id_transaccion.ToString() } );
@@ -344,7 +344,7 @@ namespace wsTransferencias.Dat
                 DatosSolicitud ds = new DatosSolicitud();
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_cta", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_numero_cuenta } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.int_ente_registra.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.int_ente.ToString() } );
 
                 //Variables de auditoria
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_sistema", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_id_sistema } );
@@ -455,7 +455,7 @@ namespace wsTransferencias.Dat
             {
                 DatosSolicitud ds = new DatosSolicitud();
 
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.VarChar, ObjValue = req_valida_cuenta.int_ente_registra.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.VarChar, ObjValue = req_valida_cuenta.int_ente.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_cuenta_origen", TipoDato = TipoDato.VarChar, ObjValue = req_valida_cuenta.str_num_cuenta.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_cuenta_destino", TipoDato = TipoDato.VarChar, ObjValue = req_valida_cuenta.str_num_cuenta.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_cod_ifi", TipoDato = TipoDato.VarChar, ObjValue = req_valida_cuenta.str_num_cuenta.ToString() } );
