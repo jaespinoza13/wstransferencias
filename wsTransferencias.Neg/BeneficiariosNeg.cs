@@ -23,12 +23,14 @@ namespace wsTransferencias.Neg
         public ResBeneficiarios add_beneficiario ( ReqAddBeneficiario req_add_beneficiario, string str_operacion )
         {
             var respuesta = new ResBeneficiarios();
+            var res_tran = new RespuestaTransaccion();
             respuesta.LlenarResHeader( req_add_beneficiario );
             req_add_beneficiario.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqAddBeneficiario>( req_add_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             respuesta.str_id_transaccion = req_add_beneficiario.str_id_transaccion;
 
             try
             {
+
                 string[] lst_palabras_nombre = req_add_beneficiario.str_nombres.Split( " " );
 
                 if(!ValidacionInyeccionSql.validar_palabras_sql( req_add_beneficiario.str_nombres, "str_nombres", str_operacion, req_add_beneficiario, str_clase ))
@@ -45,11 +47,23 @@ namespace wsTransferencias.Neg
                 }
                 else
                 {
-                    RespuestaTransaccion res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
-                    respuesta.str_res_codigo = res_tran.codigo;
-                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-                    respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
+                    var requiereOtp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_beneficiario, "ADD_BENEFICIARIO" ).Result.codigo.Equals( "1009" );
+
+                    if(requiereOtp)
+                    {
+                        res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_beneficiario ).Result;
+                    }
+
+                    if(res_tran.codigo.Equals( "000" ))
+                    {
+                        res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
+                        respuesta.str_res_codigo = res_tran.codigo;
+                        respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                    }
                 }
+
+                respuesta.str_res_codigo = res_tran.codigo;
+                respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
 
                 Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                 respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
@@ -142,8 +156,6 @@ namespace wsTransferencias.Neg
 
 
         public ResValidaBeneficiario validar_registro_beneficiarios ( ReqValidaBeneficiario req_validar_beneficiarios, string str_operacion )
-
-
         {
 
             var respuesta = new ResValidaBeneficiario();

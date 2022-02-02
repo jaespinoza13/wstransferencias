@@ -168,8 +168,7 @@ namespace wsTransferencias.Neg.Utils
         public async static Task<RespuestaTransaccion> ValidaRequiereOtp ( SettingsApi settings, Header header, string str_operacion )
         {
 
-            var parametros = "api/WsOTP?str_operacion=VALIDA_REQUIERE_OTP";
-            var service = new ServiceHttp<RespuestaTransaccion>();
+            
 
             var cabecera = new
             {
@@ -197,6 +196,8 @@ namespace wsTransferencias.Neg.Utils
                 cuerpo = cuerpo
             };
 
+            var parametros = "api/WsOTP?str_operacion=VALIDA_REQUIERE_OTP";
+            var service = new ServiceHttp<RespuestaTransaccion>();
             string str_data = JsonSerializer.Serialize( raw );
             RespuestaTransaccion respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp );
 
@@ -205,39 +206,44 @@ namespace wsTransferencias.Neg.Utils
         }
         #endregion
 
-
-        public async static Task<RespuestaTransaccion> ValidaOtp ( SettingsApi settings, Header header, string str_operacion )
+        public async static Task<RespuestaTransaccion> ValidaOtp ( SettingsApi settings, dynamic req_valida_otp)
         {
 
-            var parametros = "api/WsOTP?str_operacion=VALIDA_OTP";
-            var service = new ServiceHttp<RespuestaTransaccion>();
+            RespuestaTransaccion res_datos_otp = new ParametrosDat( settings ).get_datos_otp( req_valida_otp );
+            var datosOtp = Utils.ConvertConjuntoDatosToClass<ConfiguracionOtp>( (ConjuntoDatos) res_datos_otp.cuerpo );
 
             var cabecera = new
             {
-
-                int_id_sistema = Convert.ToInt32( header.str_id_sistema ),
-                int_id_usuario = Convert.ToInt32( header.str_id_usuario ),
-                str_usuario = header.str_login,
-                int_id_perfil = header.str_id_perfil,
-                int_id_oficina = header.str_id_oficina,
-                str_nombre_canal = header.str_app,
-                str_nemonico_canal = header.str_nemonico_canal,
-                str_ip = header.str_ip_dispositivo,
-                str_session = header.str_sesion,
-                str_mac = header.str_mac_dispositivo
+                int_id_sistema = Convert.ToInt32( req_valida_otp.str_id_sistema ),
+                int_id_usuario = Convert.ToInt32( req_valida_otp.str_id_usuario ),
+                str_usuario = req_valida_otp.str_login,
+                int_id_perfil = req_valida_otp.str_id_perfil,
+                int_id_oficina = req_valida_otp.str_id_oficina,
+                str_nombre_canal = req_valida_otp.str_app,
+                str_nemonico_canal = req_valida_otp.str_nemonico_canal,
+                str_ip = req_valida_otp.str_ip_dispositivo,
+                str_session = req_valida_otp.str_sesion,
+                str_mac = req_valida_otp.str_mac_dispositivo
             };
 
-            var cuerpo = new
+            var config_otp = new
             {
-                str_operacion = str_operacion,
+                int_ente_socio = req_valida_otp.int_ente,
+                str_celular = datosOtp!.str_celular,
+                str_canal = req_valida_otp.str_nemonico_canal,
+                str_proceso = req_valida_otp.str_app,
+                str_servicio = req_valida_otp.str_id_servicio,
+                str_clave = req_valida_otp.str_otp
             };
 
             var raw = new
             {
                 cabecera = cabecera,
-                cuerpo = cuerpo
+                cuerpo = config_otp
             };
 
+            var parametros = "api/WsOTP?str_operacion=VALIDA_OTP";
+            var service = new ServiceHttp<RespuestaTransaccion>();
             string str_data = JsonSerializer.Serialize( raw );
             RespuestaTransaccion respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp );
 

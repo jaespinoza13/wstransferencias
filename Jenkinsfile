@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    
+    agent {
+        node {
+            label 'master'
+        }
+    }
 
     stages {
         
@@ -21,6 +26,9 @@ pipeline {
             }
         }
         stage('Deploy') {
+            when {
+                branch 'desarrollo'
+            }
             steps {
                 echo 'Deploying....'
                  sh 'docker run -it --rm -e TZ=America/Guayaquil -dp  8003:80 --name service-transferencias wstransferencias'

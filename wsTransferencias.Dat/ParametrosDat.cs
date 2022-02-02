@@ -44,8 +44,6 @@ namespace wsTransferencias.Dat
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_id_transaccion.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_sistema", TipoDato = TipoDato.Integer, ObjValue = Convert.ToInt32( req_get_parametros.str_id_sistema ).ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_login.ToString() } );
-                //ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_perfil", TipoDato = TipoDato.Integer, ObjValue = Convert.ToInt32( req_get_config_token.str_id_perfil ).ToString() } );
-                //ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_oficina", TipoDato = TipoDato.Integer, ObjValue = Convert.ToInt32( req_get_config_token.str_id_oficina ).ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nemonico_canal", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_nemonico_canal.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_ip_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_ip_dispositivo.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_session ", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_sesion.ToString() } );
@@ -84,6 +82,54 @@ namespace wsTransferencias.Dat
             return respuesta;
         }
 
+
+        public RespuestaTransaccion get_datos_otp ( dynamic req_get_datos )
+        {
+            var respuesta = new RespuestaTransaccion();
+
+            try
+            {
+                DatosSolicitud ds = new DatosSolicitud();
+
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = Convert.ToInt32( req_get_datos.int_ente).ToString() } );
+                
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_sistema", TipoDato = TipoDato.Integer, ObjValue = Convert.ToInt32( req_get_datos.str_id_sistema ).ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_canal", TipoDato = TipoDato.VarChar, ObjValue = req_get_datos.str_nemonico_canal.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = req_get_datos.str_login.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_equipo", TipoDato = TipoDato.VarChar, ObjValue = req_get_datos.str_ip_dispositivo.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_sesion", TipoDato = TipoDato.VarChar, ObjValue = req_get_datos.str_sesion.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_mac", TipoDato = TipoDato.VarChar, ObjValue = req_get_datos.str_mac_dispositivo.ToString() } );
+
+                ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_error_cod", TipoDato = TipoDato.Integer } );
+                ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_error", TipoDato = TipoDato.VarChar } );
+
+                ds.NombreSP = "get_datos_otp";
+                ds.NombreBD = _settings.BD_megonline;
+
+                var resultado = objClienteDal.ExecuteDataSet( ds );
+                var lst_valores = new List<ParametroSalidaValores>();
+
+                foreach(var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
+                var str_codigo = lst_valores.Find( x => x.StrNameParameter == "@o_error_cod" )!.ObjValue;
+                var str_error = lst_valores.Find( x => x.StrNameParameter == "@o_error" )!.ObjValue.Trim();
+
+                respuesta.codigo = str_codigo.ToString().Trim().PadLeft( 3, '0' );
+                respuesta.cuerpo = Funciones.ObtenerDatos( resultado );
+                respuesta.diccionario.Add( "str_error", str_error.ToString() );
+            }
+            catch(Exception exception)
+            {
+                respuesta.codigo = "001";
+                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                
+                infoLog.str_tipo = str_salida_error;
+                infoLog.str_objeto = exception;
+                infoLog.str_metodo = MethodBase.GetCurrentMethod()!.Name;
+                infoLog.str_operacion = "VALIDA_OTP";
+                LogServicios.RegistrarTramas( str_salida_error, infoLog, str_ruta );
+            }
+            return respuesta;
+        }
 
     }
 }

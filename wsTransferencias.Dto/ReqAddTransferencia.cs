@@ -13,6 +13,8 @@ namespace wsTransferencias.Dto
         public string str_observaciones { get; set; }
         public int int_id_comprobar_transfer { get; set; }
         public string str_correo_beneficiario { get; set; }
+        public string str_otp { get; set; }
+
 
     }
 }

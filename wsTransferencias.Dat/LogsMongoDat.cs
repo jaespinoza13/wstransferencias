@@ -14,14 +14,14 @@ namespace wsTransferencias.Dat
         private const string str_salida_error = "e:< ";
         private readonly DALMongoClient objClienteMongo;
         private readonly string str_servicio = "wsTransferencias";
+        private readonly SettingsApi _settings;
 
-
-        public LogsMongoDat ( SettingsApi _settings )
+        public LogsMongoDat ( SettingsApi settings )
         {
-            infoLog.str_clase = "LogsMongoDat";
+            infoLog.str_clase = settings.nombre_base_mongo;
             infoLog.str_tipo = str_salida_error;
-
-            var canal = GrpcChannel.ForAddress( _settings.servicio_grpc_mongo );
+            _settings = settings;
+            var canal = GrpcChannel.ForAddress( settings.servicio_grpc_mongo );
             objClienteMongo = new DALMongoClient( canal );
         }
 
@@ -33,7 +33,7 @@ namespace wsTransferencias.Dat
             {
                 String ser_cabecera = JsonSerializer.Serialize( cabecera );
                 ds.StrNameBD = str_servicio;
-                ds.NombreColeccion = "peticiones";
+                ds.NombreColeccion = _settings.coll_peticiones;
                 ds.Filter = String.Empty;
                 ds.SolTran = ser_cabecera;
 
@@ -72,7 +72,7 @@ namespace wsTransferencias.Dat
 
                 String ser_cabecera = JsonSerializer.Serialize( bjson );
                 ds.StrNameBD = str_servicio;
-                ds.NombreColeccion = "respuesta";
+                ds.NombreColeccion = _settings.coll_respuesta;
                 ds.Filter = String.Empty;
                 ds.SolTran = ser_cabecera;
 
@@ -110,7 +110,7 @@ namespace wsTransferencias.Dat
 
                 String ser_cabecera = JsonSerializer.Serialize( bjson );
                 ds.StrNameBD = str_servicio;
-                ds.NombreColeccion = "errores";
+                ds.NombreColeccion = _settings.coll_errores;
                 ds.Filter = String.Empty;
                 ds.SolTran = ser_cabecera;
 
@@ -136,7 +136,7 @@ namespace wsTransferencias.Dat
 
                 String ser_cabecera = JsonSerializer.Serialize( obj_respuesta );
                 ds.StrNameBD = str_servicio;
-                ds.NombreColeccion = "amenazas";
+                ds.NombreColeccion = _settings.coll_amenazas;
                 ds.Filter = String.Empty;
                 ds.SolTran = ser_cabecera;
 
@@ -161,7 +161,7 @@ namespace wsTransferencias.Dat
             try
             {
                 ds.StrNameBD = str_servicio;
-                ds.NombreColeccion = "peticiones_diarias";
+                ds.NombreColeccion = _settings.coll_peticiones_diarias;
                 ds.Filter = filtro;
                 ds.SolTran = String.Empty;
 
@@ -187,8 +187,8 @@ namespace wsTransferencias.Dat
             try
             {
 
-                ds.StrNameBD = "wsUtilidades";
-                ds.NombreColeccion = "peticiones_diarias";
+                ds.StrNameBD = str_servicio;
+                ds.NombreColeccion = _settings.coll_peticiones_diarias;
                 ds.Filter = filtro;
                 ds.SolTran = peticion;
 
@@ -214,7 +214,7 @@ namespace wsTransferencias.Dat
             {
                 string str_filtro = "{'str_operacion':'" + str_operacion + "'}";
                 ds.StrNameBD = str_servicio;
-                ds.NombreColeccion = "promedio_peticiones_diarias";
+                ds.NombreColeccion = _settings.coll_promedio_peticiones_diarias;
                 ds.Filter = str_filtro;
                 ds.SolTran = String.Empty;
                 DatosRespuesta res = objClienteMongo.buscar_documentos( ds );
@@ -267,7 +267,7 @@ namespace wsTransferencias.Dat
             try
             {
                 ds.StrNameBD = str_servicio;
-                ds.NombreColeccion = "peticiones_diarias";
+                ds.NombreColeccion = _settings.coll_peticiones_diarias;
                 ds.Filter = str_filtro;
                 ds.SolTran = String.Empty;
 
@@ -300,7 +300,7 @@ namespace wsTransferencias.Dat
             try
             {
                 ds.StrNameBD = str_servicio;
-                ds.NombreColeccion = "promedio_peticiones_diarias";
+                ds.NombreColeccion = _settings.coll_promedio_peticiones_diarias;
                 ds.Filter = str_filtro;
                 ds.SolTran = String.Empty;
 
