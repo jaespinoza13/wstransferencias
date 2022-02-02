@@ -424,7 +424,7 @@ namespace wsTransferencias.Neg
 
                 RespuestaTransaccion res_tran = new TransferenciasDat( _settingsApi ).validar_transfer_interna( req_validar_transferencia );
                 respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals( "000" )) ? "OK" : "ERR";
-                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, str_operacion ).Result.codigo.Equals( "1009" );
+                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, req_validar_transferencia.str_nemonico_tipo_transferencia ).Result.codigo.Equals( "1009" );
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
 
@@ -436,7 +436,7 @@ namespace wsTransferencias.Neg
             }
 
             ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
+            respuesta.str_res_codigo = "5000";
             return respuesta;
         }
 
@@ -462,7 +462,7 @@ namespace wsTransferencias.Neg
             }
 
             ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
+            respuesta.str_res_codigo = "5000";
             return respuesta;
 
         }

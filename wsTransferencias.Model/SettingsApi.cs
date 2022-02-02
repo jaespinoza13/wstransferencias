@@ -34,5 +34,13 @@ namespace wsTransferencias.Model
 
         public bool valida_peticiones_diarias { get; set; }
 
+        public string nombre_base_mongo { get; set; } = String.Empty;
+        public string coll_peticiones { get; set; } = String.Empty;
+        public string coll_respuesta { get; set; } = String.Empty;
+        public string coll_errores { get; set; } = String.Empty;
+        public string coll_amenazas { get; set; } = String.Empty;
+        public string coll_peticiones_diarias { get; set; } = String.Empty;
+        public string coll_promedio_peticiones_diarias { get; set; } = String.Empty;
+
     }
 }

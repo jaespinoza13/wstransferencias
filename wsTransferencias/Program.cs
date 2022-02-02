@@ -38,6 +38,9 @@ builder.Services.Configure<SettingsApi>( builder.Configuration.GetSection( "Sett
 builder.Services.Configure<SettingsApi>( builder.Configuration.GetSection( "SettingsApi:PathLogs" ) );
 builder.Services.Configure<SettingsApi>( builder.Configuration.GetSection( "SettingsApi:Config" ) );
 builder.Services.Configure<SettingsApi>( builder.Configuration.GetSection( "SettingsApi" ) );
+builder.Services.Configure<SettingsApi>( builder.Configuration.GetSection( "SettingsApi:ConfigBdMongo" ) );
+
+builder.Services.Configure<LoadParameters>( builder.Configuration.GetSection( "LoadParameters" ) );
 
 builder.Services.AddOptions();
 

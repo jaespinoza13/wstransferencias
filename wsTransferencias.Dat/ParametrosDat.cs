@@ -29,7 +29,7 @@ namespace wsTransferencias.Dat
             objClienteDal = new DALClient( canal );
         }
 
-        public RespuestaTransaccion get_parametros ( ReqGetParametros req_get_config_token )
+        public RespuestaTransaccion get_parametros ( ReqGetParametros req_get_parametros )
         {
             var respuesta = new RespuestaTransaccion();
 
@@ -37,17 +37,19 @@ namespace wsTransferencias.Dat
             {
                 DatosSolicitud ds = new DatosSolicitud();
 
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nombre", TipoDato = TipoDato.VarChar, ObjValue = req_get_config_token.str_nombre.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nombre", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_nombre.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nemonico", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_nemonico.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_front", TipoDato = TipoDato.Integer, ObjValue = req_get_parametros.int_front.ToString() } );
 
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = req_get_config_token.str_id_transaccion.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_sistema", TipoDato = TipoDato.Integer, ObjValue = Convert.ToInt32( req_get_config_token.str_id_sistema ).ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = req_get_config_token.str_login.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_perfil", TipoDato = TipoDato.Integer, ObjValue = Convert.ToInt32( req_get_config_token.str_id_perfil ).ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_oficina", TipoDato = TipoDato.Integer, ObjValue = Convert.ToInt32( req_get_config_token.str_id_oficina ).ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nemonico_canal", TipoDato = TipoDato.VarChar, ObjValue = req_get_config_token.str_nemonico_canal.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_ip_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = req_get_config_token.str_ip_dispositivo.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_session ", TipoDato = TipoDato.VarChar, ObjValue = req_get_config_token.str_sesion.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_mac_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = req_get_config_token.str_mac_dispositivo.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_id_transaccion.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_sistema", TipoDato = TipoDato.Integer, ObjValue = Convert.ToInt32( req_get_parametros.str_id_sistema ).ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_login.ToString() } );
+                //ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_perfil", TipoDato = TipoDato.Integer, ObjValue = Convert.ToInt32( req_get_config_token.str_id_perfil ).ToString() } );
+                //ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_oficina", TipoDato = TipoDato.Integer, ObjValue = Convert.ToInt32( req_get_config_token.str_id_oficina ).ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nemonico_canal", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_nemonico_canal.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_ip_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_ip_dispositivo.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_session ", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_sesion.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_mac_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_mac_dispositivo.ToString() } );
 
 
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar } );
@@ -72,11 +74,11 @@ namespace wsTransferencias.Dat
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
 
-                infoLog.str_id_transaccion = req_get_config_token.str_id_transaccion;
+                infoLog.str_id_transaccion = req_get_parametros.str_id_transaccion;
                 infoLog.str_tipo = str_salida_error;
                 infoLog.str_objeto = exception;
                 infoLog.str_metodo = MethodBase.GetCurrentMethod()!.Name;
-                infoLog.str_operacion = req_get_config_token.str_id_servicio;
+                infoLog.str_operacion = req_get_parametros.str_id_servicio;
                 LogServicios.RegistrarTramas( str_salida_error, infoLog, str_ruta );
             }
             return respuesta;
