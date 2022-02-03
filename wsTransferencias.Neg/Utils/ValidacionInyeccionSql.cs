@@ -20,8 +20,8 @@ namespace wsTransferencias.Neg.Utils
             string str_expresion_cuerpo_palabras = String.Empty;
 
             string str_palabas_pattern = String.Empty;
-            str_palabas_pattern += LoadConfigService.lst_parametros.SingleOrDefault( p => p.str_nemonico == "SQL_INJECTION_1" )!.str_valor_ini;
-            str_palabas_pattern += LoadConfigService.lst_parametros.SingleOrDefault( p => p.str_nemonico == "SQL_INJECTION_2" )!.str_valor_ini;
+            str_palabas_pattern += LoadConfigService.lst_parametros.SingleOrDefault( p => p.str_nemonico == "UTIL_SQL_INJECTION_1" )!.str_valor_ini;
+            str_palabas_pattern += LoadConfigService.lst_parametros.SingleOrDefault( p => p.str_nemonico == "UTIL_SQL_INJECTION_2" )!.str_valor_ini;
 
 
 
