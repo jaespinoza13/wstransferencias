@@ -231,11 +231,11 @@ namespace wsTransferencias.Neg
                 {
 
                     var datosValidaCuenta = Utils.Utils.ConvertConjuntoDatosToClass<Transaccion>( (ConjuntoDatos) res_obtiene_datos.cuerpo );
+                    //str_identificacion_receptor = req_valida_cuenta.str_identificacion
 
                     datosValidaCuenta!.str_tipo_tran = "CON";
                     datosValidaCuenta.int_secuencial = Convert.ToInt32( DateTime.Now.ToString( "HHmm" ) );
                     datosValidaCuenta.dec_monto_tran = 0;
-                    datosValidaCuenta.str_tipo_cuenta_receptor = "05";
                     datosValidaCuenta.str_cuenta_receptor = req_valida_cuenta.str_num_cuenta;
                     datosValidaCuenta.str_nom_receptor = String.Empty;
                     datosValidaCuenta.str_observaciones = String.Empty;
@@ -253,28 +253,19 @@ namespace wsTransferencias.Neg
                     string str_data = JsonSerializer.Serialize( sol_tran );
                     var service = new ServiceHttp<RespuestaTransaccion>();
                     RespuestaTransaccion res_banred = service.PostRestServiceDataAsync( str_data, _settingsApi.servicio_ws_banred, String.Empty, _settingsApi.auth_ws_banred ).Result;
-                    var obj_beneficiario = new Beneficiario();
+
                     if(res_banred.codigo.Equals( "000" ) || res_banred.codigo.Equals( "0000" ))
                     {
-
-                        obj_beneficiario.str_descripcion_tipo_producto = req_valida_cuenta.int_tipo_cuenta.ToString();
-                        obj_beneficiario.str_nombres = res_banred.cuerpo.ToString()!.Trim();
-                        obj_beneficiario.str_num_documento = req_valida_cuenta.str_identificacion;
-                        obj_beneficiario.str_email = req_valida_cuenta.str_email;
-
+                        respuesta.str_nombre = (string)res_banred.cuerpo;
                     }
                     else
                     {
-                        if(_settingsApi.pago_directo_offline == "1")
+                        if(_settingsApi.pago_directo_pruebas == "1")
                         {
                             //Solo para pruebas
                             res_banred.codigo = "000";
                             res_banred.diccionario["ERROR"] = string.Empty;
-
-                            obj_beneficiario.str_descripcion_tipo_producto = req_valida_cuenta.int_tipo_cuenta.ToString();
-                            obj_beneficiario.str_nombres = "Usuario MegOnline";
-                            obj_beneficiario.str_num_documento = req_valida_cuenta.str_identificacion;
-                            obj_beneficiario.str_email = req_valida_cuenta.str_email;
+                            respuesta.str_nombre = String.Empty;
                         }
                         else
                         {

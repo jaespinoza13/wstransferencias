@@ -14,7 +14,7 @@ namespace wsTransferencias.Model
         public string servicio_ws_banred { get; set; }
         public string servicio_ws_notificador { get; set; }
 
-        public string pago_directo_offline { get; set; }
+        public string pago_directo_pruebas { get; set; }
 
         public string path_logs_transferencias { get; set; }
         public string path_logs_amenazas { get; set; }

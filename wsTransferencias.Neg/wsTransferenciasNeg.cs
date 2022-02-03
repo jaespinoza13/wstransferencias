@@ -36,9 +36,8 @@ namespace wsTransferencias.Neg
 
                     case "VALIDA_TRANSFERENCIA":
                         string str_valida_transferencia = JsonSerializer.Serialize( sol_tran );
-                        //validacion_token = Utils.Utils.ValidarToken( _settingsApi, str_valida_transferencia ).Result;
-                        //respuesta = validacion_token.str_res_codigo.Equals( "000" ) ? ProcesarSolicitudValidacionTransferencias( str_valida_transferencia, str_operacion ) : validacion_token;
-                        respuesta = ProcesarSolicitudValidacionTransferencias( str_valida_transferencia, str_operacion );
+                        validacion_token = Utils.Utils.ValidarToken( _settingsApi, str_valida_transferencia ).Result;
+                        respuesta = validacion_token.str_res_codigo.Equals( "000" ) ? ProcesarSolicitudValidacionTransferencias( str_valida_transferencia, str_operacion ) : validacion_token;
                         break;
 
                     case "ADD_TRANSFERENCIA":

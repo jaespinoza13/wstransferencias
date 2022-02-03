@@ -455,11 +455,11 @@ namespace wsTransferencias.Dat
             {
                 DatosSolicitud ds = new DatosSolicitud();
 
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.VarChar, ObjValue = req_valida_cuenta.int_ente.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_cuenta_origen", TipoDato = TipoDato.VarChar, ObjValue = req_valida_cuenta.str_num_cuenta.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_cuenta_destino", TipoDato = TipoDato.VarChar, ObjValue = req_valida_cuenta.str_num_cuenta.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_cod_ifi", TipoDato = TipoDato.VarChar, ObjValue = req_valida_cuenta.str_num_cuenta.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_cuenta", TipoDato = TipoDato.VarChar, ObjValue = req_valida_cuenta.str_num_cuenta.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = req_valida_cuenta.int_ente.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_cuenta_origen", TipoDato = TipoDato.Integer, ObjValue = 0.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_cuenta_destino", TipoDato = TipoDato.Integer, ObjValue =0.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_cod_ifi", TipoDato = TipoDato.VarChar, ObjValue = req_valida_cuenta.str_codigo_ifi.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_cuenta", TipoDato = TipoDato.Integer, ObjValue = req_valida_cuenta.int_tipo_cuenta.ToString() } );
 
                 //Variables de auditoria
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = req_valida_cuenta.str_id_transaccion.ToString() } );

@@ -32,7 +32,7 @@ namespace wsTransferencias.Neg
 
             try
             {
-                var res_tran = new TransferenciasDat( _settingsApi ).val_transf_interbancarias( req_validar_transferencia );
+                var res_tran = new TransferenciasDat( _settingsApi ).get_val_transf_interbancarias( req_validar_transferencia );
 
                 if(res_tran.codigo.Equals( "000" ))
                 {

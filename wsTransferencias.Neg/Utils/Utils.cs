@@ -155,6 +155,7 @@ namespace wsTransferencias.Neg.Utils
             cabecera.str_ip = header.str_ip_dispositivo;
             cabecera.str_session = header.str_sesion;
             cabecera.str_mac = header.str_ip_dispositivo;
+            cabecera.str_nombre_canal = header.str_app;
 
             return cabecera;
         }
