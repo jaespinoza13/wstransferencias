@@ -263,9 +263,8 @@ namespace wsTransferencias.Neg
                         if(_settingsApi.pago_directo_pruebas == "1")
                         {
                             //Solo para pruebas
-                            res_banred.codigo = "000";
-                            res_banred.diccionario["ERROR"] = string.Empty;
                             respuesta.str_nombre = String.Empty;
+                            respuesta.str_res_info_adicional = "No se pudo validar la cuenta/tarjeta. Es probable que no haya respuesta de la institución financiera o que algún dato ingresado en el momento del registro de la cuenta/tarjeta sea incorrecto";
                         }
                         else
                         {
@@ -285,7 +284,7 @@ namespace wsTransferencias.Neg
             }
 
             Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
+            //respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
             return respuesta;
         }
     }
