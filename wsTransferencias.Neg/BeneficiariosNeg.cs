@@ -47,23 +47,25 @@ namespace wsTransferencias.Neg
                 }
                 else
                 {
-                    var requiereOtp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_beneficiario, "ADD_BENEFICIARIO" ).Result.codigo.Equals( "1009" );
+                    //var requiereOtp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_beneficiario, "ADD_BENEFICIARIO" ).Result.codigo.Equals( "1009" );
 
-                    if(requiereOtp)
-                    {
-                        res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_beneficiario ).Result;
-                    }
+                    //if(requiereOtp)
+                    //{
+                    //    res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_beneficiario ).Result;
+                    //}
 
-                    if(res_tran.codigo.Equals( "000" ))
-                    {
-                        res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
-                        respuesta.str_res_codigo = res_tran.codigo;
-                        respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-                    }
+                    //if(res_tran.codigo.Equals( "000" ))
+                    //{
+                    //    res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
+                    //    respuesta.str_res_codigo = res_tran.codigo;
+                    //    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                    //}
+
+                    res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
+                    respuesta.str_res_codigo = res_tran.codigo;
+                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
                 }
 
-                respuesta.str_res_codigo = res_tran.codigo;
-                respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
 
                 Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                 respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;

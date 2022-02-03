@@ -167,9 +167,6 @@ namespace wsTransferencias.Neg.Utils
         /// <returns></returns>
         public async static Task<RespuestaTransaccion> ValidaRequiereOtp ( SettingsApi settings, Header header, string str_operacion )
         {
-
-            
-
             var cabecera = new
             {
 
@@ -246,7 +243,6 @@ namespace wsTransferencias.Neg.Utils
             var service = new ServiceHttp<RespuestaTransaccion>();
             string str_data = JsonSerializer.Serialize( raw );
             RespuestaTransaccion respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp );
-
             return respuesta;
 
         }
