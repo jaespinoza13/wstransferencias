@@ -227,6 +227,7 @@ namespace wsTransferencias.Dat
                 DatosSolicitud ds = new DatosSolicitud();
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_ente.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nem_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_tipo_beneficiario.ToString() } );               
 
                 //Variables de auditoria
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_id_transaccion.ToString() } );
