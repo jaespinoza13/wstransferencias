@@ -47,8 +47,10 @@ namespace wsTransferencias.Neg
                         string str_req_validar_transferencia = JsonSerializer.Serialize( req_validar_transferencia );
                         var obj_transferencia = JsonSerializer.Deserialize<ReqTransferencia>( str_req_validar_transferencia );
 
+                        var datos_validados = Utils.Utils.ConvertConjuntoDatosToClass<DatosValidadosTransaccion>( (ConjuntoDatos) res_tran.cuerpo )!; 
+
                         Cabecera cabecera = Utils.Utils.llenar_cabecera( req_validar_transferencia! );
-                        RespuestaTransaccion respuesta_validaciones_pago_directo = validaciones_pago_directo( respuesta, cabecera );
+                        RespuestaTransaccion respuesta_validaciones_pago_directo = validaciones_pago_directo( datos_validados, cabecera );
 
                         if(respuesta_validaciones_pago_directo.codigo == "0000")
                         {
@@ -223,7 +225,10 @@ namespace wsTransferencias.Neg
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
             {
-                respuesta = conectar_banred( sol_tran );
+                //respuesta = conectar_banred( sol_tran );
+                string str_data = JsonSerializer.Serialize( sol_tran );
+                var service = new ServiceHttp<RespuestaTransaccion>();
+                respuesta = service.PostRestServiceDataAsync( str_data, _settingsApi.servicio_ws_banred, String.Empty, _settingsApi.auth_ws_banred ).Result;
 
             }
             catch(Exception ex)
@@ -255,7 +260,7 @@ namespace wsTransferencias.Neg
         }
 
 
-        public RespuestaTransaccion validaciones_pago_directo ( dynamic datos_validados, Cabecera cabecera )
+        public RespuestaTransaccion validaciones_pago_directo ( DatosValidadosTransaccion datos_validados, Cabecera cabecera )
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
