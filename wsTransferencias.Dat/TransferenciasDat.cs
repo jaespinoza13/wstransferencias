@@ -450,8 +450,8 @@ namespace wsTransferencias.Dat
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_mac_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = req_transferencia.str_mac_dispositivo.ToString() });
 
 
-                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_error", TipoDato = TipoDato.VarChar });
-                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_error_cod", TipoDato = TipoDato.Integer });
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar });
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer });
 
                 ds.NombreSP = "set_envio_transf_por_spi2";
                 ds.NombreBD = _settings.BD_megservicios;
@@ -460,8 +460,8 @@ namespace wsTransferencias.Dat
                 var lst_valores = new List<ParametroSalidaValores>();
 
                 foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add(item);
-                var str_codigo = lst_valores.Find(x => x.StrNameParameter == "@o_error_cod")!.ObjValue;
-                var str_error = lst_valores.Find(x => x.StrNameParameter == "@o_error")!.ObjValue.Trim();
+                var str_codigo = lst_valores.Find(x => x.StrNameParameter == "@int_o_error_cod" )!.ObjValue;
+                var str_error = lst_valores.Find(x => x.StrNameParameter == "@str_o_error" )!.ObjValue.Trim();
 
                 respuesta.codigo = str_codigo.ToString().Trim().PadLeft(3, '0');
                 respuesta.cuerpo = resultado.NumAfectados;
