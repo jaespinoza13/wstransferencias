@@ -166,7 +166,7 @@ namespace wsTransferencias.Neg
             {
                 var res_tran = new BeneficiariosDat( _settingsApi ).validar_registro_beneficiarios( req_validar_beneficiarios );
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
-                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, "ADD_BENEFICIARIO" ).Result.codigo.Equals( "1009" );
+                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, "ADD_BENEFICIARIO_CTAS_OTRAS_IFIS" ).Result.codigo.Equals( "1009" );
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
 
@@ -287,5 +287,34 @@ namespace wsTransferencias.Neg
             Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             return respuesta;
         }
+
+        public ResValidaBeneficiario validar_benef_otras_ctas_mego ( ReqValidaBeneficiario req_validar_beneficiarios, string str_operacion )
+        {
+
+            var respuesta = new ResValidaBeneficiario();
+            respuesta.LlenarResHeader( req_validar_beneficiarios );
+            req_validar_beneficiarios.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqValidaBeneficiario>( req_validar_beneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            respuesta.str_id_transaccion = req_validar_beneficiarios.str_id_transaccion;
+
+            try
+            {
+                var res_tran = new BeneficiariosDat( _settingsApi ).validar_benef_otras_ctas_mego( req_validar_beneficiarios );
+                respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
+                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, "ADD_BENEFICIARIO_CTAS_COOPMEGO" ).Result.codigo.Equals( "1009" );
+                respuesta.str_res_codigo = res_tran.codigo;
+                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+
+            }
+            catch(Exception exception)
+            {
+                Utils.ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
+                throw;
+            }
+
+            Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
+            return respuesta;
+        }
+
     }
 }

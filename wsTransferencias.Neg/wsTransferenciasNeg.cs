@@ -27,7 +27,7 @@ namespace wsTransferencias.Neg
                     case "DELETE_BENEFICIARIO":
                     case "GET_CUENTAS_BENEFICIARIO":
                     case "VALIDAR_REGISTRO_BENEFICIARIO":
-                    case "VALIDAR_CUENTA":
+                    case "VALIDA_CUENTAS_MEGO":
                     case "VALIDA_CUENTA_PD":
                         var str_beneficiarios = JsonSerializer.Serialize( sol_tran );
                         validacion_token = Utils.Utils.ValidarToken( _settingsApi, str_beneficiarios ).Result;
@@ -114,6 +114,10 @@ namespace wsTransferencias.Neg
                     case "VALIDAR_REGISTRO_BENEFICIARIO":
                         var valida_beneficiarios = JsonSerializer.Deserialize<ReqValidaBeneficiario>( str_sol_tran );
                         respuesta = new BeneficiariosNeg( _settingsApi ).validar_registro_beneficiarios( valida_beneficiarios!, str_operacion );
+                        break;
+                    case "VALIDA_CUENTAS_MEGO":
+                        var valida_cuenta = JsonSerializer.Deserialize<ReqValidaBeneficiario>( str_sol_tran );
+                        respuesta = new BeneficiariosNeg( _settingsApi ).validar_benef_otras_ctas_mego( valida_cuenta!, str_operacion );
                         break;
 
                     case "VALIDA_CUENTA_PD":
