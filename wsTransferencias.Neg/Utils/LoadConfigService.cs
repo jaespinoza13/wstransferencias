@@ -30,7 +30,8 @@ namespace wsTransferencias.Neg.Utils
                     req_get_parametros.str_nombre = "CODIGOS_ERROR";
                     req_get_parametros.str_id_sistema = item.ToString();
                     RespuestaTransaccion res_tran = new ParametrosDat( settings ).get_parametros( req_get_parametros );
-                    lst_errores.AddRange( Utils.ConvertConjuntoDatosToListClass<Parametro>( (ConjuntoDatos) res_tran.cuerpo ) );
+                    lst_errores.AddRange( Utils.ConvertConjuntoDatosToListClass<Parametro>( (ConjuntoDatos) res_tran.cuerpo ).Where( x => !lst_errores.Any( y => y.str_nemonico == x.str_nemonico ) ) );
+
                 }
 
                 foreach(var item in lst_nombres_parametros)
@@ -38,7 +39,7 @@ namespace wsTransferencias.Neg.Utils
                     req_get_parametros.str_nombre = item;
                     req_get_parametros.str_id_sistema = "-1";
                     RespuestaTransaccion res_tran2 = new ParametrosDat( settings ).get_parametros( req_get_parametros );
-                    lst_parametros.AddRange( Utils.ConvertConjuntoDatosToListClass<Parametro>( (ConjuntoDatos) res_tran2.cuerpo ) );
+                    lst_parametros.AddRange( Utils.ConvertConjuntoDatosToListClass<Parametro>( (ConjuntoDatos) res_tran2.cuerpo ).Where( x => !lst_parametros.Any( y => y.str_nemonico == x.str_nemonico ) ) );
                 }
                 dt_fecha_codigos = DateTime.Now.Date;
 
