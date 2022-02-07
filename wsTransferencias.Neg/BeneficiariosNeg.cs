@@ -288,10 +288,10 @@ namespace wsTransferencias.Neg
             return respuesta;
         }
 
-        public ResValidaBeneficiario validar_benef_otras_ctas_mego ( ReqValidaBeneficiario req_validar_beneficiarios, string str_operacion )
+        public ResValidaBeneficiarioCtasMego validar_benef_otras_ctas_mego ( ReqValidaBeneficiario req_validar_beneficiarios, string str_operacion )
         {
 
-            var respuesta = new ResValidaBeneficiario();
+            var respuesta = new ResValidaBeneficiarioCtasMego();
             respuesta.LlenarResHeader( req_validar_beneficiarios );
             req_validar_beneficiarios.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqValidaBeneficiario>( req_validar_beneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             respuesta.str_id_transaccion = req_validar_beneficiarios.str_id_transaccion;
@@ -299,6 +299,12 @@ namespace wsTransferencias.Neg
             try
             {
                 var res_tran = new BeneficiariosDat( _settingsApi ).validar_benef_otras_ctas_mego( req_validar_beneficiarios );
+
+                if(res_tran.codigo.Equals( "000" ))
+                {
+                    respuesta.lst_beneficiario = Utils.Utils.ConvertConjuntoDatosToListClass<Beneficiario>( (ConjuntoDatos) res_tran.cuerpo );
+                }
+
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
                 respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, "ADD_BENEFICIARIO_CTAS_COOPMEGO" ).Result.codigo.Equals( "1009" );
                 respuesta.str_res_codigo = res_tran.codigo;
