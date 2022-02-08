@@ -241,6 +241,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_cta_beneficiario", TipoDato = TipoDato.Integer, ObjValue = req_add_transferencia_interna.int_id_cta_beneficiario.ToString() });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@mny_monto", TipoDato = TipoDato.Money, ObjValue = req_add_transferencia_interna.dec_monto_tran.ToString() });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_observaciones", TipoDato = TipoDato.VarChar, ObjValue = req_add_transferencia_interna.str_observaciones.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_correo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = req_add_transferencia_interna.str_correo_beneficiario.ToString() });
 
 
                 //Variables de auditoria
