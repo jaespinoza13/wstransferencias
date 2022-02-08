@@ -249,7 +249,10 @@ namespace wsTransferencias.Neg
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
             {
-                respuesta = conectar_banred( sol_tran );
+                //respuesta = conectar_banred( sol_tran );
+                string str_data = JsonSerializer.Serialize( sol_tran );
+                var service = new ServiceHttp<RespuestaTransaccion>();
+                respuesta = service.PostRestServiceDataAsync( str_data, _settingsApi.servicio_ws_banred, String.Empty, _settingsApi.auth_ws_banred ).Result;
 
             }
             catch(Exception ex)
