@@ -47,7 +47,7 @@ namespace wsTransferencias.Neg
                 }
                 else
                 {
-                    var requiereOtp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_beneficiario, "ADD_BENEFICIARIO" ).Result.codigo.Equals( "1009" );
+                    var requiereOtp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_beneficiario, "ADD_BENEFICIARIO_CTAS_OTRAS_IFIS" ).Result.codigo.Equals( "1009" );
 
                     if(requiereOtp)
                     {
