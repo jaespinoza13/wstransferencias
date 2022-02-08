@@ -441,7 +441,7 @@ namespace wsTransferencias.Neg
             }
 
             ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_codigo = "5000";
+            respuesta.str_res_codigo = (respuesta.str_res_codigo.Equals( "000" )) ? respuesta.str_res_codigo : "5000";
             return respuesta;
         }
 
@@ -467,7 +467,7 @@ namespace wsTransferencias.Neg
             }
 
             ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_codigo = "5000";
+            respuesta.str_res_codigo = (respuesta.str_res_codigo.Equals( "000" )) ? respuesta.str_res_codigo : "5000";
             return respuesta;
 
         }
