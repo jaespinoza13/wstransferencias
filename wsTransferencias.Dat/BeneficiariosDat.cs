@@ -390,7 +390,7 @@ namespace wsTransferencias.Dat
             return respuesta;
         }
 
-        public RespuestaTransaccion get_ctas_beneficiario ( ReqCuentasBeneficiario obj_beneficiario )
+        public RespuestaTransaccion get_ctas_benef_transferencia ( ReqCuentasBeneficiario obj_beneficiario )
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
 
@@ -399,7 +399,7 @@ namespace wsTransferencias.Dat
                 DatosSolicitud ds = new DatosSolicitud();
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_ente.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nemo_tipo_transferencia", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_nemonico_tipo_transferencia.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nem_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_tipo_beneficiario.ToString() } );
 
                 //Variables de auditoria
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_id_transaccion.ToString() } );
@@ -416,7 +416,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer } );
 
-                ds.NombreSP = "get_ctas_beneficiario";
+                ds.NombreSP = "get_ctas_benef_transferencia";
                 ds.NombreBD = _settings.BD_megservicios;
 
                 var resultado = objClienteDal.ExecuteDataSet( ds );

@@ -183,7 +183,7 @@ namespace wsTransferencias.Neg
         }
 
 
-        public ResCuentasBeneficiario get_cuentas_beneficiario ( ReqCuentasBeneficiario req_cuentas_beneficiario, string str_operacion )
+        public ResCuentasBeneficiario get_ctas_benef_transferencia ( ReqCuentasBeneficiario req_cuentas_beneficiario, string str_operacion )
         {
             var respuesta = new ResCuentasBeneficiario();
             respuesta.LlenarResHeader( req_cuentas_beneficiario );
@@ -193,7 +193,7 @@ namespace wsTransferencias.Neg
             try
             {
 
-                RespuestaTransaccion res_tran = new BeneficiariosDat( _settingsApi ).get_ctas_beneficiario( req_cuentas_beneficiario );
+                RespuestaTransaccion res_tran = new BeneficiariosDat( _settingsApi ).get_ctas_benef_transferencia( req_cuentas_beneficiario );
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.lst_cuentas_beneficiario = Utils.Utils.ConvertConjuntoDatosToListClass<ResCuentasBeneficiario.CuentasBeneficiario>( (ConjuntoDatos) res_tran.cuerpo );

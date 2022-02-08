@@ -25,7 +25,7 @@ namespace wsTransferencias.Neg
                     case "GET_BENEFICIARIO":
                     case "UPDATE_BENEFICIARIO":
                     case "DELETE_BENEFICIARIO":
-                    case "GET_CUENTAS_BENEFICIARIO":
+                    case "GET_CTAS_BENEF_TRANSFERENCIA":
                     case "VALIDAR_REGISTRO_BENEFICIARIO":
                     case "VALIDA_OTRAS_CTAS_MEGO":
                     case "VALIDA_CUENTA_PD":
@@ -106,9 +106,9 @@ namespace wsTransferencias.Neg
                         respuesta = new BeneficiariosNeg( _settingsApi ).get_beneficiario( req_get_beneficiario!, str_operacion );
                         break;
 
-                    case "GET_CUENTAS_BENEFICIARIO":
+                    case "GET_CTAS_BENEF_TRANSFERENCIA":
                         var get_ctas_beneficiario = JsonSerializer.Deserialize<ReqCuentasBeneficiario>( str_sol_tran );
-                        respuesta = new BeneficiariosNeg( _settingsApi ).get_cuentas_beneficiario( get_ctas_beneficiario!, str_operacion );
+                        respuesta = new BeneficiariosNeg( _settingsApi ).get_ctas_benef_transferencia( get_ctas_beneficiario!, str_operacion );
                         break;
 
                     case "VALIDAR_REGISTRO_BENEFICIARIO":
