@@ -59,7 +59,7 @@ namespace wsTransferencias.Neg
                         res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
                         respuesta.str_res_codigo = res_tran.codigo;
                         respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-                        res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
+                        //res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
                     }
                     
                 }
