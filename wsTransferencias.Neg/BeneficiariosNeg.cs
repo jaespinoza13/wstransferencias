@@ -80,16 +80,36 @@ namespace wsTransferencias.Neg
         public ResBeneficiarios update_beneficiario ( ReqUpdateBeneficiario req_update_beneficiario, string str_operacion )
         {
             var respuesta = new ResBeneficiarios();
+            var res_tran = new RespuestaTransaccion();
             respuesta.LlenarResHeader( req_update_beneficiario );
             req_update_beneficiario.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqUpdateBeneficiario>( req_update_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             respuesta.str_id_transaccion = req_update_beneficiario.str_id_transaccion;
 
             try
             {
-                var res_tran = new BeneficiariosDat( _settingsApi ).update_cuentas_beneficiarios( req_update_beneficiario );
-                respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
-                respuesta.str_res_codigo = res_tran.codigo;
-                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                res_tran = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_update_beneficiario, req_update_beneficiario.str_tipo_beneficiario ).Result;
+
+                if(res_tran.codigo.Equals( "1009" ))
+                {
+                    res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_update_beneficiario ).Result;
+
+                    if(res_tran.codigo.Equals( "000" ))
+                    {
+                        res_tran = new BeneficiariosDat( _settingsApi ).update_cuentas_beneficiarios( req_update_beneficiario );
+                        respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
+                    }
+                }
+                else
+                {
+                    res_tran = new BeneficiariosDat( _settingsApi ).update_cuentas_beneficiarios( req_update_beneficiario );
+                    respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
+                }
+
+                respuesta.str_res_codigo = res_tran.codigo;               
+                Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
+                return respuesta;
+
             }
             catch(Exception exception)
             {
@@ -97,11 +117,7 @@ namespace wsTransferencias.Neg
                 throw;
             }
 
-            Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
-            return respuesta;
         }
-
 
         public ResBeneficiarios delete_beneficiario ( ReqDeleteBeneficiario req_delete_beneficiario, string str_operacion )
         {
