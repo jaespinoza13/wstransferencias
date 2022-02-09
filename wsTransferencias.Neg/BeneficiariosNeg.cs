@@ -47,21 +47,23 @@ namespace wsTransferencias.Neg
                 }
                 else
                 {
-                    var requiereOtp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_beneficiario, "ADD_BENEFICIARIO_CTAS_OTRAS_IFIS" ).Result.codigo.Equals( "1009" );
+                    res_tran = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_beneficiario, req_add_beneficiario.str_tipo_beneficiario ).Result;
 
-                    if(requiereOtp)
+                    if(res_tran.codigo.Equals( "1009" ))
                     {
                         res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_beneficiario ).Result;
+                        
+                        if(res_tran.codigo.Equals( "000" ))
+                        {
+                            res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
+                            respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                        }
                     }
-
-                    if(res_tran.codigo.Equals( "000" ))
+                    else
                     {
                         res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
-                        respuesta.str_res_codigo = res_tran.codigo;
                         respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-                        //res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
                     }
-                    
                 }
                 respuesta.str_res_codigo = res_tran.codigo;
                 Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
