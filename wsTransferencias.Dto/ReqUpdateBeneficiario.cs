@@ -15,5 +15,6 @@ namespace wsTransferencias.Dto
         public string str_email { get; set; }
         public string str_alias_cta { get; set; }
         public string str_tipo_beneficiario { get; set; }
+        public string str_otp { get; set; }
     }
 }
