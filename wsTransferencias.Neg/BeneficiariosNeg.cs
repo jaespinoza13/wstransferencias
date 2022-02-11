@@ -65,7 +65,7 @@ namespace wsTransferencias.Neg
                         respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
                     }
                 }
-                respuesta.str_res_codigo = res_tran.codigo;
+                respuesta.str_res_codigo = String.IsNullOrEmpty( res_tran.codigo ) ? respuesta.str_res_codigo : res_tran.codigo;
                 Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                 respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
                 return respuesta;
