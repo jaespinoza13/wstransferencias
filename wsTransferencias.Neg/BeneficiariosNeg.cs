@@ -202,33 +202,6 @@ namespace wsTransferencias.Neg
         }
 
 
-        public ResValidaBeneficiario validar_update_beneficiarios ( ReqValidaBeneficiario req_validar_beneficiarios, string str_operacion )
-        {
-
-            var respuesta = new ResValidaBeneficiario();
-            respuesta.LlenarResHeader( req_validar_beneficiarios );
-            req_validar_beneficiarios.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqValidaBeneficiario>( req_validar_beneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_validar_beneficiarios.str_id_transaccion;
-
-            try
-            {                
-                respuesta.str_res_estado_transaccion = "OK";
-                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result.codigo.Equals( "1009" );
-                respuesta.str_res_codigo = "000";
-                respuesta.str_res_info_adicional = "";
-
-            }
-            catch(Exception exception)
-            {
-                Utils.ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
-            }
-
-            Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
-            return respuesta;
-        }
-
         public ResCuentasBeneficiario get_ctas_benef_transferencia ( ReqCuentasBeneficiario req_cuentas_beneficiario, string str_operacion )
         {
             var respuesta = new ResCuentasBeneficiario();
