@@ -45,9 +45,10 @@ namespace wsTransferencias.Dat
                 DatosSolicitud ds = new DatosSolicitud();
 
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_num_cta_ordenante", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_num_cta_ordenante.ToString() });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_fecha_inicio", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_fecha_inicio.ToString() });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_fecha_fin", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_fecha_fin.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@dt_fecha_ini", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_fecha_inicio.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@dt_fecha_fin", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_fecha_fin.ToString() });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_filtro", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_filtro.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_ultimos_movimientos", TipoDato = TipoDato.Integer, ObjValue = req_get_transferencias.int_ultimos_movimientos.ToString() } );
 
                 //Variables de auditoria
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_id_transaccion.ToString() });
