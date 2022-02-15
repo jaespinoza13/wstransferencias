@@ -29,7 +29,6 @@ namespace wsTransferencias.Neg
                     case "VALIDAR_REGISTRO_BENEFICIARIO":
                     case "VALIDA_OTRAS_CTAS_MEGO":
                     case "VALIDA_CUENTA_PD":
-                    case "VALIDAR_UPDATE_BENEFICIARIO":
                         var str_beneficiarios = JsonSerializer.Serialize( sol_tran );
                         validacion_token = Utils.Utils.ValidarToken( _settingsApi, str_beneficiarios ).Result;
                         respuesta = validacion_token.str_res_codigo.Equals( "000" ) ? ProcesarSolicitudBeneficiarios( str_beneficiarios, str_operacion ) : validacion_token;
@@ -48,9 +47,10 @@ namespace wsTransferencias.Neg
                         break;
 
                     case "GET_CONSULTA_TRANSFERENCIAS":
-                        string str_get_parametros = JsonSerializer.Serialize( sol_tran );
-                        var req_get_parametros = JsonSerializer.Deserialize<ReqGetTransferencias>( str_get_parametros )!;
-                        respuesta = new TransferenciasNeg( _settingsApi ).get_consulta_transferencias( req_get_parametros, str_operacion );
+                                             var req_add_datos = JsonSerializer.Deserialize<ReqGetTransferencias>( JsonSerializer.Serialize( sol_tran ) )!;
+                        validacion_token = Utils.Utils.ValidarToken( _settingsApi, JsonSerializer.Serialize( sol_tran ) ).Result;
+                        respuesta = validacion_token.str_res_codigo.Equals( "000" ) ? new TransferenciasNeg(_settingsApi).get_consulta_transferencias( req_add_datos, str_operacion ) : validacion_token;
+
                         break;
                     case "GET_CUPOS_SOCIOS":
                     case "SET_CUPOS_SOCIOS":
@@ -115,10 +115,6 @@ namespace wsTransferencias.Neg
                     case "VALIDAR_REGISTRO_BENEFICIARIO":
                         var valida_beneficiarios = JsonSerializer.Deserialize<ReqValidaBeneficiario>( str_sol_tran );
                         respuesta = new BeneficiariosNeg( _settingsApi ).validar_registro_beneficiarios( valida_beneficiarios!, str_operacion );
-                        break;
-                    case "VALIDAR_UPDATE_BENEFICIARIO":
-                        var valida_update_beneficiarios = JsonSerializer.Deserialize<ReqValidaBeneficiario>( str_sol_tran );
-                        respuesta = new BeneficiariosNeg( _settingsApi ).validar_update_beneficiarios( valida_update_beneficiarios!, str_operacion );
                         break;
                     case "VALIDA_OTRAS_CTAS_MEGO":
                         var valida_cuenta = JsonSerializer.Deserialize<ReqValidaBeneficiario>( str_sol_tran );
