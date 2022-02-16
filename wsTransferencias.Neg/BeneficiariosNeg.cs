@@ -200,8 +200,6 @@ namespace wsTransferencias.Neg
             respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
             return respuesta;
         }
-
-
         public ResValidaBeneficiario validar_update_beneficiarios ( ReqValidaBeneficiario req_validar_beneficiarios, string str_operacion )
         {
 
@@ -211,7 +209,7 @@ namespace wsTransferencias.Neg
             respuesta.str_id_transaccion = req_validar_beneficiarios.str_id_transaccion;
 
             try
-            {                
+            {
                 respuesta.str_res_estado_transaccion = "OK";
                 respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result.codigo.Equals( "1009" );
                 respuesta.str_res_codigo = "000";
