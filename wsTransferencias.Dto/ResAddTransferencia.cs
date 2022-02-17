@@ -15,15 +15,20 @@ namespace wsTransferencias.Dto
 		{
 			public int int_id_cta_ordenante { get; set; }
 			public string str_descrip_tipo_cta_ordenante { get; set; }
+			public string str_tipo_prod_ordenante { get; set; }
 			public string str_num_cta_ordenante { get; set; }
 			public int int_ente { get; set; }
 			public string str_num_doc_ordenante { get; set; }
 			public string str_nombre_ordenante { get; set; }
+			public string str_nombre_ifi_ord{ get; set; }
+
 			public string str_descrip_moneda_ordenante { get; set; }
+
 			public int int_id_cta_beneficiario { get; set; }
 			public string str_nombre_ifi_benef { get; set; }
 			public string str_cta_bce_ifi_benef { get; set; }
 			public string str_tipo_cta_benef { get; set; }
+			public string str_tipo_prod_benef { get; set; }
 			public string str_desc_tipo_cta_benef { get; set; }
 			public string str_num_cta_benef { get; set; }
 			public int int_tipo_benef { get; set; }

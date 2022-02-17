@@ -48,7 +48,7 @@ namespace wsTransferencias.Neg
                         break;
 
                     case "GET_CONSULTA_TRANSFERENCIAS":
-                                             var req_add_datos = JsonSerializer.Deserialize<ReqGetTransferencias>( JsonSerializer.Serialize( sol_tran ) )!;
+                        var req_add_datos = JsonSerializer.Deserialize<ReqGetTransferencias>( JsonSerializer.Serialize( sol_tran ) )!;
                         validacion_token = Utils.Utils.ValidarToken( _settingsApi, JsonSerializer.Serialize( sol_tran ) ).Result;
                         respuesta = validacion_token.str_res_codigo.Equals( "000" ) ? new TransferenciasNeg(_settingsApi).get_consulta_transferencias( req_add_datos, str_operacion ) : validacion_token;
 

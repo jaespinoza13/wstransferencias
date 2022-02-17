@@ -467,18 +467,40 @@ namespace wsTransferencias.Neg
             return respuesta;
         }
 
-        public ResComun add_transferencia_interna ( ReqAddTransferencia req_add_transferencia, string str_operacion )
+        public ResAddTransferencia add_transferencia_interna ( ReqAddTransferencia req_add_transferencia, string str_operacion )
         {
-            var respuesta = new ResComun();
+            var respuesta = new ResAddTransferencia();
             respuesta.LlenarResHeader( req_add_transferencia );
             req_add_transferencia.str_id_transaccion = ServiceLogs.SaveHeaderLogs<ReqAddTransferencia>( req_add_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             respuesta.str_id_transaccion = req_add_transferencia.str_id_transaccion;
 
             try
             {
-                RespuestaTransaccion res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
+                var res_tran = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_transferencia, req_add_transferencia.str_nemonico_tipo_transferencia ).Result;
 
-                respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals( "000" )) ? "OK" : "ERR";
+                if(res_tran.codigo.Equals( "1009" ))
+                {
+                    res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_transferencia ).Result;
+
+                    if(res_tran.codigo.Equals( "000" ))
+                    {
+                        res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
+                    }
+                }
+                else
+                {
+                    res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
+                }
+
+                if(res_tran.codigo.Equals( "000" ))
+                {
+                    respuesta.objAddTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResAddTransferencia.AddTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
+                    respuesta.str_res_estado_transaccion = "OK";
+                }else
+                    respuesta.str_res_estado_transaccion = "ERR";
+
+
+
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
             }
