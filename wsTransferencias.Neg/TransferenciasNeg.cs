@@ -485,11 +485,17 @@ namespace wsTransferencias.Neg
                     if(res_tran.codigo.Equals( "000" ))
                     {
                         res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
+                        respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                    }
+                    else {
+                        respuesta.str_res_info_adicional = res_tran.diccionario["ERROR"].ToString();
+
                     }
                 }
                 else
                 {
                     res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
+                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
                 }
 
                 if(res_tran.codigo.Equals( "000" ))
@@ -499,10 +505,8 @@ namespace wsTransferencias.Neg
                 }else
                     respuesta.str_res_estado_transaccion = "ERR";
 
+                respuesta.str_res_codigo = String.IsNullOrEmpty( res_tran.codigo ) ? respuesta.str_res_codigo : res_tran.codigo;
 
-
-                respuesta.str_res_codigo = res_tran.codigo;
-                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
             }
             catch(Exception exception)
             {
