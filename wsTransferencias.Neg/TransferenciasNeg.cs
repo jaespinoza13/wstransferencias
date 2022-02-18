@@ -36,11 +36,10 @@ namespace wsTransferencias.Neg
 
                 if(res_tran.codigo.Equals( "000" ))
                 {
+                    bool requiereOtp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, "TRN_EXTERNAS" ).Result.codigo.Equals( "1009" );
+                    respuesta.bl_requiere_otp = requiereOtp ? res_tran.diccionario["str_requiere_otp"].Equals( "1009" ) : false!;
+
                     respuesta.objValidacionTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResValidacionTransferencias.ValidacionTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
-
-                    respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, "TRN_EXTERNAS" ).Result.codigo.Equals( "1009" );
-
-
 
                     if(respuesta!.objValidacionTransferencia.int_enviar_banred == 1)
                     {

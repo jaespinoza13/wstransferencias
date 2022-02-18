@@ -325,6 +325,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_error", TipoDato = TipoDato.VarChar });
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_error_cod", TipoDato = TipoDato.Integer });
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_enviar_banred", TipoDato = TipoDato.Integer });
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@o_requiere_otp", TipoDato = TipoDato.Integer } );
 
                 ds.NombreSP = "get_val_transf_interbancarias2";
                 ds.NombreBD = _settings.BD_megservicios;
@@ -336,11 +337,13 @@ namespace wsTransferencias.Dat
                 var str_codigo = lst_valores.Find(x => x.StrNameParameter == "@o_error_cod")!.ObjValue;
                 var str_error = lst_valores.Find(x => x.StrNameParameter == "@o_error")!.ObjValue.Trim();
                 var str_enviar_banred = lst_valores.Find(x => x.StrNameParameter == "@o_enviar_banred")!.ObjValue.Trim();
+                var str_requiere_otp = lst_valores.Find(x => x.StrNameParameter == "@o_requiere_otp" )!.ObjValue.Trim();
 
                 respuesta.codigo = str_codigo.ToString().Trim().PadLeft(3, '0');
                 respuesta.cuerpo = Funciones.ObtenerDatos(resultado);
                 respuesta.diccionario.Add("str_error", str_error.ToString());
                 respuesta.diccionario.Add("str_enviar_banred", str_enviar_banred.ToString());
+                respuesta.diccionario.Add("str_requiere_otp", str_requiere_otp.ToString());
 
             }
             catch (Exception exception)
