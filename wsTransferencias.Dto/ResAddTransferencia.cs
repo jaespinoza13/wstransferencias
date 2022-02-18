@@ -44,6 +44,8 @@ namespace wsTransferencias.Dto
 			public int int_enviar_banred { get; set; }
 			public int int_num_referencia { get; set; }
 			public string str_fecha_transac { get; set; }
+			public string str_observacion { get; set; }
+
 
 		}
 
