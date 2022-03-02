@@ -53,12 +53,6 @@ namespace wsTransferencias.Neg
                         respuesta = validacion_token.str_res_codigo.Equals( "000" ) ? new TransferenciasNeg(_settingsApi).get_consulta_transferencias( req_add_datos, str_operacion ) : validacion_token;
 
                         break;
-                    case "GET_CUPOS_SOCIOS":
-                    case "SET_CUPOS_SOCIOS":
-                        validacion_token = Utils.Utils.ValidarToken( _settingsApi, JsonSerializer.Serialize( sol_tran ) ).Result;
-                        respuesta = validacion_token.str_res_codigo.Equals( "000" ) ? ProcesarSolicitudCupos( JsonSerializer.Serialize( sol_tran ), str_operacion ) : validacion_token;
-
-                        break;
 
                     default:
                         break;
@@ -147,39 +141,6 @@ namespace wsTransferencias.Neg
             return respuesta;
         }
 
-        public Object ProcesarSolicitudCupos ( string str_cupos, string str_operacion )
-        {
-            Object respuesta = new();
-            try
-            {
-
-                switch(str_operacion)
-                {
-                    case "GET_CUPOS_SOCIOS":
-                        var get_cupos = JsonSerializer.Deserialize<ReqGetCupos>( str_cupos );
-                        respuesta = new CuposNeg( _settingsApi ).get_cupos_socios( get_cupos!, str_operacion );
-                        break;
-
-                    case "SET_CUPOS_SOCIOS":
-                        //respuesta = new ResTransferencia();
-                        // respuesta = new CuposNeg( _settingsApi ).set_cupos_socios( req_valida_transferencia!, str_operacion );
-                        break;
-                }
-
-            }
-            catch(Exception)
-            {
-                ResException resException = new ResException()
-                {
-                    str_res_estado_transaccion = "ERR",
-                    str_res_codigo = "001",
-                    str_res_info_adicional = "Ocurrio un problema. intente nuevamente más tarde."
-                };
-                return resException;
-            }
-
-            return respuesta;
-        }
         public Object ProcesarSolicitudValidacionTransferencias ( string str_va_transferencia, string str_operacion )
         {
             Object respuesta = new();
