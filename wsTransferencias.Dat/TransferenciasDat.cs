@@ -48,6 +48,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@dt_fecha_ini", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_fecha_inicio.ToString() });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@dt_fecha_fin", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_fecha_fin.ToString() });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_filtro", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_filtro.ToString() });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_filtro_nem_canal", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_filtro_nem_canal.ToString() });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_ultimos_movimientos", TipoDato = TipoDato.Integer, ObjValue = req_get_transferencias.int_ultimos_movimientos.ToString() } );
 
                 //Variables de auditoria
