@@ -2,7 +2,6 @@
 using Grpc.Net.Client;
 using System.Text.Json;
 using wsTransferencias.Dto;
-using wsTransferencias.Log;
 using wsTransferencias.Model;
 using static AccesoDatosGrpcMongo.Neg.DALMongo;
 
@@ -10,17 +9,14 @@ namespace wsTransferencias.Dat
 {
     public class LogsMongoDat
     {
-        private InfoLog infoLog;
-        private const string str_salida_error = "e:< ";
         private readonly DALMongoClient objClienteMongo;
-        private readonly string str_servicio = "wsTransferencias";
+        private readonly string str_servicio;
         private readonly SettingsApi _settings;
 
         public LogsMongoDat ( SettingsApi settings )
         {
-            infoLog.str_clase = settings.nombre_base_mongo;
-            infoLog.str_tipo = str_salida_error;
             _settings = settings;
+            str_servicio = settings.nombre_base_mongo;
             var canal = GrpcChannel.ForAddress( settings.servicio_grpc_mongo );
             objClienteMongo = new DALMongoClient( canal );
         }
@@ -322,6 +318,42 @@ namespace wsTransferencias.Dat
                 int_respuesta = 0;
             }
             return int_respuesta;
+        }
+
+        public RespuestaTransaccion GuardarExcepcionesDataBase ( Header obj_respuesta, object excepcion )
+        {
+            var respuesta = new RespuestaTransaccion();
+            var ds = new DatosSolicitud();
+            try
+            {
+                var bjson = new
+                {
+                    idHeader = obj_respuesta.str_id_transaccion,
+                    str_id_servicio = obj_respuesta.str_id_servicio,
+                    str_nemonico_canal = obj_respuesta.str_nemonico_canal,
+                    dt_fecha_operacion = obj_respuesta.dt_fecha_operacion,
+                    str_ip_dispositivo = obj_respuesta.str_ip_dispositivo,
+                    str_login = obj_respuesta.str_login,
+                    str_id_oficina = obj_respuesta.str_id_oficina,
+                    error = excepcion.ToString()
+                };
+
+                String ser_cabecera = JsonSerializer.Serialize( bjson );
+                ds.StrNameBD = _settings.nombre_base_mongo;
+                ds.NombreColeccion = _settings.coll_errores_db;
+                ds.Filter = String.Empty;
+                ds.SolTran = ser_cabecera;
+
+                DatosRespuesta res = objClienteMongo.insertar_documento( ds );
+                respuesta.codigo = "000";
+                respuesta.cuerpo = res.Mensaje;
+            }
+            catch(Exception ex)
+            {
+                respuesta.codigo = "001";
+                respuesta.diccionario.Add( "str_error", ex.ToString() );
+            }
+            return respuesta;
         }
 
     }

@@ -2,7 +2,6 @@
 using System.Text.Json;
 using wsTransferencias.Dat;
 using wsTransferencias.Dto;
-using wsTransferencias.Log;
 using wsTransferencias.Model;
 using wsTransferencias.Neg.Utils;
 
@@ -52,7 +51,7 @@ namespace wsTransferencias.Neg
                     if(res_tran.codigo.Equals( "1009" ))
                     {
                         res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_beneficiario ).Result;
-                        
+
                         if(res_tran.codigo.Equals( "000" ))
                         {
                             res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
@@ -106,7 +105,7 @@ namespace wsTransferencias.Neg
                     respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
                 }
 
-                respuesta.str_res_codigo = res_tran.codigo;               
+                respuesta.str_res_codigo = res_tran.codigo;
                 Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                 respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
                 return respuesta;
@@ -297,8 +296,8 @@ namespace wsTransferencias.Neg
 
                     if(res_banred.codigo.Equals( "000" ) || res_banred.codigo.Equals( "0000" ))
                     {
-                        
-                        respuesta.str_nombre = (string)res_banred.cuerpo;
+
+                        respuesta.str_nombre = (string) res_banred.cuerpo;
                     }
                     else
                     {
@@ -312,8 +311,7 @@ namespace wsTransferencias.Neg
                         else
                         {
                             //La cuenta no se validó en pago directo
-                            //res_banred.codigo = "1012";
-                            res_banred.codigo = "5000";
+                            res_banred.codigo = "5000"; //"1012"
                             respuesta.str_res_info_adicional = "No se pudo validar la cuenta/tarjeta. Es probable que no haya respuesta de la institución financiera o que algún dato ingresado en el momento del registro de la cuenta/tarjeta sea incorrecto";
                         }
                     }

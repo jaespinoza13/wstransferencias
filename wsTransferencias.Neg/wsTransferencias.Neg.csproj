@@ -9,7 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\wsTransferencias.Dat\wsTransferencias.Dat.csproj" />
     <ProjectReference Include="..\wsTransferencias.Dto\wsTransferencias.Dto.csproj" />
-    <ProjectReference Include="..\wsTransferencias.Log\wsTransferencias.Log.csproj" />
     <ProjectReference Include="..\wsTransferencias.Model\wsTransferencias.Model.csproj" />
   </ItemGroup>
 

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using wsTransferencias.Dat;
 using wsTransferencias.Dto;
-using wsTransferencias.Log;
 using wsTransferencias.Model;
 
 namespace wsTransferencias.Neg.Utils
@@ -14,10 +14,12 @@ namespace wsTransferencias.Neg.Utils
     {
         private static InfoLog infoLog;
         static SettingsApi _settingsApi;
+        private static readonly object objetoBloqueoJson = new();
+
         public static void Init ( SettingsApi settings )
         {
             _settingsApi = settings;
-            infoLog.str_webservice = "wsTransferencias";
+            infoLog.str_webservice = settings.nombre_base_mongo;
         }
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace wsTransferencias.Neg.Utils
             str_id_transaccion = res_tran_logs.codigo.Equals( "000" ) ? (String) res_tran_logs.cuerpo : Utils.GeneraCadenaAleatoria();
             infoLog.str_id_transaccion = str_id_transaccion;
             infoLog.str_tipo = "s:<";
-            LogServicios.RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_transferencias );
+            RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_transferencias );
 
             return str_id_transaccion;
         }
@@ -69,7 +71,7 @@ namespace wsTransferencias.Neg.Utils
             string str_id_transaccion = res_tran_logs.codigo.Equals( "000" ) ? (String) res_tran_logs.cuerpo : Utils.GeneraCadenaAleatoria();
             infoLog.str_id_transaccion = str_id_transaccion;
             infoLog.str_tipo = "r:>";
-            LogServicios.RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_transferencias );
+            RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_transferencias );
         }
 
         /// <summary>
@@ -96,7 +98,7 @@ namespace wsTransferencias.Neg.Utils
             str_id_transaccion = res_tran_logs.codigo.Equals( "000" ) ? (String) res_tran_logs.cuerpo : Utils.GeneraCadenaAleatoria();
             infoLog.str_id_transaccion = str_id_transaccion;
             infoLog.str_tipo = "e:<";
-            LogServicios.RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_transferencias );
+            RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_transferencias );
         }
 
 
@@ -126,7 +128,7 @@ namespace wsTransferencias.Neg.Utils
                 str_id_transaccion = res_tran_logs.Equals( "000" ) ? Utils.GeneraCadenaAleatoria() : (String) res_tran_logs.cuerpo;
                 infoLog.str_id_transaccion = str_id_transaccion;
                 infoLog.str_tipo = "s:<";
-                LogServicios.RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_amenazas );
+                RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_amenazas );
 
             }
             catch(Exception)
@@ -136,5 +138,38 @@ namespace wsTransferencias.Neg.Utils
             }
             return str_id_transaccion;
         }
+
+        public static void RegistrarTramas ( String str_tipo, Object obj, string path_log )
+        {
+            try
+            {
+                string rutaArchivo = Directory.GetCurrentDirectory() + path_log;
+
+                lock(objetoBloqueoJson)
+                {
+
+                    if(!File.Exists( rutaArchivo ))
+                    {
+                        Directory.CreateDirectory( rutaArchivo );
+                    }
+
+                    string fileName = Path.Combine( rutaArchivo, DateTime.Now.ToString( "yyyyMMdd" ) + ".txt" );
+
+                    using(var fs = File.Open( fileName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite ))
+                    {
+                        using(var writer = new StreamWriter( fs ))
+                        {
+                            writer.WriteLine( DateTime.Now.ToString( "HHmmssff" ) + " " + str_tipo + JsonSerializer.Serialize( obj ) + " " );
+                        }
+                        fs.Close();
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new ArgumentNullException( ex.ToString() );
+            }
+        }
+
     }
 }

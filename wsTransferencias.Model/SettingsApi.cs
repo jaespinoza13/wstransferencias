@@ -17,7 +17,11 @@ namespace wsTransferencias.Model
         public string pago_directo_pruebas { get; set; }
 
         public string path_logs_transferencias { get; set; }
+        public string path_logs_errores { get; set; }
+        public string path_logs_errores_db { get; set; }
         public string path_logs_amenazas { get; set; }
+
+
 
         public string auth_ws_transferencias { get; set; }
         public string auth_ws_acceso { get; set; }
@@ -35,6 +39,7 @@ namespace wsTransferencias.Model
         public bool valida_peticiones_diarias { get; set; }
 
         public string nombre_base_mongo { get; set; } = String.Empty;
+        public string coll_errores_db { get; set; } = String.Empty;
         public string coll_peticiones { get; set; } = String.Empty;
         public string coll_respuesta { get; set; } = String.Empty;
         public string coll_errores { get; set; } = String.Empty;

@@ -2,7 +2,6 @@
 using Grpc.Net.Client;
 using System.Reflection;
 using wsTransferencias.Dto;
-using wsTransferencias.Log;
 using wsTransferencias.Model;
 using static AccesoDatosGrpcAse.Neg.DAL;
 
@@ -10,22 +9,17 @@ namespace wsTransferencias.Dat
 {
     public class BeneficiariosDat
     {
-
-        private InfoLog infoLog;
         private readonly SettingsApi _settings;
         private readonly DALClient objClienteDal;
-        private readonly string str_ruta;
-        private const string str_salida_error = "e:< ";
+        private readonly string str_clase;
 
         public BeneficiariosDat ( SettingsApi serviceSettings )
         {
             _settings = serviceSettings;
-            this.str_ruta = serviceSettings.path_logs_transferencias;
+            this.str_clase = GetType().FullName!;
 
-            infoLog.str_clase = GetType().FullName;
-            infoLog.str_fecha = DateTime.Now;
-            
-            var canal = GrpcChannel.ForAddress( serviceSettings.servicio_grpc_sybase );
+            var httpHandler = new HttpClientHandler();
+            var canal = GrpcChannel.ForAddress( serviceSettings.servicio_grpc_sybase, new GrpcChannelOptions { HttpHandler = httpHandler } );
             objClienteDal = new DALClient( canal );
         }
 
@@ -80,14 +74,8 @@ namespace wsTransferencias.Dat
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
+                Funciones.SaveExcepcionDataBaseSybase( _settings, obj_beneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
 
-                infoLog.str_id_transaccion = obj_beneficiario.str_id_transaccion;
-                infoLog.str_tipo = str_salida_error;
-                infoLog.str_objeto = exception;
-                infoLog.str_metodo = MethodBase.GetCurrentMethod()!.Name;
-                infoLog.str_operacion = obj_beneficiario.str_id_servicio;
-
-                LogServicios.RegistrarTramas( str_salida_error, infoLog, str_ruta );
             }
             return respuesta;
         }
@@ -146,13 +134,8 @@ namespace wsTransferencias.Dat
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
 
-                infoLog.str_id_transaccion = obj_beneficiario.str_id_transaccion;
-                infoLog.str_tipo = str_salida_error;
-                infoLog.str_objeto = exception;
-                infoLog.str_metodo = MethodBase.GetCurrentMethod()!.Name;
-                infoLog.str_operacion = obj_beneficiario.str_id_servicio;
+                Funciones.SaveExcepcionDataBaseSybase( _settings, obj_beneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
 
-                LogServicios.RegistrarTramas( str_salida_error, infoLog, str_ruta );
             }
             return respuesta;
         }
@@ -204,14 +187,7 @@ namespace wsTransferencias.Dat
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
-
-                infoLog.str_id_transaccion = obj_beneficiario.str_id_transaccion;
-                infoLog.str_tipo = str_salida_error;
-                infoLog.str_objeto = exception;
-                infoLog.str_metodo = MethodBase.GetCurrentMethod()!.Name;
-                infoLog.str_operacion = obj_beneficiario.str_id_servicio;
-
-                LogServicios.RegistrarTramas( str_salida_error, infoLog, str_ruta );
+                Funciones.SaveExcepcionDataBaseSybase( _settings, obj_beneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
             }
             return respuesta;
         }
@@ -227,7 +203,7 @@ namespace wsTransferencias.Dat
                 DatosSolicitud ds = new DatosSolicitud();
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = obj_beneficiario.int_ente.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nem_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_tipo_beneficiario.ToString() } );               
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nem_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_tipo_beneficiario.ToString() } );
 
                 //Variables de auditoria
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = obj_beneficiario.str_id_transaccion.ToString() } );
@@ -263,14 +239,7 @@ namespace wsTransferencias.Dat
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
-
-                infoLog.str_id_transaccion = obj_beneficiario.str_id_transaccion;
-                infoLog.str_tipo = str_salida_error;
-                infoLog.str_objeto = exception;
-                infoLog.str_metodo = MethodBase.GetCurrentMethod()!.Name;
-                infoLog.str_operacion = obj_beneficiario.str_id_servicio;
-
-                LogServicios.RegistrarTramas( str_salida_error, infoLog, str_ruta );
+                Funciones.SaveExcepcionDataBaseSybase( _settings, obj_beneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
             }
             return respuesta;
         }
@@ -323,14 +292,7 @@ namespace wsTransferencias.Dat
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
-
-                infoLog.str_id_transaccion = obj_beneficiario.str_id_transaccion;
-                infoLog.str_tipo = str_salida_error;
-                infoLog.str_objeto = exception;
-                infoLog.str_metodo = MethodBase.GetCurrentMethod()!.Name;
-                infoLog.str_operacion = obj_beneficiario.str_id_servicio;
-
-                LogServicios.RegistrarTramas( str_salida_error, infoLog, str_ruta );
+                Funciones.SaveExcepcionDataBaseSybase( _settings, obj_beneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
             }
             return respuesta;
         }
@@ -378,14 +340,7 @@ namespace wsTransferencias.Dat
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
-
-                infoLog.str_id_transaccion = obj_beneficiario.str_id_transaccion;
-                infoLog.str_tipo = str_salida_error;
-                infoLog.str_objeto = exception;
-                infoLog.str_metodo = MethodBase.GetCurrentMethod()!.Name;
-                infoLog.str_operacion = obj_beneficiario.str_id_servicio;
-
-                LogServicios.RegistrarTramas( str_salida_error, infoLog, str_ruta );
+                Funciones.SaveExcepcionDataBaseSybase( _settings, obj_beneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
             }
             return respuesta;
         }
@@ -435,14 +390,7 @@ namespace wsTransferencias.Dat
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
-
-                infoLog.str_id_transaccion = obj_beneficiario.str_id_transaccion;
-                infoLog.str_tipo = str_salida_error;
-                infoLog.str_objeto = exception;
-                infoLog.str_metodo = MethodBase.GetCurrentMethod()!.Name;
-                infoLog.str_operacion = obj_beneficiario.str_id_servicio;
-
-                LogServicios.RegistrarTramas( str_salida_error, infoLog, str_ruta );
+                Funciones.SaveExcepcionDataBaseSybase( _settings, obj_beneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
             }
             return respuesta;
         }
@@ -458,7 +406,7 @@ namespace wsTransferencias.Dat
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = req_valida_cuenta.int_ente.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_cuenta_origen", TipoDato = TipoDato.Integer, ObjValue = 0.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_cuenta_destino", TipoDato = TipoDato.Integer, ObjValue =0.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_cuenta_destino", TipoDato = TipoDato.Integer, ObjValue = 0.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_cod_ifi", TipoDato = TipoDato.VarChar, ObjValue = req_valida_cuenta.str_codigo_ifi.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_cuenta", TipoDato = TipoDato.Integer, ObjValue = req_valida_cuenta.int_tipo_cuenta.ToString() } );
 
@@ -496,14 +444,8 @@ namespace wsTransferencias.Dat
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
+                Funciones.SaveExcepcionDataBaseSybase( _settings, req_valida_cuenta, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
 
-                infoLog.str_id_transaccion = req_valida_cuenta.str_id_transaccion;
-                infoLog.str_tipo = str_salida_error;
-                infoLog.str_objeto = exception;
-                infoLog.str_metodo = MethodBase.GetCurrentMethod()!.Name;
-                infoLog.str_operacion = req_valida_cuenta.str_id_servicio;
-
-                LogServicios.RegistrarTramas( str_salida_error, infoLog, str_ruta );
             }
             return respuesta;
         }

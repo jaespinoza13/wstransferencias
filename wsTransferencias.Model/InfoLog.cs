@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wsTransferencias.Log
+namespace wsTransferencias.Model
 {
     public struct InfoLog
     {

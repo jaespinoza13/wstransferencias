@@ -46,7 +46,7 @@ namespace wsTransferencias.Neg
                         string str_req_validar_transferencia = JsonSerializer.Serialize( req_validar_transferencia );
                         var obj_transferencia = JsonSerializer.Deserialize<ReqTransferencia>( str_req_validar_transferencia );
 
-                        var datos_validados = Utils.Utils.ConvertConjuntoDatosToClass<DatosValidadosTransaccion>( (ConjuntoDatos) res_tran.cuerpo )!; 
+                        var datos_validados = Utils.Utils.ConvertConjuntoDatosToClass<DatosValidadosTransaccion>( (ConjuntoDatos) res_tran.cuerpo )!;
 
                         Cabecera cabecera = Utils.Utils.llenar_cabecera( req_validar_transferencia! );
                         RespuestaTransaccion respuesta_validaciones_pago_directo = validaciones_pago_directo( datos_validados, cabecera );
@@ -119,7 +119,7 @@ namespace wsTransferencias.Neg
                 }
                 else
                 {
-                        res_tran = new TransferenciasDat( _settingsApi ).add_transf_interbancarias( req_add_transferencia );
+                    res_tran = new TransferenciasDat( _settingsApi ).add_transf_interbancarias( req_add_transferencia );
                 }
 
                 if(res_tran.codigo.Equals( "000" ))
@@ -144,14 +144,14 @@ namespace wsTransferencias.Neg
                     datos_validados.int_estado = datos_debito.int_estado;
                     datos_validados.str_fecha_transac = datos_debito.str_fecha_transac;
 
-                    respuesta.objAddTransferencia = JsonSerializer.Deserialize< ResAddTransferencia.AddTransferencia>(JsonSerializer.Serialize(datos_validados))!; 
+                    respuesta.objAddTransferencia = JsonSerializer.Deserialize<ResAddTransferencia.AddTransferencia>( JsonSerializer.Serialize( datos_validados ) )!;
 
                     //Se debe tratar de enviar por banred
                     if(datos_validados.int_enviar_banred == 1 && datos_validados.int_estado == 4)
                     {
                         var cabecera = Utils.Utils.llenar_cabecera( req_add_transferencia );
                         ejecutar_pago_directo( datos_validados, cabecera );
-                        respuesta.objAddTransferencia = JsonSerializer.Deserialize<ResAddTransferencia.AddTransferencia>(JsonSerializer.Serialize(datos_validados))!; 
+                        respuesta.objAddTransferencia = JsonSerializer.Deserialize<ResAddTransferencia.AddTransferencia>( JsonSerializer.Serialize( datos_validados ) )!;
                     }
                     else
                     {
@@ -243,7 +243,6 @@ namespace wsTransferencias.Neg
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
             {
-                //respuesta = conectar_banred( sol_tran );
                 string str_data = JsonSerializer.Serialize( sol_tran );
                 var service = new ServiceHttp<RespuestaTransaccion>();
                 respuesta = service.PostRestServiceDataAsync( str_data, _settingsApi.servicio_ws_banred, String.Empty, _settingsApi.auth_ws_banred ).Result;
@@ -267,7 +266,6 @@ namespace wsTransferencias.Neg
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
             {
-                //respuesta = conectar_banred( sol_tran );
                 string str_data = JsonSerializer.Serialize( sol_tran );
                 var service = new ServiceHttp<RespuestaTransaccion>();
                 respuesta = service.PostRestServiceDataAsync( str_data, _settingsApi.servicio_ws_banred, String.Empty, _settingsApi.auth_ws_banred ).Result;
@@ -370,7 +368,7 @@ namespace wsTransferencias.Neg
             return respuesta!;
         }
 
-       
+
         public RespuestaTransaccion ejecutar_pago_directo ( ResTransferencia datos_validados, Cabecera cabecera )
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
@@ -486,7 +484,8 @@ namespace wsTransferencias.Neg
                         res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
                         respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
                     }
-                    else {
+                    else
+                    {
                         respuesta.str_res_info_adicional = res_tran.diccionario["ERROR"].ToString();
 
                     }
@@ -501,7 +500,8 @@ namespace wsTransferencias.Neg
                 {
                     respuesta.objAddTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResAddTransferencia.AddTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
                     respuesta.str_res_estado_transaccion = "OK";
-                }else
+                }
+                else
                     respuesta.str_res_estado_transaccion = "ERR";
 
                 respuesta.str_res_codigo = String.IsNullOrEmpty( res_tran.codigo ) ? respuesta.str_res_codigo : res_tran.codigo;

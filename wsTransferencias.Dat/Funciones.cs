@@ -1,5 +1,7 @@
 ﻿using AccesoDatosGrpcAse.Neg;
+using System.Text.Json;
 using wsTransferencias.Dto;
+using wsTransferencias.Model;
 
 namespace wsTransferencias.Dat
 {
@@ -32,6 +34,49 @@ namespace wsTransferencias.Dat
             }
             cd.lst_tablas = lst_tablas;
             return cd;
+        }
+
+
+        public static void SaveExcepcionDataBaseSybase(SettingsApi _settingsApi, Header transaction, String str_metodo, Exception excepcion, string str_clase)
+        {
+            try
+            {
+                InfoLog infoLog = new();
+                infoLog.str_clase = str_clase;
+                infoLog.str_operacion = transaction.str_id_servicio;
+                infoLog.str_objeto = transaction;
+                infoLog.str_metodo = str_metodo;
+                infoLog.str_fecha = DateTime.Now;
+
+                Random random = new Random();
+                RespuestaTransaccion res_tran_logs = new LogsMongoDat(_settingsApi).GuardarExcepcionesDataBase(transaction, excepcion);
+                string str_id_transaccion = res_tran_logs.codigo.Equals("000") ? (String)res_tran_logs.cuerpo : new string(Enumerable.Repeat("0123456789", 20).Select(s => s[random.Next(s.Length)]).ToArray());
+                infoLog.str_id_transaccion = str_id_transaccion;
+                infoLog.str_tipo = "e:<";
+
+
+
+                if (!File.Exists(_settingsApi.path_logs_errores))
+                {
+                    Directory.CreateDirectory(_settingsApi.path_logs_errores);
+                }
+
+                string fileName = Path.Combine(_settingsApi.path_logs_errores, DateTime.Now.ToString("yyyyMMdd") + ".txt");
+
+                using (var fs = File.Open(fileName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+                {
+                    using (var writer = new StreamWriter(fs))
+                    {
+                        writer.WriteLine(DateTime.Now.ToString("HHmmssff") + " " + infoLog.str_tipo + JsonSerializer.Serialize(excepcion.ToString()) + " ");
+                    }
+                    fs.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
         }
 
 
