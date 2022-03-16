@@ -15,6 +15,7 @@ namespace wsTransferencias.Dto
         public string str_nombre_ifi_benef { get; set; } = String.Empty;
         public string str_alias_cta_benef { get; set; } = String.Empty;
         public string str_desc_tip_tarj_cre_receptor { get; set; } = String.Empty;
+        public string str_alias_tipo { get; set; } = String.Empty;
         public string str_nombre_benef { get; set; } = String.Empty;
         public string str_num_cta_benef { get; set; } = String.Empty;
         public string dec_monto_tran { get; set; } = String.Empty;
