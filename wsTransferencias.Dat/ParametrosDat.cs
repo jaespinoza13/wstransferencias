@@ -92,7 +92,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_error_cod", TipoDato = TipoDato.Integer } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_error", TipoDato = TipoDato.VarChar } );
 
-                ds.NombreSP = "get_datos_otp";
+                ds.NombreSP = "get_datos_otp2";
                 ds.NombreBD = _settings.BD_megonline;
 
                 var resultado = objClienteDal.ExecuteDataSet( ds );
