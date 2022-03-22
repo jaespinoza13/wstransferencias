@@ -1,6 +1,10 @@
 pipeline {
     
-    agent any
+    agent {
+        node {
+            label 'web-service-development-server'
+        }
+    }
 
     stages {
         
@@ -18,7 +22,7 @@ pipeline {
         stage('Clean') {
             steps {
                 echo 'Cleaning..'
-                 sh 'docker rm -f service-transferencias'
+                 sh 'docker rm -f servicio-transferencias'
             }
         }
         stage('Deploy') {
@@ -27,13 +31,13 @@ pipeline {
             }
             steps {
                 echo 'Deploying....'
-                 sh 'docker run -it --rm -e TZ=America/Guayaquil -dp  8003:80 --name service-transferencias wstransferencias'
+                 sh 'docker run -it --restart unless-stopped -e TZ=America/Guayaquil -dp  8003:80 --name servicio-transferencias wstransferencias'
             }
         }
         stage('Restart') {
             steps {
                 echo 'Deploying....'
-                 sh 'docker restart service-transferencias'
+                 sh 'docker restart servicio-transferencias'
             }
         }
 
