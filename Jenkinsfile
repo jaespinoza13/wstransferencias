@@ -26,9 +26,6 @@ pipeline {
             }
         }
         stage('Deploy') {
-            when {
-                branch 'desarrollo'
-            }
             steps {
                 echo 'Deploying....'
                  sh 'docker run -it --restart unless-stopped -e TZ=America/Guayaquil -dp  8050:80 --name servicio-transferencias wstransferencias'
