@@ -1,8 +1,0 @@
-}
-tC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias\Controllers\wsTransferenciasController.csutf-8u
-lC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias\Middleware\BasicAuthentication.csutf-8e
-UC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias\Program.cswindows-1252â
-~C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias\obj\Debug\net6.0\wsTransferencias.GlobalUsings.g.csutf-8ñ
-äC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias\obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.csutf-8á
-|C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias\obj\Debug\net6.0\wsTransferencias.AssemblyInfo.csutf-8õ
-èC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias\obj\Debug\net6.0\wsTransferencias.MvcApplicationPartsAssemblyInfo.csutf-8

@@ -1,9 +1,0 @@
-﻿C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\BeneficiariosNeg.cs
-C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\TransferenciasNeg.cs
-C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\Utils\Converting.cs
-C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\Utils\LoadConfigService.cs
-C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\Utils\ServiceHttp.cs
-C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\Utils\ServiceLogs.cs
-C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\Utils\Utils.cs
-C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\Utils\ValidacionInyeccionSql.cs
-C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\wsTransferenciasNeg.cs

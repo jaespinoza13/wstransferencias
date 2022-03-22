@@ -1,17 +1,0 @@
-ï
-bC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\BeneficiariosNeg.csT 8r¡	
- !"#$%&'(*+,/012346789:;<=>?@ACDEHIJKLMOPQRSTUVWXYZ\]^abcdefhilmnopqrstuvxyz}~ÄÅÇÉÖÜáàãåçèêëíìîñóòõúùûü†¢£•¶ß®©´¨≠ÆØ∞≤≥¥∂∑xÇ` !"&'*+23489:;?@CDKLMQRSTXY\]deflmnoptuxyÅÇÉáàãåçíìñóûü†•¶ß®©ÆØ≤≥Å	
-cC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\TransferenciasNeg.cs· 8'j/7Å Ÿ⁄€‹›ﬁÓÔÒÚÛ˙å™Æ≤˜íóúrÜ	
-!"#%&')*+,./1234568:;<=?@BCDFGHIJKMNOQRSTUVWXY\]^_`abcdgijklmnoprstuvxyz{|}ÇÉÜàâäãåçéèêëíìîïóòôöõúù°¢£§•¶®©™¨ÆØ∞±≤≥¥µ∂∏π∫æø¿¬√ƒ≈∆«»…ÀÃÕŒœ–—“”‘’÷◊ﬂ‡·‚„‰ÊÁËÈÍÎÏÙıˆ˜¯˘¸˛ˇÄÅÇÉÑáàâäãçèìïñòôöúùûü°¢£§•®©™´¨≠ÆØ∞±≤≥¥µ∂∏π∫ªºæ¿¡¬√ƒ≈∆… ÀÃÕœ–“”’◊ÿ⁄€‹›ﬁﬂ‡‚„‰ÂÊÁËÈÍÎÏÓÔÒÚÛÙı¯˙˚˝˛ÄÅÇÑÖÜáâäãåçêëìîïñòôöõùûü†°£§•¶ß©´¨≠ÆØ∞±∂∑∏π∫ªΩæø¡¬√ƒ≈∆«»…ÀÃÕœ–—“”‘÷◊ÿ⁄€‹›ﬁﬂ‡·‚‰ÂÊÍÎx/Ç”#%')+,./138:<?CDFGMNOTUWXabcdgiknpsuxyz{|}ÇÜàâçéèêìîïöú§•¶™¨ÆØ∞¥µ∏πƒ≈ÀÃŒœ‘÷‰ÈÎ˘¸ÅÉçìïñòôöúùûü°¢£§•®´¨≠Ø∞±≥¥µ∏πªºæ√≈œ–“”◊ÿ›ﬂÂÊÁËÈÍÎÏÓ¯˚˝˛ÄÅÇÑÖÜáâäãåçêîïñôöõûü†£§¶ß©Æ∞π∫ªø¡¬√«»ÀÃ“”‘ÿ⁄€‹‡·‰Â™
-bC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\Utils\Converting.cs 8r)	
- "#$%&'()+,.0134xÇ "$%&(0∑
-iC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\Utils\LoadConfigService.cs 	8	jr)	
- !#%&'()*-./0123478xÇ !#(/3…
-cC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\Utils\ServiceHttp.cs 8j%&'()*+,r4	
- !"#-./012356789:;<>?@ABCDEFxÇ!235679;>B±
-cC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\Utils\ServiceLogs.cs3 8	j!3456789:KLMNOPQRSghijklmnrd	 !"$%&'(*+,-.01<=>?@ABDEFGHIUVWYZ[\]_`abcdpqrsuvwxyz{}~ÄÅÉÑÖÜáàâäãåxÇ6"$%&'(*+,-.0>?@ABDEFGHWYZ[\]_`abcrwxyz{}~ÄÅÜáâ˙
-]C:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\Utils\Utils.cs5 8j&'()*9:;<GHIJîïñór±	 "#+,-./01245=>?@ABCKLMNOPRWXZ[\^_abcefghijkmnoprsuvwxyz{|~ÄÅÇÉÑÖÜáàâäãåçéèòôõúûü°¢£§•¶ß®©™´≠ÆØ∞≤≥¥µ∂∏πªΩ¬√xÇ>"/14ABOP^ceghjkmnprsuw|ÑÖãåé°¢£§•¶ß®©™∏πªÀ
-nC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\Utils\ValidacionInyeccionSql.cs 8r4	
- !"#$%&()*+,-./01246789;<=>?xÇ!"#%(*+,-./01249<¢
-eC:\Users\amloarte\Documents\REPOSITORIO2\wstransferencias\wsTransferencias.Neg\wsTransferenciasNeg.csG 8r·	
- !#$%&')*+,-/01235689:;<=>?@ABCEFIJKLMNOQRSTVWXY[\]^`abcefghjklmnopqrstuvwxy{|~ÄÅÇÉÖÜáàâäåçéèëíìîïñóòôöõùû†°¢£§•ß®©™´¨ÆØ∞±≥¥µ∂∑∏π∫ªºΩø¿¡¬xÇJ !$%&'*+,-01236BENRSTWXY\]^abcfghklmx{ÉÖâäçéöù•ß´¨Ø∞ºø
