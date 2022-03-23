@@ -2,8 +2,8 @@ version: '3.8'
 services:
   app:
     build: .
-    image: wstransferencias-dev
-    container_name: servicio-transferencias
+    image: wstransferencias
+    container_name: servicio-transferenciasdev
     ports:
       - 8003:80
     restart: always
