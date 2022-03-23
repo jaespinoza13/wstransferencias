@@ -22,7 +22,7 @@ pipeline {
         stage('Clean') {
             steps {
                 echo 'Cleaning..'
-                sh 'docker rm -f servicio-transferencias'
+                sh 'docker rm -f servicio-transferenciasdev'
             }
         }
 
@@ -35,7 +35,7 @@ pipeline {
         stage('Restart') {
             steps {
                 echo 'Deploying....'
-                 sh 'docker restart servicio-transferencias'
+                 sh 'docker restart servicio-transferenciasdev'
             }
         }
 
