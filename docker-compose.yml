@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    image: wstransferencias-dev
+    container_name: servicio-transferencias
+    ports:
+      - 8003:80
+    restart: always
+    volumes: 
+      - /app/wsTransferencias/:/app/Logs
+    environment:
+      TZ: ${TZ}
+      SettingsApi__Endpoints__servicio_grpc_sybase: ${ENDPOINT_GRPC_SYBASE}
+      SettingsApi__Endpoints__servicio_grpc_mongo: ${ENDPOINT_GRPC_MONGO}
+      SettingsApi__Endpoints__servicio_ws_acceso: ${ENDPOINT_WS_ACCESO}
+      SettingsApi__Endpoints__servicio_ws_otp: ${ENDPOINT_WS_OTP}
+      SettingsApi__Endpoints__servicio_ws_banred: ${ENDPOINT_WS_BANRED}
+      SettingsApi__Endpoints__servicio_ws_notificador: ${ENDPOINT_WS_NOTIFICADOR}
+
+      SettingsApi__BasicAuth__auth_ws_transferencias: ${AUTH_WS_TRANSFERENCIAS}
+      SettingsApi__BasicAuth__auth_ws_acceso: ${AUTH_WS_ACCESO}
+      SettingsApi__BasicAuth__auth_ws_otp: ${AUTH_WS_OTP}
+      SettingsApi__BasicAuth__auth_ws_banred: ${AUTH_WS_BANRED}
+      SettingsApi__BasicAuth__auth_ws_notificador: ${AUTH_WS_NOTIFICADOR}
+
