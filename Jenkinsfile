@@ -22,20 +22,20 @@ pipeline {
         stage('Clean') {
             steps {
                 echo 'Cleaning..'
-                sh 'docker rm -f servicio-transferencias'
+                sh 'docker rm -f servicio-transferencias-dev'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
-                sh 'docker-compose up -d '                 
+                sh 'docker-compose up --no-deps -d app'                 
             }
         }
         stage('Restart') {
             steps {
                 echo 'Deploying....'
-                 sh 'docker restart servicio-transferencias'
+                 sh 'docker restart servicio-transferencias-dev'
             }
         }
 
