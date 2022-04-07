@@ -92,8 +92,8 @@ namespace wsTransferencias.Dat
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_error_cod", TipoDato = TipoDato.Integer } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_error", TipoDato = TipoDato.VarChar } );
 
-                ds.NombreSP = "get_datos_otp2";
-                ds.NombreBD = _settings.BD_megonline;
+                ds.NombreSP = "get_datos_otp_gen";
+                ds.NombreBD = _settings.BD_megservicios;
 
                 var resultado = objClienteDal.ExecuteDataSet( ds );
                 var lst_valores = new List<ParametroSalidaValores>();
