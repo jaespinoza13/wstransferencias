@@ -19,8 +19,7 @@ namespace wsTransferencias.Controllers
             _settings.path_logs_transferencias = path_logs;
             if(DateTime.Compare( DateTime.Now, LoadConfigService.dt_fecha_codigos.AddDays( 1 ) ) > 0 || LoadConfigService.lst_errores.Count <= 0)
             {
-                LoadConfigService.Init( optionsMonitorParam.CurrentValue );
-                LoadConfigService.LoadConfiguration( _settings );
+                LoadConfigService.LoadConfiguration( _settings, optionsMonitorParam.CurrentValue );
             }
         }
 

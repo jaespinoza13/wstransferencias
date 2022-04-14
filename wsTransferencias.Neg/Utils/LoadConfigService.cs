@@ -6,16 +6,11 @@ namespace wsTransferencias.Neg.Utils
 {
     public static class LoadConfigService
     {
-        private static LoadParameters? _settingsParameters;
-        public static void Init ( LoadParameters settings )
-        {
-            _settingsParameters = settings;
-        }
         public static List<Parametro> lst_errores { get; set; } = new();
         public static List<Parametro> lst_parametros { get; set; } = new();
         public static DateTime dt_fecha_codigos { get; set; }
 
-        public static void LoadConfiguration ( SettingsApi settings )
+        public static void LoadConfiguration ( SettingsApi settings, LoadParameters _settingsParameters )
         {
             try
             {
@@ -46,7 +41,7 @@ namespace wsTransferencias.Neg.Utils
             }
             catch(Exception ex)
             {
-                throw new ArgumentNullException( ex.ToString() );
+                throw new ArgumentNullException( ex.Message );
             }
         }
 
