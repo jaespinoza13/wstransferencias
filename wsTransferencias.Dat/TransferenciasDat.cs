@@ -43,6 +43,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_filtro", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_filtro.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_filtro_nem_canal", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_filtro_nem_canal.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ultimos_movimientos", TipoDato = TipoDato.Integer, ObjValue = req_get_transferencias.int_ultimos_movimientos.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_iteracion", TipoDato = TipoDato.Integer, ObjValue = req_get_transferencias.int_iteracion.ToString() } );
 
                 //Variables de auditoria
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = req_get_transferencias.str_id_transaccion.ToString() } );
@@ -58,6 +59,7 @@ namespace wsTransferencias.Dat
 
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer } );
+                ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_num_total_pag", TipoDato = TipoDato.Integer } );
 
                 ds.NombreSP = "get_con_transferencias_v2";
                 ds.NombreBD = _settings.BD_megservicios;
@@ -68,10 +70,12 @@ namespace wsTransferencias.Dat
                 foreach(var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
                 var str_codigo = lst_valores.Find( x => x.StrNameParameter == "@int_o_error_cod" )!.ObjValue;
                 var str_error = lst_valores.Find( x => x.StrNameParameter == "@str_o_error" )!.ObjValue.Trim();
+                var num_total_pag = lst_valores.Find( x => x.StrNameParameter == "@int_num_total_pag" )!.ObjValue.Trim();
 
                 respuesta.codigo = str_codigo.ToString().Trim().PadLeft( 3, '0' );
                 respuesta.cuerpo = Funciones.ObtenerDatos( resultado );
                 respuesta.diccionario.Add( "str_error", str_error.ToString() );
+                respuesta.diccionario.Add( "num_total_pag", num_total_pag.ToString() );
 
             }
             catch(Exception exception)

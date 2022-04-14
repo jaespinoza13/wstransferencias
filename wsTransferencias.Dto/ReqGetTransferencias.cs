@@ -11,5 +11,6 @@ namespace wsTransferencias.Dto
         public string str_filtro { get; set; } = String.Empty;
         public string str_filtro_nem_canal { get; set; } = String.Empty;
         public int int_ultimos_movimientos { get; set; }
+        public int int_iteracion { get; set; }
     }
 }

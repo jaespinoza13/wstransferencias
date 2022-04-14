@@ -189,7 +189,13 @@ namespace wsTransferencias.Neg
             {
                 RespuestaTransaccion res_tran = new TransferenciasDat( _settingsApi ).get_consulta_transferencias( req_get_tranferencias );
 
-                respuesta.lst_tranferencias = Utils.Utils.ConvertConjuntoDatosToListClass<Transferencias>( (ConjuntoDatos) res_tran.cuerpo );
+                if(res_tran.codigo.Equals("000"))
+                {
+                    respuesta.lst_tranferencias = Utils.Utils.ConvertConjuntoDatosToListClass<Transferencias>( (ConjuntoDatos) res_tran.cuerpo );
+                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                    respuesta.int_num_paginas = Convert.ToInt32( res_tran.diccionario["num_total_pag"].ToString());
+
+                }
 
                 respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals( "000" )) ? "OK" : "ERR";
                 respuesta.str_res_codigo = res_tran.codigo;
