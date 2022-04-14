@@ -27,8 +27,7 @@ namespace wsTransferencias.Neg
         {
             var respuesta = new ResValidacionTransferencias();
             respuesta.LlenarResHeader( req_validar_transferencia );
-            req_validar_transferencia.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqValidacionTransferencia>( req_validar_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_validar_transferencia.str_id_transaccion;
+            Utils.ServiceLogs.SaveHeaderLogs( req_validar_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
@@ -36,62 +35,78 @@ namespace wsTransferencias.Neg
 
                 if(res_tran.codigo.Equals( "000" ))
                 {
-                    bool requiereOtp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, "TRN_EXTERNAS" ).Result.codigo.Equals( "1009" );
-                    respuesta.bl_requiere_otp = requiereOtp ? res_tran.diccionario["str_requiere_otp"].Equals( "1009" ) : false!;
+                    var res_tran_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, "TRN_EXTERNAS" ).Result;
 
-                    respuesta.objValidacionTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResValidacionTransferencias.ValidacionTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
-
-                    if(respuesta!.objValidacionTransferencia.int_enviar_banred == 1)
+                    if(res_tran_otp.codigo.Equals( "1007" ))
                     {
-                        string str_req_validar_transferencia = JsonSerializer.Serialize( req_validar_transferencia );
-                        var obj_transferencia = JsonSerializer.Deserialize<ReqTransferencia>( str_req_validar_transferencia );
+                        respuesta.str_res_codigo = res_tran_otp.codigo;
+                        respuesta.str_res_estado_transaccion = "ERR";
+                        respuesta.str_res_info_adicional = res_tran_otp.diccionario["str_error"];
+                        return respuesta;
+                    }
+                    else
+                    {
 
-                        var datos_validados = Utils.Utils.ConvertConjuntoDatosToClass<DatosValidadosTransaccion>( (ConjuntoDatos) res_tran.cuerpo )!;
+                        Boolean requiereOtp = res_tran_otp.codigo.Equals( "1009" ) ? true : false;
+                        respuesta.bl_requiere_otp = requiereOtp ? res_tran.diccionario["str_requiere_otp"].Equals( "1009" ) : false!;
 
-                        Cabecera cabecera = Utils.Utils.llenar_cabecera( req_validar_transferencia! );
-                        RespuestaTransaccion respuesta_validaciones_pago_directo = validaciones_pago_directo( datos_validados, cabecera );
+                        respuesta.objValidacionTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResValidacionTransferencias.ValidacionTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
 
-                        if(respuesta_validaciones_pago_directo.codigo == "0000")
+                        if(respuesta!.objValidacionTransferencia.int_enviar_banred == 1)
                         {
-                            respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
-                            respuesta.str_res_codigo = res_tran.codigo;
-                            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
-                            Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-                            return respuesta;
-                        }
-                        else
-                        {
-                            //Se actualiza el registro para que la transacción se enviada por SPI                            
-                            RespuestaTransaccion respuesta_cambio_tipo_transfer = new TransferenciasDat( _settingsApi ).set_envio_transf_por_spi( obj_transferencia! );
+                            string str_req_validar_transferencia = JsonSerializer.Serialize( req_validar_transferencia );
+                            var obj_transferencia = JsonSerializer.Deserialize<ReqTransferencia>( str_req_validar_transferencia );
 
-                            if(respuesta_cambio_tipo_transfer.codigo == "000")
+                            var datos_validados = Utils.Utils.ConvertConjuntoDatosToClass<DatosValidadosTransaccion>( (ConjuntoDatos) res_tran.cuerpo )!;
+
+                            Cabecera cabecera = Utils.Utils.llenar_cabecera( req_validar_transferencia! );
+                            RespuestaTransaccion respuesta_validaciones_pago_directo = validaciones_pago_directo( datos_validados, cabecera, respuesta.str_id_transaccion );
+
+                            if(respuesta_validaciones_pago_directo.codigo == "0000")
                             {
-                                respuesta.objValidacionTransferencia.int_enviar_banred = 0;
+                                respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
+                                respuesta.str_res_codigo = res_tran.codigo;
+                                respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
+                                Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                                return respuesta;
                             }
-
-                            if(respuesta_validaciones_pago_directo.codigo == _settingsApi.codigo_error_datos_incorrectos_banred)
+                            else
                             {
+                                //Se actualiza el registro para que la transacción se enviada por SPI                            
+                                RespuestaTransaccion respuesta_cambio_tipo_transfer = new TransferenciasDat( _settingsApi ).set_envio_transf_por_spi( obj_transferencia! );
 
-                                ResTransferencia respuesta_error_validacion = new ResTransferencia();
-                                respuesta_error_validacion.str_res_codigo = _settingsApi.codigo_error_datos_incorrectos_coopmego;
-                                respuesta_error_validacion.str_res_info_adicional = _settingsApi.msj_error_validacion;
+                                if(respuesta_cambio_tipo_transfer.codigo == "000")
+                                {
+                                    respuesta.objValidacionTransferencia.int_enviar_banred = 0;
+                                }
 
-                                Utils.ServiceLogs.SaveResponseLogs( respuesta_error_validacion, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                                if(respuesta_validaciones_pago_directo.codigo == _settingsApi.codigo_error_datos_incorrectos_banred)
+                                {
+
+                                    ResTransferencia respuesta_error_validacion = new ResTransferencia();
+                                    respuesta_error_validacion.str_res_codigo = _settingsApi.codigo_error_datos_incorrectos_coopmego;
+                                    respuesta_error_validacion.str_res_info_adicional = _settingsApi.msj_error_validacion;
+
+                                    Utils.ServiceLogs.SaveResponseLogs( respuesta_error_validacion, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                                }
                             }
                         }
+
                     }
                 }
+
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
                 respuesta.str_res_codigo = res_tran.codigo;
-                respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
+
+                Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                return respuesta;
+
             }
             catch(Exception exception)
             {
                 Utils.ServiceLogs.SaveExceptionLogs( respuesta!, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
+                throw new Exception( respuesta.str_id_transaccion );
             }
-            Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            return respuesta;
         }
 
 
@@ -102,13 +117,20 @@ namespace wsTransferencias.Neg
             {
                 respuesta = new ResAddTransferencia();
                 respuesta.LlenarResHeader( req_add_transferencia );
-                req_add_transferencia.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqAddTransferencia>( req_add_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-                respuesta.str_id_transaccion = req_add_transferencia.str_id_transaccion;
-
+                Utils.ServiceLogs.SaveHeaderLogs( req_add_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
                 var res_tran = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_transferencia, "TRN_EXTERNAS" ).Result;
 
-                if(res_tran.codigo.Equals( "1009" ))
+                if(res_tran.codigo.Equals( "1017" ))
+                {
+
+                    respuesta.str_res_codigo = res_tran.codigo;
+                    respuesta.str_res_estado_transaccion = "ERR";
+                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
+                    return respuesta;
+
+                }
+                else if(res_tran.codigo.Equals( "1009" ))
                 {
                     res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_transferencia ).Result;
 
@@ -117,7 +139,7 @@ namespace wsTransferencias.Neg
                         res_tran = new TransferenciasDat( _settingsApi ).add_transf_interbancarias( req_add_transferencia );
                     }
                 }
-                else
+                else if(res_tran.codigo.Equals( "1006" ))
                 {
                     res_tran = new TransferenciasDat( _settingsApi ).add_transf_interbancarias( req_add_transferencia );
                 }
@@ -150,7 +172,7 @@ namespace wsTransferencias.Neg
                     if(datos_validados.int_enviar_banred == 1 && datos_validados.int_estado == 4)
                     {
                         var cabecera = Utils.Utils.llenar_cabecera( req_add_transferencia );
-                        ejecutar_pago_directo( datos_validados, cabecera );
+                        ejecutar_pago_directo( datos_validados, cabecera, respuesta.str_id_transaccion );
                         respuesta.objAddTransferencia = JsonSerializer.Deserialize<ResAddTransferencia.AddTransferencia>( JsonSerializer.Serialize( datos_validados ) )!;
                     }
                     else
@@ -164,13 +186,12 @@ namespace wsTransferencias.Neg
                 }
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
                 respuesta.str_res_codigo = res_tran.codigo;
-                respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
 
             }
             catch(Exception exception)
             {
                 Utils.ServiceLogs.SaveExceptionLogs( respuesta!, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
+                throw new Exception( respuesta.str_id_transaccion );
             }
             Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             return respuesta;
@@ -182,19 +203,17 @@ namespace wsTransferencias.Neg
         {
             var respuesta = new ResGetTransferencias();
             respuesta.LlenarResHeader( req_get_tranferencias );
-            req_get_tranferencias.str_id_transaccion = ServiceLogs.SaveHeaderLogs<ReqGetTransferencias>( req_get_tranferencias, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_get_tranferencias.str_id_transaccion;
+            ServiceLogs.SaveHeaderLogs( req_get_tranferencias, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
                 RespuestaTransaccion res_tran = new TransferenciasDat( _settingsApi ).get_consulta_transferencias( req_get_tranferencias );
 
-                if(res_tran.codigo.Equals("000"))
+                if(res_tran.codigo.Equals( "000" ))
                 {
                     respuesta.lst_tranferencias = Utils.Utils.ConvertConjuntoDatosToListClass<Transferencias>( (ConjuntoDatos) res_tran.cuerpo );
                     respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-                    respuesta.int_num_paginas = Convert.ToInt32( res_tran.diccionario["num_total_pag"].ToString());
-
+                    respuesta.int_num_paginas = Convert.ToInt32( res_tran.diccionario["num_total_pag"].ToString() );
                 }
 
                 respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals( "000" )) ? "OK" : "ERR";
@@ -204,14 +223,14 @@ namespace wsTransferencias.Neg
             catch(Exception exception)
             {
                 ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
+                throw new Exception( respuesta.str_id_transaccion );
             }
 
             ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             return respuesta;
         }
 
-        public RespuestaTransaccion ProcesarSolicitud ( SolicitudTransaccion sol_tran, string str_operacion )
+        public RespuestaTransaccion ProcesarSolicitud ( SolicitudTransaccion sol_tran, string str_operacion, string str_id_transaccion )
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
 
@@ -231,9 +250,10 @@ namespace wsTransferencias.Neg
                         break;
                 }
             }
-            catch(Exception ex)
+            catch(Exception exception)
             {
-                throw new ArgumentNullException( ex.ToString() );
+                ServiceLogs.SaveHttpErrorLogs( respuesta, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
+                throw new Exception( str_id_transaccion );
             }
             return respuesta;
         }
@@ -251,8 +271,7 @@ namespace wsTransferencias.Neg
             {
                 string str_data = JsonSerializer.Serialize( sol_tran );
                 var service = new ServiceHttp<RespuestaTransaccion>();
-                respuesta = service.PostRestServiceDataAsync( str_data, _settingsApi.servicio_ws_banred, String.Empty, _settingsApi.auth_ws_banred ).Result;
-
+                respuesta = service.PostRestServiceDataAsync( str_data, _settingsApi.servicio_ws_banred, String.Empty, _settingsApi.auth_ws_banred, _settingsApi ).Result;
             }
             catch(Exception ex)
             {
@@ -274,22 +293,22 @@ namespace wsTransferencias.Neg
             {
                 string str_data = JsonSerializer.Serialize( sol_tran );
                 var service = new ServiceHttp<RespuestaTransaccion>();
-                respuesta = service.PostRestServiceDataAsync( str_data, _settingsApi.servicio_ws_banred, String.Empty, _settingsApi.auth_ws_banred ).Result;
-
+                respuesta = service.PostRestServiceDataAsync( str_data, _settingsApi.servicio_ws_banred, String.Empty, _settingsApi.auth_ws_banred, _settingsApi ).Result;
             }
             catch(Exception ex)
             {
-                throw new ArgumentNullException( ex.ToString() );
+                throw new ArgumentNullException( ex.Message );
             }
             return respuesta;
         }
 
 
-        public RespuestaTransaccion validaciones_pago_directo ( DatosValidadosTransaccion datos_validados, Cabecera cabecera )
+        public RespuestaTransaccion validaciones_pago_directo ( DatosValidadosTransaccion datos_validados, Cabecera cabecera, String str_id_transaccion )
         {
-            RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
             {
+
+                RespuestaTransaccion respuesta = new RespuestaTransaccion();
                 //Se asigna nuevamente para que no se requiera deserealizarlo en un list TransferenciaDto
                 respuesta.cuerpo = datos_validados;
 
@@ -338,44 +357,18 @@ namespace wsTransferencias.Neg
                 sol_tran.cuerpo = datos_para_validacion_banred;
                 sol_tran.cabecera = cabecera;
 
-                respuesta = ProcesarSolicitud( sol_tran, "" );
+                respuesta = ProcesarSolicitud( sol_tran, "", str_id_transaccion );
+                return respuesta;
 
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                throw new ArgumentNullException( ex.ToString() );
+                throw new Exception( str_id_transaccion );
             }
-            return respuesta;
+
         }
 
-
-        public RespuestaTransaccion conectar_banred ( SolicitudTransaccion sol_tran )
-        {
-            var respuesta = new RespuestaTransaccion();
-            try
-            {
-
-                string url = _settingsApi.servicio_ws_banred;
-                string content_type = ApplicationContenTypes.JSON_UTF8;
-
-                string str_usuario = _settingsApi.user_ws_banred;
-                string str_contrasenia = _settingsApi.pass_ws_banred;
-
-                RestClient rest_client = new RestClient( url, content_type, str_usuario, str_contrasenia );
-
-                var obj = rest_client.post_string_content( sol_tran );
-                respuesta = JsonSerializer.Deserialize<RespuestaTransaccion>( obj.ToString()! );
-
-            }
-            catch(Exception ex)
-            {
-                throw new ArgumentNullException( ex.ToString() );
-            }
-            return respuesta!;
-        }
-
-
-        public RespuestaTransaccion ejecutar_pago_directo ( ResTransferencia datos_validados, Cabecera cabecera )
+        public RespuestaTransaccion ejecutar_pago_directo ( ResTransferencia datos_validados, Cabecera cabecera, String str_id_transaccion )
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
@@ -430,12 +423,13 @@ namespace wsTransferencias.Neg
                 sol_tran.cuerpo = datos_para_validacion_banred;
                 sol_tran.cabecera = cabecera;
 
-                ProcesarSolicitud( sol_tran, "" );
+                ProcesarSolicitud( sol_tran, "", str_id_transaccion );
 
             }
             catch(Exception ex)
             {
-                throw new ArgumentNullException( ex.ToString() );
+                Utils.ServiceLogs.SaveHttpErrorLogs( datos_validados, MethodBase.GetCurrentMethod()!.Name, str_clase, ex );
+                throw new Exception( datos_validados.str_id_transaccion );
             }
             return respuesta;
         }
@@ -446,40 +440,51 @@ namespace wsTransferencias.Neg
         {
             var respuesta = new ResValidacionTransferencias();
             respuesta.LlenarResHeader( req_validar_transferencia );
-            req_validar_transferencia.str_id_transaccion = ServiceLogs.SaveHeaderLogs<ReqValidacionTransferencia>( req_validar_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_validar_transferencia.str_id_transaccion;
+            ServiceLogs.SaveHeaderLogs( req_validar_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
 
-                RespuestaTransaccion res_tran = new TransferenciasDat( _settingsApi ).validar_transfer_interna( req_validar_transferencia );
-                respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals( "000" )) ? "OK" : "ERR";
-                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, req_validar_transferencia.str_nemonico_tipo_transferencia ).Result.codigo.Equals( "1009" );
-                respuesta.str_res_codigo = res_tran.codigo;
-                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                var res_tran = new TransferenciasDat( _settingsApi ).validar_transfer_interna( req_validar_transferencia );
 
+                var res_tran_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, req_validar_transferencia.str_nemonico_tipo_transferencia ).Result;
+
+                if(res_tran_requiere_otp.codigo.Equals( "1017" ))
+                {
+
+                    respuesta.str_res_codigo = res_tran_requiere_otp.codigo;
+                    respuesta.str_res_info_adicional = res_tran_requiere_otp.diccionario["str_error"];
+
+                }
+                else
+                {
+
+                    respuesta.bl_requiere_otp = res_tran_requiere_otp.codigo.Equals( "1009" );
+                    respuesta.str_res_codigo = res_tran.codigo;
+                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                }
+
+                respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
+                ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                return respuesta;
             }
             catch(Exception exception)
             {
                 ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
+                throw new Exception( respuesta.str_id_transaccion );
             }
-
-            ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_codigo = (respuesta.str_res_codigo.Equals( "000" )) ? respuesta.str_res_codigo : "5000";
-            return respuesta;
         }
 
         public ResAddTransferencia add_transferencia_interna ( ReqAddTransferencia req_add_transferencia, string str_operacion )
         {
             var respuesta = new ResAddTransferencia();
             respuesta.LlenarResHeader( req_add_transferencia );
-            req_add_transferencia.str_id_transaccion = ServiceLogs.SaveHeaderLogs<ReqAddTransferencia>( req_add_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_add_transferencia.str_id_transaccion;
+            ServiceLogs.SaveHeaderLogs( req_add_transferencia, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
                 var res_tran = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_transferencia, req_add_transferencia.str_nemonico_tipo_transferencia ).Result;
+                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
 
                 if(res_tran.codigo.Equals( "1009" ))
                 {
@@ -496,7 +501,7 @@ namespace wsTransferencias.Neg
 
                     }
                 }
-                else
+                else if(res_tran.codigo.Equals( "1006" ))
                 {
                     res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
                     respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
@@ -516,16 +521,12 @@ namespace wsTransferencias.Neg
             catch(Exception exception)
             {
                 ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
+                throw new Exception( respuesta.str_id_transaccion );
             }
 
             ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_codigo = (respuesta.str_res_codigo.Equals( "000" )) ? respuesta.str_res_codigo : "5000";
             return respuesta;
-
         }
-
         #endregion
-
     }
 }

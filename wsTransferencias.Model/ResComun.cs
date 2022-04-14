@@ -43,11 +43,12 @@ namespace wsTransferencias.Model
         public int int_res_id_servidor { get; set; }
         public string str_res_info_adicional { get; set; } = string.Empty;
 
-        public void LlenarResHeader(Header requerimiento)
+        public void LlenarResHeader ( Header requerimiento )
         {
+            requerimiento.str_id_transaccion = Guid.NewGuid().ToString();
             str_nemonico_canal = requerimiento.str_nemonico_canal;
             str_app = requerimiento.str_app;
-            str_id_servicio = !String.IsNullOrEmpty(requerimiento.str_id_servicio) ? requerimiento.str_id_servicio.Replace("REQ", "RES") : requerimiento.str_id_servicio;
+            str_id_servicio = !String.IsNullOrEmpty( requerimiento.str_id_servicio ) ? requerimiento.str_id_servicio.Replace( "REQ", "RES" ) : requerimiento.str_id_servicio;
             str_version_servicio = requerimiento.str_version_servicio;
             str_mac_dispositivo = requerimiento.str_mac_dispositivo;
             str_ip_dispositivo = requerimiento.str_ip_dispositivo;
@@ -55,9 +56,9 @@ namespace wsTransferencias.Model
             str_receptor = requerimiento.str_remitente;
             str_tipo_peticion = "REQ";
             str_id_msj = requerimiento.str_id_msj;
-            dt_fecha_operacion = DateTime.ParseExact(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss", null);
+            dt_fecha_operacion = DateTime.ParseExact( DateTime.Now.ToString( "yyyy-MM-dd HH:mm:ss" ), "yyyy-MM-dd HH:mm:ss", null );
             bl_posible_duplicado = requerimiento.bl_posible_duplicado;
-            str_token = requerimiento.str_token = "";
+            str_token = requerimiento.str_token = String.Empty;
             str_prioridad = requerimiento.str_prioridad;
             str_login = requerimiento.str_login;
             str_latitud = requerimiento.str_latitud;
@@ -69,12 +70,12 @@ namespace wsTransferencias.Model
             str_sesion = requerimiento.str_sesion;
             str_id_perfil = requerimiento.str_id_perfil;
             str_id_oficina = requerimiento.str_id_oficina;
-            LlenarResComun(requerimiento.str_id_msj, requerimiento.str_id_servicio, requerimiento.dt_fecha_operacion);
+            LlenarResComun( requerimiento.str_id_msj, requerimiento.str_id_servicio!, requerimiento.dt_fecha_operacion, requerimiento.str_id_transaccion );
 
         }
-
-        public void LlenarResComun(string str_res_original_id_msj, string str_res_original_id_servicio, DateTime dt_res_fecha_msj_crea)
+        public void LlenarResComun ( string str_res_original_id_msj, string str_res_original_id_servicio, DateTime dt_res_fecha_msj_crea, string str_id_transaccion )
         {
+            this.str_id_transaccion = str_id_transaccion;
             this.str_res_original_id_msj = str_res_original_id_msj;
             this.str_res_original_id_servicio = str_res_original_id_servicio;
             this.dt_res_fecha_msj_crea = dt_res_fecha_msj_crea;

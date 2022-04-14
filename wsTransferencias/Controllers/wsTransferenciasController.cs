@@ -28,10 +28,16 @@ namespace wsTransferencias.Controllers
         [HttpPost]
         public IActionResult Transaccion ( Object raw, string str_operacion )
         {
-            WsTransferenciasNeg objConsultas = new WsTransferenciasNeg( _settings );
-            object respuesta = objConsultas.procesarSolicitud( raw, str_operacion );
-            return Ok( respuesta );
+            try
+            {
+                WsTransferenciasNeg objConsultas = new WsTransferenciasNeg( _settings );
+                object respuesta = objConsultas.procesarSolicitud( raw, str_operacion );
+                return Ok( respuesta );
+            }
+            catch(Exception ex)
+            {
+                throw new Exception( ex.Message )!;
+            }
         }
-
     }
 }

@@ -17,13 +17,22 @@ namespace wsTransferencias.Dat
         {
             _settings = settings;
             str_servicio = settings.nombre_base_mongo;
-            var canal = GrpcChannel.ForAddress( settings.servicio_grpc_mongo );
+
+            var handler = new SocketsHttpHandler
+            {
+                PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan,
+                KeepAlivePingDelay = TimeSpan.FromSeconds( _settings.delayOutGrpcMongo ),
+                KeepAlivePingTimeout = TimeSpan.FromSeconds( _settings.timeoutGrpcMongo ),
+                EnableMultipleHttp2Connections = true
+            };
+
+            var canal = GrpcChannel.ForAddress( _settings.servicio_grpc_mongo, new GrpcChannelOptions { HttpHandler = handler } );
+
             objClienteMongo = new DALMongoClient( canal );
         }
 
-        public RespuestaTransaccion GuardarCabeceraMongo ( object? cabecera )
+        public void GuardarCabeceraMongo ( object? cabecera )
         {
-            var respuesta = new RespuestaTransaccion();
             var ds = new DatosSolicitud();
             try
             {
@@ -33,61 +42,37 @@ namespace wsTransferencias.Dat
                 ds.Filter = String.Empty;
                 ds.SolTran = ser_cabecera;
 
-
-                DatosRespuesta res = objClienteMongo.insertar_documento( ds );
-                respuesta.codigo = "000";
-                respuesta.cuerpo = res.Mensaje;
+                objClienteMongo.insertar_documento( ds );
             }
             catch(Exception ex)
             {
-                respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", ex.ToString() );
+                Console.WriteLine( "Error en mongo: " + ex.Message );
             }
-
-            return respuesta;
         }
 
 
-        public RespuestaTransaccion GuardarRespuestaMongo ( ResComun obj_respuesta )
+        public void GuardarRespuestaMongo ( dynamic ObjRespPeticion )
         {
-            var respuesta = new RespuestaTransaccion();
+
             var ds = new DatosSolicitud();
             try
             {
-                var bjson = new
-                {
-                    idHeader = obj_respuesta.str_id_transaccion,
-                    rsc_res_original_id_msj = obj_respuesta.str_res_original_id_msj,
-                    rsc_res_original_id_servicio = obj_respuesta.str_res_original_id_servicio,
-                    rsc_res_fecha_msj_crea = obj_respuesta.dt_res_fecha_msj_crea,
-                    rsc_res_estado_transaccion = obj_respuesta.str_res_estado_transaccion,
-                    rsc_res_codigo = obj_respuesta.str_res_codigo,
-                    rsc_res_id_servidor = obj_respuesta.str_id_servicio,
-                    rsc_res_info_adicional = obj_respuesta.str_res_info_adicional
-                };
-
-                String ser_cabecera = JsonSerializer.Serialize( bjson );
+                String ser_cabecera = JsonSerializer.Serialize( ObjRespPeticion );
                 ds.StrNameBD = str_servicio;
                 ds.NombreColeccion = _settings.coll_respuesta;
                 ds.Filter = String.Empty;
                 ds.SolTran = ser_cabecera;
+                objClienteMongo.insertar_documento( ds );
 
-                DatosRespuesta res = objClienteMongo.insertar_documento( ds );
-                respuesta.codigo = "000";
-                respuesta.cuerpo = res.Mensaje;
             }
             catch(Exception ex)
             {
-                respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", ex.ToString() );
+                Console.WriteLine( "Error en mongo: " + ex.Message );
             }
-
-            return respuesta;
         }
 
-        public RespuestaTransaccion GuardarExcepcionesMongo ( ResComun obj_respuesta, object excepcion )
+        public void GuardarExcepcionesMongo ( ResComun obj_respuesta, object excepcion )
         {
-            var respuesta = new RespuestaTransaccion();
             var ds = new DatosSolicitud();
             try
             {
@@ -105,22 +90,76 @@ namespace wsTransferencias.Dat
                 };
 
                 String ser_cabecera = JsonSerializer.Serialize( bjson );
-                ds.StrNameBD = str_servicio;
+                ds.StrNameBD = _settings.nombre_base_mongo;
                 ds.NombreColeccion = _settings.coll_errores;
                 ds.Filter = String.Empty;
                 ds.SolTran = ser_cabecera;
 
-                DatosRespuesta res = objClienteMongo.insertar_documento( ds );
-                respuesta.codigo = "000";
-                respuesta.cuerpo = res.Mensaje;
+                objClienteMongo.insertar_documento( ds );
             }
             catch(Exception ex)
             {
-                respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", ex.ToString() );
+                Console.WriteLine( "Error en mongo: " + ex.Message );
             }
+        }
 
-            return respuesta;
+        public void GuardarExcepcionesDataBase ( Header obj_respuesta, object excepcion )
+        {
+            var ds = new DatosSolicitud();
+            try
+            {
+                var bjson = new
+                {
+                    idHeader = obj_respuesta.str_id_transaccion,
+                    str_id_servicio = obj_respuesta.str_id_servicio,
+                    str_nemonico_canal = obj_respuesta.str_nemonico_canal,
+                    dt_fecha_operacion = obj_respuesta.dt_fecha_operacion,
+                    str_ip_dispositivo = obj_respuesta.str_ip_dispositivo,
+                    str_login = obj_respuesta.str_login,
+                    str_id_oficina = obj_respuesta.str_id_oficina,
+                    error = excepcion.ToString()
+                };
+
+                String ser_cabecera = JsonSerializer.Serialize( bjson );
+                ds.StrNameBD = _settings.nombre_base_mongo;
+                ds.NombreColeccion = _settings.coll_errores_db;
+                ds.Filter = String.Empty;
+                ds.SolTran = ser_cabecera;
+
+                objClienteMongo.insertar_documento( ds );
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine( "Error en mongo: " + ex.Message );
+            }
+        }
+
+        public void GuardaErroresHttp ( Object any, object excepcion )
+        {
+            var ds = new DatosSolicitud();
+            try
+            {
+                var bjson = new
+                {
+                    fecha = DateTime.Now,
+                    objeto = any,
+                    error = excepcion.ToString(),
+                };
+
+                String ser_cabecera = JsonSerializer.Serialize( bjson );
+                ds.StrNameBD = _settings.nombre_base_mongo;
+                ds.NombreColeccion = _settings.coll_errores_http;
+                ds.Filter = String.Empty;
+                ds.SolTran = ser_cabecera;
+
+                objClienteMongo.insertar_documento( ds );
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine( "Error en mongo: " + ex.Message );
+            }
         }
 
         public RespuestaTransaccion GuardarAmenazasMongo ( ValidacionInyeccion obj_respuesta )
@@ -176,35 +215,27 @@ namespace wsTransferencias.Dat
         }
 
 
-        public RespuestaTransaccion actualizar_peticion_diaria ( string filtro, string peticion )
+        public void actualizar_peticion_diaria ( string filtro, string peticion )
         {
-            var respuesta = new RespuestaTransaccion();
-            var ds = new DatosSolicitud();
             try
             {
+                var ds = new DatosSolicitud();
 
                 ds.StrNameBD = str_servicio;
                 ds.NombreColeccion = _settings.coll_peticiones_diarias;
                 ds.Filter = filtro;
                 ds.SolTran = peticion;
 
-                DatosRespuesta res = objClienteMongo.actualizar_documento_avanzado( ds );
-
-                respuesta.codigo = "000";
-                respuesta.cuerpo = res.Mensaje;
+                objClienteMongo.actualizar_documento_avanzado( ds );
             }
             catch(Exception ex)
-
             {
-                respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", ex.ToString() );
+                Console.WriteLine( "Error en mongo: " + ex.Message );
             }
-            return respuesta;
         }
 
-        public RespuestaTransaccion guardar_promedio_peticion_diaria ( string str_operacion, string str_fecha )
+        public void guardar_promedio_peticion_diaria ( string str_operacion, string str_fecha )
         {
-            var respuesta = new RespuestaTransaccion();
             var ds = new DatosSolicitud();
             try
             {
@@ -240,17 +271,11 @@ namespace wsTransferencias.Dat
                     objClienteMongo.insertar_documento( ds );
 
                 }
-
-                respuesta.codigo = "000";
-                respuesta.cuerpo = res.Mensaje;
             }
             catch(Exception ex)
-
             {
-                respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", ex.ToString() );
+                Console.WriteLine( "Error en mongo: " + ex.Message );
             }
-            return respuesta;
         }
         public int calcular_promedio ( string str_operacion )
         {
@@ -288,8 +313,6 @@ namespace wsTransferencias.Dat
         }
         public int obtener_promedio ( string str_operacion )
         {
-
-
             string str_filtro = "{'str_operacion':'" + str_operacion + "'}";
             int int_respuesta = 0;
             var ds = new DatosSolicitud();
@@ -319,43 +342,5 @@ namespace wsTransferencias.Dat
             }
             return int_respuesta;
         }
-
-        public RespuestaTransaccion GuardarExcepcionesDataBase ( Header obj_respuesta, object excepcion )
-        {
-            var respuesta = new RespuestaTransaccion();
-            var ds = new DatosSolicitud();
-            try
-            {
-                var bjson = new
-                {
-                    idHeader = obj_respuesta.str_id_transaccion,
-                    str_id_servicio = obj_respuesta.str_id_servicio,
-                    str_nemonico_canal = obj_respuesta.str_nemonico_canal,
-                    dt_fecha_operacion = obj_respuesta.dt_fecha_operacion,
-                    str_ip_dispositivo = obj_respuesta.str_ip_dispositivo,
-                    str_login = obj_respuesta.str_login,
-                    str_id_oficina = obj_respuesta.str_id_oficina,
-                    error = excepcion.ToString()
-                };
-
-                String ser_cabecera = JsonSerializer.Serialize( bjson );
-                ds.StrNameBD = _settings.nombre_base_mongo;
-                ds.NombreColeccion = _settings.coll_errores_db;
-                ds.Filter = String.Empty;
-                ds.SolTran = ser_cabecera;
-
-                DatosRespuesta res = objClienteMongo.insertar_documento( ds );
-                respuesta.codigo = "000";
-                respuesta.cuerpo = res.Mensaje;
-            }
-            catch(Exception ex)
-            {
-                respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", ex.ToString() );
-            }
-            return respuesta;
-        }
-
     }
-
 }

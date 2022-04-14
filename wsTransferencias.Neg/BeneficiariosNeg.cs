@@ -24,8 +24,8 @@ namespace wsTransferencias.Neg
             var respuesta = new ResBeneficiarios();
             var res_tran = new RespuestaTransaccion();
             respuesta.LlenarResHeader( req_add_beneficiario );
-            req_add_beneficiario.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqAddBeneficiario>( req_add_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_add_beneficiario.str_id_transaccion;
+
+            ServiceLogs.SaveHeaderLogs( req_add_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
@@ -66,14 +66,15 @@ namespace wsTransferencias.Neg
                 }
                 respuesta.str_res_codigo = String.IsNullOrEmpty( res_tran.codigo ) ? respuesta.str_res_codigo : res_tran.codigo;
                 respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
+
                 Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-                respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
                 return respuesta;
+
             }
             catch(Exception exception)
             {
                 Utils.ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
+                throw new Exception( respuesta.str_id_transaccion );
             }
         }
 
@@ -82,12 +83,14 @@ namespace wsTransferencias.Neg
             var respuesta = new ResBeneficiarios();
             var res_tran = new RespuestaTransaccion();
             respuesta.LlenarResHeader( req_update_beneficiario );
-            req_update_beneficiario.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqUpdateBeneficiario>( req_update_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_update_beneficiario.str_id_transaccion;
+
+            Utils.ServiceLogs.SaveHeaderLogs( req_update_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
                 res_tran = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_update_beneficiario, req_update_beneficiario.str_tipo_beneficiario ).Result;
+                respuesta.str_res_codigo = res_tran.codigo;
+                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
 
                 if(res_tran.codigo.Equals( "1009" ))
                 {
@@ -96,35 +99,33 @@ namespace wsTransferencias.Neg
                     if(res_tran.codigo.Equals( "000" ))
                     {
                         res_tran = new BeneficiariosDat( _settingsApi ).update_cuentas_beneficiarios( req_update_beneficiario );
-                        respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
                     }
+                    respuesta.str_res_codigo = res_tran.codigo;
+                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                 }
-                else
+                else if(res_tran.codigo.Equals( "1006" ))
                 {
                     res_tran = new BeneficiariosDat( _settingsApi ).update_cuentas_beneficiarios( req_update_beneficiario );
-                    respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
+                    respuesta.str_res_codigo = res_tran.codigo;
+                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                 }
 
-                respuesta.str_res_codigo = res_tran.codigo;
+                respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
                 Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-                respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
                 return respuesta;
-
             }
             catch(Exception exception)
             {
                 Utils.ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
+                throw new Exception( respuesta.str_id_transaccion );
             }
-
         }
 
         public ResBeneficiarios delete_beneficiario ( ReqDeleteBeneficiario req_delete_beneficiario, string str_operacion )
         {
             var respuesta = new ResBeneficiarios();
             respuesta.LlenarResHeader( req_delete_beneficiario );
-            req_delete_beneficiario.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqDeleteBeneficiario>( req_delete_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_delete_beneficiario.str_id_transaccion;
+            Utils.ServiceLogs.SaveHeaderLogs( req_delete_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
@@ -132,16 +133,15 @@ namespace wsTransferencias.Neg
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+
+                Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                return respuesta;
             }
             catch(Exception exception)
             {
                 Utils.ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
+                throw new Exception( respuesta.str_id_transaccion );
             }
-
-            Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
-            return respuesta;
         }
 
 
@@ -149,8 +149,7 @@ namespace wsTransferencias.Neg
         {
             var respuesta = new ResGetBeneficiario();
             respuesta.LlenarResHeader( req_get_beneficiario );
-            req_get_beneficiario.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqGetBeneficiario>( req_get_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_get_beneficiario.str_id_transaccion;
+            Utils.ServiceLogs.SaveHeaderLogs( req_get_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
@@ -158,100 +157,121 @@ namespace wsTransferencias.Neg
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+
                 respuesta.lst_beneficiarios = Utils.Utils.ConvertConjuntoDatosToListClass<Beneficiario>( (ConjuntoDatos) res_tran.cuerpo );
+                Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                return respuesta;
+
             }
             catch(Exception exception)
             {
                 Utils.ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
+                throw new Exception( respuesta.str_id_transaccion );
             }
-
-            Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
-            return respuesta;
         }
-
 
         public ResValidaBeneficiario validar_registro_beneficiarios ( ReqValidaBeneficiario req_validar_beneficiarios, string str_operacion )
         {
 
             var respuesta = new ResValidaBeneficiario();
             respuesta.LlenarResHeader( req_validar_beneficiarios );
-            req_validar_beneficiarios.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqValidaBeneficiario>( req_validar_beneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_validar_beneficiarios.str_id_transaccion;
+            Utils.ServiceLogs.SaveHeaderLogs( req_validar_beneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
                 var res_tran = new BeneficiariosDat( _settingsApi ).validar_registro_beneficiarios( req_validar_beneficiarios );
-                respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
-                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result.codigo.Equals( "1009" );
-                respuesta.str_res_codigo = res_tran.codigo;
+                var res_tran_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result;
+
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
 
+                switch(res_tran_otp.codigo)
+                {
+                    case "1009":
+                        respuesta.str_res_codigo = res_tran.codigo;
+                        respuesta.bl_requiere_otp = true;
+                        break;
+                    case "1006":
+                        respuesta.str_res_codigo = res_tran.codigo;
+                        respuesta.bl_requiere_otp = false;
+                        break;
+                    case "1017":
+                        respuesta.str_res_codigo = "001";
+                        respuesta.str_res_info_adicional = res_tran_otp.diccionario["str_error"].ToString();
+                        break;
+                }
+
+                respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
+                Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                return respuesta;
             }
             catch(Exception exception)
             {
                 Utils.ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
+                throw new Exception( respuesta.str_id_transaccion );
             }
-
-            Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
-            return respuesta;
         }
         public ResValidaBeneficiario validar_update_beneficiarios ( ReqValidaBeneficiario req_validar_beneficiarios, string str_operacion )
         {
-
             var respuesta = new ResValidaBeneficiario();
             respuesta.LlenarResHeader( req_validar_beneficiarios );
-            req_validar_beneficiarios.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqValidaBeneficiario>( req_validar_beneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_validar_beneficiarios.str_id_transaccion;
+            Utils.ServiceLogs.SaveHeaderLogs( req_validar_beneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
-                respuesta.str_res_estado_transaccion = "OK";
-                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result.codigo.Equals( "1009" );
+                var res_tran_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result;
                 respuesta.str_res_codigo = "000";
-                respuesta.str_res_info_adicional = "";
+
+                switch(res_tran_otp.codigo)
+                {
+                    case "1009":
+                        respuesta.bl_requiere_otp = true;
+                        break;
+
+                    case "1006":
+                        respuesta.bl_requiere_otp = false;
+                        break;
+
+                    case "1017":
+                        respuesta.str_res_codigo = "001";
+                        break;
+                }
+
+                respuesta.str_res_info_adicional = res_tran_otp.diccionario["str_error"];
+                respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
+                Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                return respuesta;
 
             }
             catch(Exception exception)
             {
                 Utils.ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
+                throw new Exception( respuesta.str_id_transaccion );
             }
-
-            Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
-            return respuesta;
         }
 
         public ResCuentasBeneficiario get_ctas_benef_transferencia ( ReqCuentasBeneficiario req_cuentas_beneficiario, string str_operacion )
         {
             var respuesta = new ResCuentasBeneficiario();
             respuesta.LlenarResHeader( req_cuentas_beneficiario );
-            req_cuentas_beneficiario.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqCuentasBeneficiario>( req_cuentas_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_cuentas_beneficiario.str_id_transaccion;
+
+            Utils.ServiceLogs.SaveHeaderLogs( req_cuentas_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
-
                 RespuestaTransaccion res_tran = new BeneficiariosDat( _settingsApi ).get_ctas_benef_transferencia( req_cuentas_beneficiario );
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.lst_cuentas_beneficiario = Utils.Utils.ConvertConjuntoDatosToListClass<ResCuentasBeneficiario.CuentasBeneficiario>( (ConjuntoDatos) res_tran.cuerpo );
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
 
+                Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                return respuesta;
             }
             catch(Exception exception)
             {
                 Utils.ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
+                throw new Exception( req_cuentas_beneficiario.str_id_transaccion );
             }
-
-            Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
-            return respuesta;
         }
 
         public ResValidaCuentaPagoDirecto valida_cuenta_pago_directo ( ReqValidaCuentaPagoDirecto req_valida_cuenta, string str_operacion )
@@ -259,8 +279,7 @@ namespace wsTransferencias.Neg
 
             var respuesta = new ResValidaCuentaPagoDirecto();
             respuesta.LlenarResHeader( req_valida_cuenta );
-            req_valida_cuenta.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqValidaCuentaPagoDirecto>( req_valida_cuenta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_valida_cuenta.str_id_transaccion;
+            Utils.ServiceLogs.SaveHeaderLogs( req_valida_cuenta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
@@ -271,7 +290,6 @@ namespace wsTransferencias.Neg
                 {
 
                     var datosValidaCuenta = Utils.Utils.ConvertConjuntoDatosToClass<Transaccion>( (ConjuntoDatos) res_obtiene_datos.cuerpo );
-                    //str_identificacion_receptor = req_valida_cuenta.str_identificacion
 
                     datosValidaCuenta!.str_tipo_tran = "CON";
                     datosValidaCuenta.int_secuencial = Convert.ToInt32( DateTime.Now.ToString( "HHmm" ) );
@@ -292,7 +310,7 @@ namespace wsTransferencias.Neg
 
                     string str_data = JsonSerializer.Serialize( sol_tran );
                     var service = new ServiceHttp<RespuestaTransaccion>();
-                    RespuestaTransaccion res_banred = service.PostRestServiceDataAsync( str_data, _settingsApi.servicio_ws_banred, String.Empty, _settingsApi.auth_ws_banred ).Result;
+                    RespuestaTransaccion res_banred = service.PostRestServiceDataAsync( str_data, _settingsApi.servicio_ws_banred, String.Empty, _settingsApi.auth_ws_banred, _settingsApi ).Result;
 
                     if(res_banred.codigo.Equals( "000" ) || res_banred.codigo.Equals( "0000" ))
                     {
@@ -312,7 +330,7 @@ namespace wsTransferencias.Neg
                         {
                             //La cuenta no se validó en pago directo
                             res_banred.codigo = "5000"; //"1012"
-                            respuesta.str_res_info_adicional = "No se pudo validar la cuenta/tarjeta. Es probable que no haya respuesta de la institución financiera o que algún dato ingresado en el momento del registro de la cuenta/tarjeta sea incorrecto";
+                            respuesta.str_res_info_adicional = _settingsApi.msj_error_validacion;
                         }
                     }
                     respuesta.str_res_codigo = res_banred.codigo;
@@ -335,8 +353,7 @@ namespace wsTransferencias.Neg
 
             var respuesta = new ResValidaBeneficiarioCtasMego();
             respuesta.LlenarResHeader( req_validar_beneficiarios );
-            req_validar_beneficiarios.str_id_transaccion = Utils.ServiceLogs.SaveHeaderLogs<ReqValidaBeneficiario>( req_validar_beneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_id_transaccion = req_validar_beneficiarios.str_id_transaccion;
+            Utils.ServiceLogs.SaveHeaderLogs( req_validar_beneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
@@ -347,22 +364,36 @@ namespace wsTransferencias.Neg
                     respuesta.lst_beneficiario = Utils.Utils.ConvertConjuntoDatosToListClass<Beneficiario>( (ConjuntoDatos) res_tran.cuerpo );
                 }
 
-                respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
-                respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result.codigo.Equals( "1009" );
-                respuesta.str_res_codigo = res_tran.codigo;
-                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
 
+                var res_tran_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result;
+
+                switch(res_tran_otp.codigo)
+                {
+                    case "1009":
+                        respuesta.str_res_codigo = res_tran.codigo;
+                        respuesta.bl_requiere_otp = true;
+                        respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                        break;
+                    case "1006":
+                        respuesta.str_res_codigo = res_tran.codigo;
+                        respuesta.bl_requiere_otp = false;
+                        respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                        break;
+                    case "1017":
+                        respuesta.str_res_codigo = "001";
+                        respuesta.str_res_info_adicional = res_tran_otp.diccionario["str_error"].ToString();
+                        break;
+                }
+
+                respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
+                Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+                return respuesta;
             }
             catch(Exception exception)
             {
                 Utils.ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw;
+                throw new Exception( respuesta.str_id_transaccion );
             }
-
-            Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
-            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( respuesta.str_res_codigo ).str_valor_fin;
-            return respuesta;
         }
-
     }
 }

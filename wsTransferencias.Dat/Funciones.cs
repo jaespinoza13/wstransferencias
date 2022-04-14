@@ -35,26 +35,39 @@ namespace wsTransferencias.Dat
             cd.lst_tablas = lst_tablas;
             return cd;
         }
+        
+        public static void llenar_datos_auditoria_salida ( DatosSolicitud ds, Header header )
+        {
+            ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = header.str_id_transaccion } );
+            ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_sistema", TipoDato = TipoDato.Integer, ObjValue = header.str_id_sistema } );
+            ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = header.str_login } );
+            ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_perfil", TipoDato = TipoDato.Integer, ObjValue = header.str_id_perfil } );
+            ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_oficina", TipoDato = TipoDato.Integer, ObjValue = header.str_id_oficina } );
+            ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nemonico_canal", TipoDato = TipoDato.VarChar, ObjValue = header.str_nemonico_canal } );
+            ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_ip_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = header.str_ip_dispositivo } );
+            ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_sesion", TipoDato = TipoDato.VarChar, ObjValue = header.str_sesion } );
+            ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_mac_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = header.str_mac_dispositivo } );
 
+            ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar } );
+            ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer } );
+        }
 
         public static void SaveExcepcionDataBaseSybase(SettingsApi _settingsApi, Header transaction, String str_metodo, Exception excepcion, string str_clase)
         {
             try
             {
+                var error = new { error = excepcion.ToString(), peticion = transaction };
+
                 InfoLog infoLog = new();
                 infoLog.str_clase = str_clase;
                 infoLog.str_operacion = transaction.str_id_servicio;
-                infoLog.str_objeto = transaction;
+                infoLog.str_objeto = error;
                 infoLog.str_metodo = str_metodo;
-                infoLog.str_fecha = DateTime.Now;
-
-                Random random = new Random();
-                RespuestaTransaccion res_tran_logs = new LogsMongoDat(_settingsApi).GuardarExcepcionesDataBase(transaction, excepcion);
-                string str_id_transaccion = res_tran_logs.codigo.Equals("000") ? (String)res_tran_logs.cuerpo : new string(Enumerable.Repeat("0123456789", 20).Select(s => s[random.Next(s.Length)]).ToArray());
-                infoLog.str_id_transaccion = str_id_transaccion;
+                infoLog.str_fecha = transaction.dt_fecha_operacion;
+                infoLog.str_id_transaccion = transaction.str_id_transaccion;
                 infoLog.str_tipo = "e:<";
 
-
+                new LogsMongoDat(_settingsApi).GuardarExcepcionesDataBase(transaction, excepcion);
 
                 if (!File.Exists(_settingsApi.path_logs_errores))
                 {
@@ -74,12 +87,8 @@ namespace wsTransferencias.Dat
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine( "Error al guardar excepción de sybase en mongo: " + ex.ToString() );
             }
-
         }
-
-
-       
     }
 }

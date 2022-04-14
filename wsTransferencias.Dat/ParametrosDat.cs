@@ -67,6 +67,7 @@ namespace wsTransferencias.Dat
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 Funciones.SaveExcepcionDataBaseSybase( _settings, req_get_parametros, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                throw new Exception(req_get_parametros.str_id_transaccion)!;
             }
             return respuesta;
         }
@@ -111,6 +112,7 @@ namespace wsTransferencias.Dat
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 Funciones.SaveExcepcionDataBaseSybase( _settings, req_get_datos, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                throw new Exception(req_get_datos.str_id_transaccion)!;
             }
             return respuesta;
         }

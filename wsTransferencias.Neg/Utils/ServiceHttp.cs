@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using wsTransferencias.Model;
 
 namespace wsTransferencias.Neg.Utils
 {
@@ -42,7 +44,7 @@ namespace wsTransferencias.Neg.Utils
         /// <param name="serviceAddress"></param>
         /// <param name="base64basicAuth"></param>
         /// <returns></returns>
-        public async Task<T> PostRestServiceDataAsync ( string serializedData, string serviceAddress, string parameters, string base64basicAuth )
+        public async Task<T> PostRestServiceDataAsync ( string serializedData, string serviceAddress, string parameters, string base64basicAuth, SettingsApi settings )
         {
             try
             {
@@ -58,12 +60,21 @@ namespace wsTransferencias.Neg.Utils
                 {
                     respuesta = JsonSerializer.Deserialize<T>( resultadoJson )!;
                 }
+                else
+                {
+                    var res_servicio = new { codigo = response.StatusCode, cabecera = response.Headers, cuerpo = response.Content.ReadAsStreamAsync() };
+                    ServiceLogs.Init( settings );
+                    ServiceLogs.SaveHttpErrorLogs( JsonSerializer.Deserialize<dynamic>( serializedData ), MethodBase.GetCurrentMethod()!.Name, "ServiceHttp", res_servicio );
+                }
 
                 return respuesta;
             }
             catch(Exception ex)
             {
-                throw new ArgumentNullException( ex.ToString() );
+                var data = JsonSerializer.Deserialize<dynamic>( serializedData );
+                ServiceLogs.Init( settings );
+                ServiceLogs.SaveHttpErrorLogs( data, MethodBase.GetCurrentMethod()!.Name, "ServiceHttp", ex );
+                throw new Exception( String.Empty )!;
             }
         }
     }

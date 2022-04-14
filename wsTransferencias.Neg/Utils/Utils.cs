@@ -77,7 +77,7 @@ namespace wsTransferencias.Neg.Utils
         {
             string parametros = "api/wsAcceso?str_operacion=VALIDAR_TOKEN";
             var service = new ServiceHttp<ResComun>();
-            ResComun respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_acceso, parametros, settings.auth_ws_acceso );
+            ResComun respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_acceso, parametros, settings.auth_ws_acceso, settings );
             return respuesta;
 
         }
@@ -122,7 +122,7 @@ namespace wsTransferencias.Neg.Utils
                     }
 
                     string str_act_registro = "{$set:{'int_num_peticion':" + int_act_peticiones + ", 'str_fecha_solicitud' : '" + str_fecha_diaria + "',str_operacion:'" + str_operacion + "'}}";
-                    var_respuesta = new LogsMongoDat( serviceSettings! ).actualizar_peticion_diaria( str_filtro, str_act_registro );
+                    new LogsMongoDat( serviceSettings! ).actualizar_peticion_diaria( str_filtro, str_act_registro );
 
 
                 }
@@ -197,7 +197,7 @@ namespace wsTransferencias.Neg.Utils
             var parametros = "api/WsOTP?str_operacion=VALIDA_REQUIERE_OTP";
             var service = new ServiceHttp<RespuestaTransaccion>();
             string str_data = JsonSerializer.Serialize( raw );
-            RespuestaTransaccion respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp );
+            RespuestaTransaccion respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp, settings );
 
             return respuesta;
 
@@ -243,7 +243,7 @@ namespace wsTransferencias.Neg.Utils
             var parametros = "api/WsOTP?str_operacion=VALIDA_OTP";
             var service = new ServiceHttp<RespuestaTransaccion>();
             string str_data = JsonSerializer.Serialize( raw );
-            RespuestaTransaccion respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp );
+            RespuestaTransaccion respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp, settings );
             return respuesta;
 
         }

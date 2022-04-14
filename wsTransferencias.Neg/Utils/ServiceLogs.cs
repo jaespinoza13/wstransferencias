@@ -31,23 +31,21 @@ namespace wsTransferencias.Neg.Utils
         /// <param name="str_clase"></param>
         /// <returns></returns>
         /// 
-        public static string SaveHeaderLogs<T> ( T transaction, String str_operacion, String str_metodo, String str_clase )
+        public static void SaveHeaderLogs ( Header transaction, String str_operacion, String str_metodo, String str_clase )
         {
-            string str_id_transaccion = String.Empty;
-
+            infoLog.str_id_transaccion = transaction.str_id_transaccion;
             infoLog.str_clase = str_clase;
             infoLog.str_operacion = str_operacion;
-            infoLog.str_objeto = transaction;
+            infoLog.str_objeto = transaction!;
             infoLog.str_metodo = str_metodo;
-            infoLog.str_fecha = DateTime.Now;
-
-            RespuestaTransaccion res_tran_logs = new LogsMongoDat( _settingsApi ).GuardarCabeceraMongo( transaction );
-            str_id_transaccion = res_tran_logs.codigo.Equals( "000" ) ? (String) res_tran_logs.cuerpo : Utils.GeneraCadenaAleatoria();
-            infoLog.str_id_transaccion = str_id_transaccion;
+            infoLog.str_fecha = transaction.dt_fecha_operacion;
             infoLog.str_tipo = "s:<";
-            RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_transferencias );
 
-            return str_id_transaccion;
+            // REGISTRA LOGS DE TEXTO 
+            RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi!.path_logs_transferencias );
+
+            // REGISTRA LOGS DE MONGO
+            new LogsMongoDat( _settingsApi! ).GuardarCabeceraMongo( transaction! );
         }
 
         /// <summary>
@@ -59,20 +57,23 @@ namespace wsTransferencias.Neg.Utils
         /// <param name="str_clase"></param>
         /// <returns></returns>
         /// 
-        public static void SaveResponseLogs ( ResComun transaction, String str_operacion, String str_metodo, String str_clase )
+        public static void SaveResponseLogs ( dynamic transaction, String str_operacion, String str_metodo, String str_clase )
         {
+            infoLog.str_id_transaccion = transaction.str_id_transaccion;
             infoLog.str_clase = str_clase;
             infoLog.str_operacion = str_operacion;
             infoLog.str_objeto = transaction;
             infoLog.str_metodo = str_metodo;
-            infoLog.str_fecha = DateTime.Now;
-
-            RespuestaTransaccion res_tran_logs = new LogsMongoDat( _settingsApi ).GuardarRespuestaMongo( transaction );
-            string str_id_transaccion = res_tran_logs.codigo.Equals( "000" ) ? (String) res_tran_logs.cuerpo : Utils.GeneraCadenaAleatoria();
-            infoLog.str_id_transaccion = str_id_transaccion;
+            infoLog.str_fecha = transaction.dt_fecha_operacion;
             infoLog.str_tipo = "r:>";
-            RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_transferencias );
+
+            // REGISTRA LOGS DE TEXTO 
+            RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi!.path_logs_transferencias );
+
+            // REGISTRA LOGS DE MONGO
+            new LogsMongoDat( _settingsApi! ).GuardarRespuestaMongo( transaction );
         }
+
 
         /// <summary>
         /// Guarda cualquier error 
@@ -86,19 +87,21 @@ namespace wsTransferencias.Neg.Utils
         /// 
         public static void SaveExceptionLogs ( ResComun transaction, String str_operacion, String str_metodo, String str_clase, Object obj_error )
         {
-            string str_id_transaccion = String.Empty;
+            var objError = new { peticion = transaction, error = obj_error };
 
+            infoLog.str_id_transaccion = transaction.str_id_transaccion;
             infoLog.str_clase = str_clase;
             infoLog.str_operacion = str_operacion;
-            infoLog.str_objeto = transaction;
+            infoLog.str_objeto = objError.ToString()!;
             infoLog.str_metodo = str_metodo;
-            infoLog.str_fecha = DateTime.Now;
-
-            RespuestaTransaccion res_tran_logs = new LogsMongoDat( _settingsApi ).GuardarExcepcionesMongo( transaction, obj_error );
-            str_id_transaccion = res_tran_logs.codigo.Equals( "000" ) ? (String) res_tran_logs.cuerpo : Utils.GeneraCadenaAleatoria();
-            infoLog.str_id_transaccion = str_id_transaccion;
+            infoLog.str_fecha = transaction.dt_fecha_operacion;
             infoLog.str_tipo = "e:<";
-            RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_transferencias );
+
+            // REGISTRA LOGS DE TEXTO 
+            RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi!.path_logs_errores );
+
+            //REGISTRA LOGS DE MONGO
+            new LogsMongoDat( _settingsApi! ).GuardarExcepcionesMongo( transaction, obj_error );
         }
 
 
@@ -111,35 +114,52 @@ namespace wsTransferencias.Neg.Utils
         /// <param name="str_clase"></param>
         /// <returns></returns>
         /// 
-        public static string SaveAmenazasLogs ( ValidacionInyeccion validacion, String str_operacion, String str_metodo, String str_clase )
+        public static void SaveAmenazasLogs ( ValidacionInyeccion validacion, String str_operacion, String str_metodo, String str_clase )
         {
-            string str_id_transaccion = String.Empty;
-            var res_tran_logs = new RespuestaTransaccion();
+            infoLog.str_clase = str_clase;
+            infoLog.str_operacion = str_operacion;
+            infoLog.str_objeto = validacion!;
+            infoLog.str_metodo = str_metodo;
+            infoLog.str_fecha = validacion.dtt_fecha;
+            infoLog.str_id_transaccion = validacion.idHeader;
+            infoLog.str_tipo = "s:<";
 
-            try
-            {
-                infoLog.str_clase = str_clase;
-                infoLog.str_operacion = str_operacion;
-                infoLog.str_objeto = validacion!;
-                infoLog.str_metodo = str_metodo;
-                infoLog.str_fecha = DateTime.Now;
+            // REGISTRA LOGS DE TEXTO 
+            RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi!.path_logs_amenazas );
 
-                res_tran_logs = new LogsMongoDat( _settingsApi! ).GuardarAmenazasMongo( validacion! );
-                str_id_transaccion = res_tran_logs.Equals( "000" ) ? Utils.GeneraCadenaAleatoria() : (String) res_tran_logs.cuerpo;
-                infoLog.str_id_transaccion = str_id_transaccion;
-                infoLog.str_tipo = "s:<";
-                RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi.path_logs_amenazas );
-
-            }
-            catch(Exception)
-            {
-                str_id_transaccion = String.Empty;
-                throw;
-            }
-            return str_id_transaccion;
+            //REGISTRA LOGS DE MONGO
+            new LogsMongoDat( _settingsApi! ).GuardarAmenazasMongo( validacion! );
         }
 
-        public static void RegistrarTramas ( String str_tipo, Object obj, string path_log )
+
+        /// <summary>
+        /// Guarda cualquier error http
+        /// </summary>
+        /// <param name="Transaccion"></param>
+        /// <param name="str_operacion"></param>
+        /// <param name="str_metodo"></param>
+        /// <param name="str_clase"></param>
+        /// <param name="obj_error"></param>
+        /// <returns></returns>
+        /// 
+        public static void SaveHttpErrorLogs ( dynamic transaction, String str_metodo, String str_clase, dynamic obj_error )
+        {
+            var objError = new { peticion = transaction, error = obj_error };
+            infoLog.str_id_transaccion = transaction.str_id_transaccion;
+            infoLog.str_clase = str_clase;
+            infoLog.str_objeto = objError.ToString()!;
+            infoLog.str_metodo = str_metodo;
+            infoLog.str_fecha = DateTime.Now;
+            infoLog.str_tipo = "e:<";
+
+            //REGISTRA LOGS DE TEXTO 
+            RegistrarTramas( infoLog.str_tipo, infoLog, _settingsApi!.path_logs_errores_http );
+
+            //REGISTRA LOGS DE MONGO
+            new LogsMongoDat( _settingsApi! ).GuardaErroresHttp( transaction, obj_error );
+        }
+
+        public static void RegistrarTramas ( String str_tipo, dynamic obj, string path_log )
         {
             try
             {
@@ -165,9 +185,9 @@ namespace wsTransferencias.Neg.Utils
                     }
                 }
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                throw new ArgumentNullException( ex.ToString() );
+                throw new Exception( obj.str_id_transaccion )!;
             }
         }
 

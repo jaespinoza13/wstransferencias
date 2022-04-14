@@ -21,12 +21,11 @@ namespace wsTransferencias.Model
             this.content_type = content_type;
         }
 
-        public RestClient(string url_request, string content_type, string usuario, string contrasenia)
+        public RestClient(string url_request, string content_type, string authServicio)
         {
             this.url_request = url_request;
             this.content_type = content_type;
-            string authInfo = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(usuario + ":" + contrasenia));
-            headers.Add("Authorization", "Basic " + authInfo);
+            headers.Add("Authorization", "Basic " + authServicio );
         }
 
 
