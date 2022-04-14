@@ -329,7 +329,8 @@ namespace wsTransferencias.Neg
                         else
                         {
                             //La cuenta no se validó en pago directo
-                            res_banred.codigo = "5000"; //"1012"
+                            res_banred.codigo = "1033";
+                            respuesta.str_res_codigo = LoadConfigService.FindErrorCode( "1033" ).str_descripcion;
                             respuesta.str_res_info_adicional = _settingsApi.msj_error_validacion;
                         }
                     }
