@@ -38,9 +38,9 @@ namespace wsTransferencias.Model
         #region CONFIGURACIONES
         public string codigo_error_datos_incorrectos_banred { get; set; }
         public string codigo_error_datos_incorrectos_coopmego { get; set; }
-        public string msj_error_validacion { get; set; }
+        
         public bool valida_peticiones_diarias { get; set; }
-        public string pago_directo_pruebas { get; set; }
+        public int pago_directo_pruebas { get; set; }
         #endregion
 
         #region CONFIGURACIONES HTTP

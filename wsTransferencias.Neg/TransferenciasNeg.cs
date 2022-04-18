@@ -82,10 +82,9 @@ namespace wsTransferencias.Neg
 
                                 if(respuesta_validaciones_pago_directo.codigo == _settingsApi.codigo_error_datos_incorrectos_banred)
                                 {
-
                                     ResTransferencia respuesta_error_validacion = new ResTransferencia();
                                     respuesta_error_validacion.str_res_codigo = _settingsApi.codigo_error_datos_incorrectos_coopmego;
-                                    respuesta_error_validacion.str_res_info_adicional = _settingsApi.msj_error_validacion;
+                                    respuesta_error_validacion.str_res_info_adicional = LoadConfigService.FindErrorCode( "1033" ).str_descripcion;;
 
                                     Utils.ServiceLogs.SaveResponseLogs( respuesta_error_validacion, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                                 }

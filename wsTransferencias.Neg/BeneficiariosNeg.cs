@@ -319,7 +319,7 @@ namespace wsTransferencias.Neg
                     }
                     else
                     {
-                        if(_settingsApi.pago_directo_pruebas == "1")
+                        if(_settingsApi.pago_directo_pruebas == 1)
                         {
                             res_banred.codigo = "000";
                             //Solo para pruebas
@@ -330,8 +330,8 @@ namespace wsTransferencias.Neg
                         {
                             //La cuenta no se validó en pago directo
                             res_banred.codigo = "1033";
-                            respuesta.str_res_codigo = LoadConfigService.FindErrorCode( "1033" ).str_descripcion;
-                            respuesta.str_res_info_adicional = _settingsApi.msj_error_validacion;
+                            respuesta.str_res_codigo = res_banred.codigo;
+                            respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( "1033" ).str_descripcion;
                         }
                     }
                     respuesta.str_res_codigo = res_banred.codigo;
