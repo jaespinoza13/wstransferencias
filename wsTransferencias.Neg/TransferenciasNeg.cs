@@ -84,7 +84,7 @@ namespace wsTransferencias.Neg
                                 {
                                     ResTransferencia respuesta_error_validacion = new ResTransferencia();
                                     respuesta_error_validacion.str_res_codigo = _settingsApi.codigo_error_datos_incorrectos_coopmego;
-                                    respuesta_error_validacion.str_res_info_adicional = LoadConfigService.FindErrorCode( "1033" ).str_descripcion;;
+                                    respuesta_error_validacion.str_res_info_adicional = LoadConfigService.FindErrorCode( "1033" ).str_descripcion; ;
 
                                     Utils.ServiceLogs.SaveResponseLogs( respuesta_error_validacion, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                                 }
@@ -483,38 +483,46 @@ namespace wsTransferencias.Neg
             try
             {
                 var res_tran = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_transferencia, req_add_transferencia.str_nemonico_tipo_transferencia ).Result;
-                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-
-                if(res_tran.codigo.Equals( "1009" ))
+                
+                
+                if(!res_tran.codigo.Equals( "001" ))
                 {
-                    res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_transferencia ).Result;
+                    if(res_tran.codigo.Equals( "1009" ))
+                    {
+                        res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_transferencia ).Result;
 
-                    if(res_tran.codigo.Equals( "000" ))
+                        if(res_tran.codigo.Equals( "000" ))
+                        {
+                            res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
+                            respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                        }
+                        else
+                        {
+                            respuesta.str_res_info_adicional = res_tran.diccionario["ERROR"].ToString();
+
+                        }
+                    }
+                    else if(res_tran.codigo.Equals( "1006" ))
                     {
                         res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
                         respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
                     }
-                    else
+
+                    if(res_tran.codigo.Equals( "000" ))
                     {
-                        respuesta.str_res_info_adicional = res_tran.diccionario["ERROR"].ToString();
-
+                        respuesta.objAddTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResAddTransferencia.AddTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
+                        respuesta.str_res_estado_transaccion = "OK";
                     }
-                }
-                else if(res_tran.codigo.Equals( "1006" ))
-                {
-                    res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
-                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-                }
+                    else
+                        respuesta.str_res_estado_transaccion = "ERR";
 
-                if(res_tran.codigo.Equals( "000" ))
-                {
-                    respuesta.objAddTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResAddTransferencia.AddTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
-                    respuesta.str_res_estado_transaccion = "OK";
-                }
-                else
-                    respuesta.str_res_estado_transaccion = "ERR";
+                    respuesta.str_res_codigo = String.IsNullOrEmpty( res_tran.codigo ) ? respuesta.str_res_codigo : res_tran.codigo;
 
-                respuesta.str_res_codigo = String.IsNullOrEmpty( res_tran.codigo ) ? respuesta.str_res_codigo : res_tran.codigo;
+                }else {
+                    respuesta.str_res_codigo = res_tran.codigo;
+                    respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
+                    respuesta.str_res_info_adicional = "Problemas con el servicio wsOtp";
+                }
 
             }
             catch(Exception exception)
