@@ -447,24 +447,32 @@ namespace wsTransferencias.Neg
                 var res_tran = new TransferenciasDat( _settingsApi ).validar_transfer_interna( req_validar_transferencia );
 
                 var res_tran_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, req_validar_transferencia.str_nemonico_tipo_transferencia ).Result;
+                
+                if(!res_tran_requiere_otp.codigo.Equals("001")){
 
-                if(res_tran_requiere_otp.codigo.Equals( "1017" ))
-                {
+                    if(res_tran_requiere_otp.codigo.Equals( "1017" ))
+                    {
+
+                        respuesta.str_res_codigo = res_tran_requiere_otp.codigo;
+                        respuesta.str_res_info_adicional = res_tran_requiere_otp.diccionario["str_error"];
+                    }
+                    else
+                    {
+                        respuesta.bl_requiere_otp = res_tran_requiere_otp.codigo.Equals( "1009" );
+                        respuesta.str_res_codigo = res_tran.codigo;
+                        respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                    }
+
+                }else {
 
                     respuesta.str_res_codigo = res_tran_requiere_otp.codigo;
-                    respuesta.str_res_info_adicional = res_tran_requiere_otp.diccionario["str_error"];
-
-                }
-                else
-                {
-
-                    respuesta.bl_requiere_otp = res_tran_requiere_otp.codigo.Equals( "1009" );
-                    respuesta.str_res_codigo = res_tran.codigo;
-                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                    respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
+                    respuesta.str_res_info_adicional = "Ocurrio un problema, intente nuevamente más tarde";
                 }
 
                 respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
                 ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+
                 return respuesta;
             }
             catch(Exception exception)
