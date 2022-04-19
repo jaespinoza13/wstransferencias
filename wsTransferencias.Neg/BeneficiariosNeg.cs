@@ -46,17 +46,12 @@ namespace wsTransferencias.Neg
                 }
                 else
                 {
-                    res_tran = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_beneficiario, req_add_beneficiario.str_tipo_beneficiario ).Result;
+                    var bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_beneficiario, req_add_beneficiario.str_tipo_beneficiario ).Result;
 
-                    if(res_tran.codigo.Equals( "1009" ))
+                    if(bl_requiere_otp)
                     {
                         res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_beneficiario ).Result;
-
-                        if(res_tran.codigo.Equals( "000" ))
-                        {
-                            res_tran = new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario );
-                            respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-                        }
+                        res_tran = res_tran.codigo.Equals( "000" ) ? new BeneficiariosDat( _settingsApi ).add_cuentas_beneficiarios( req_add_beneficiario ) : res_tran;
                     }
                     else
                     {
@@ -64,9 +59,10 @@ namespace wsTransferencias.Neg
                         respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
                     }
                 }
-                respuesta.str_res_codigo = String.IsNullOrEmpty( res_tran.codigo ) ? respuesta.str_res_codigo : res_tran.codigo;
-                respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
 
+                respuesta.str_res_codigo = res_tran.codigo;
+                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
+                respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
                 Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                 return respuesta;
 
@@ -83,34 +79,24 @@ namespace wsTransferencias.Neg
             var respuesta = new ResBeneficiarios();
             var res_tran = new RespuestaTransaccion();
             respuesta.LlenarResHeader( req_update_beneficiario );
-
             Utils.ServiceLogs.SaveHeaderLogs( req_update_beneficiario, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
             try
             {
-                res_tran = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_update_beneficiario, req_update_beneficiario.str_tipo_beneficiario ).Result;
-                respuesta.str_res_codigo = res_tran.codigo;
-                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
-
-                if(res_tran.codigo.Equals( "1009" ))
+                var requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_update_beneficiario, req_update_beneficiario.str_tipo_beneficiario ).Result;
+                if(requiere_otp)
                 {
                     res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_update_beneficiario ).Result;
-
-                    if(res_tran.codigo.Equals( "000" ))
-                    {
-                        res_tran = new BeneficiariosDat( _settingsApi ).update_cuentas_beneficiarios( req_update_beneficiario );
-                    }
-                    respuesta.str_res_codigo = res_tran.codigo;
-                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
+                    res_tran = res_tran.codigo.Equals( "000" ) ? new BeneficiariosDat( _settingsApi ).update_cuentas_beneficiarios( req_update_beneficiario ) : res_tran;
                 }
-                else if(res_tran.codigo.Equals( "1006" ))
+                else
                 {
                     res_tran = new BeneficiariosDat( _settingsApi ).update_cuentas_beneficiarios( req_update_beneficiario );
-                    respuesta.str_res_codigo = res_tran.codigo;
-                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                 }
 
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
+                respuesta.str_res_codigo = res_tran.codigo;
+                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                 Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                 return respuesta;
             }
@@ -180,27 +166,14 @@ namespace wsTransferencias.Neg
             try
             {
                 var res_tran = new BeneficiariosDat( _settingsApi ).validar_registro_beneficiarios( req_validar_beneficiarios );
-                var res_tran_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result;
 
-                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-
-                switch(res_tran_otp.codigo)
-                {
-                    case "1009":
-                        respuesta.str_res_codigo = res_tran.codigo;
-                        respuesta.bl_requiere_otp = true;
-                        break;
-                    case "1006":
-                        respuesta.str_res_codigo = res_tran.codigo;
-                        respuesta.bl_requiere_otp = false;
-                        break;
-                    case "1017":
-                        respuesta.str_res_codigo = "001";
-                        respuesta.str_res_info_adicional = res_tran_otp.diccionario["str_error"].ToString();
-                        break;
+                if(res_tran.codigo.Equals("000")){
+                    respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result;
                 }
-
+                
+                respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
+                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                 Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                 return respuesta;
             }
@@ -218,26 +191,12 @@ namespace wsTransferencias.Neg
 
             try
             {
-                var res_tran_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result;
+                var bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result;
                 respuesta.str_res_codigo = "000";
+                respuesta.str_res_estado_transaccion = "OK";
+                respuesta.str_res_info_adicional = String.Empty;
+                respuesta.bl_requiere_otp = bl_requiere_otp;
 
-                switch(res_tran_otp.codigo)
-                {
-                    case "1009":
-                        respuesta.bl_requiere_otp = true;
-                        break;
-
-                    case "1006":
-                        respuesta.bl_requiere_otp = false;
-                        break;
-
-                    case "1017":
-                        respuesta.str_res_codigo = "001";
-                        break;
-                }
-
-                respuesta.str_res_info_adicional = res_tran_otp.diccionario["str_error"];
-                respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
                 Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                 return respuesta;
 
@@ -362,30 +321,13 @@ namespace wsTransferencias.Neg
 
                 if(res_tran.codigo.Equals( "000" ))
                 {
+                    var res_tran_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result;
+                    respuesta.bl_requiere_otp = res_tran_otp;
                     respuesta.lst_beneficiario = Utils.Utils.ConvertConjuntoDatosToListClass<Beneficiario>( (ConjuntoDatos) res_tran.cuerpo );
                 }
 
-
-                var res_tran_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_beneficiarios, req_validar_beneficiarios.str_tipo_beneficiario ).Result;
-
-                switch(res_tran_otp.codigo)
-                {
-                    case "1009":
-                        respuesta.str_res_codigo = res_tran.codigo;
-                        respuesta.bl_requiere_otp = true;
-                        respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-                        break;
-                    case "1006":
-                        respuesta.str_res_codigo = res_tran.codigo;
-                        respuesta.bl_requiere_otp = false;
-                        respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-                        break;
-                    case "1017":
-                        respuesta.str_res_codigo = "001";
-                        respuesta.str_res_info_adicional = res_tran_otp.diccionario["str_error"].ToString();
-                        break;
-                }
-
+                respuesta.str_res_codigo = res_tran.codigo;
+                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
                 Utils.ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                 return respuesta;

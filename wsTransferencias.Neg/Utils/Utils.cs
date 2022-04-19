@@ -166,8 +166,9 @@ namespace wsTransferencias.Neg.Utils
         /// Valida si la operacion requiere OTP
         /// </summary>
         /// <returns></returns>
-        public async static Task<RespuestaTransaccion> ValidaRequiereOtp ( SettingsApi settings, Header header, string str_operacion )
+        public async static Task<Boolean> ValidaRequiereOtp ( SettingsApi settings, Header header, string str_operacion )
         {
+            Boolean requiere_otp = false;
             var cabecera = new
             {
 
@@ -197,10 +198,21 @@ namespace wsTransferencias.Neg.Utils
             var parametros = "api/WsOTP?str_operacion=VALIDA_REQUIERE_OTP";
             var service = new ServiceHttp<RespuestaTransaccion>();
             string str_data = JsonSerializer.Serialize( raw );
-            RespuestaTransaccion respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp, settings );
-
-            return respuesta;
-
+            RespuestaTransaccion res_tran_otp = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp, settings );
+            
+            if(res_tran_otp.codigo.Equals( "1009" ))
+            {
+                requiere_otp = true;
+            }
+            else if(res_tran_otp.codigo.Equals( "1006" ))
+            {
+                requiere_otp = false;
+            }
+            else
+            {
+                throw new Exception( res_tran_otp.diccionario["str_error"] );
+            }
+            return requiere_otp;
         }
         #endregion
 
@@ -244,8 +256,11 @@ namespace wsTransferencias.Neg.Utils
             var service = new ServiceHttp<RespuestaTransaccion>();
             string str_data = JsonSerializer.Serialize( raw );
             RespuestaTransaccion respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp, settings );
-            return respuesta;
+            
+            if(respuesta.codigo.Equals("001"))
+                new Exception(respuesta.diccionario["str_error"]);
 
+            return respuesta;
         }
 
     }
