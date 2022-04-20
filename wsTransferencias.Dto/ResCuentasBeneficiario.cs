@@ -19,7 +19,7 @@ namespace wsTransferencias.Dto
             public string str_nombres { get; set; } = String.Empty; 
             public string str_num_documento { get; set; } = String.Empty;
             public string str_email { get; set; } = String.Empty;
-
+            public string str_acronimo_producto {get; set; } = String.Empty;
             public string str_descripcion_tipo_producto { get; set; } = String.Empty;
 
         }
