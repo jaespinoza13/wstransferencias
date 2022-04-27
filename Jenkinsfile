@@ -31,16 +31,17 @@ pipeline {
                 echo 'Deploying....'
                 sh  '''docker run --restart=always -it -dp 8003:80 \
                         --name servicio-transferencias-des \
-                        -e ServiceSettings__Endpoints__servicio_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
-                        -e ServiceSettings__Endpoints__servicio_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
-                        -e ServiceSettings__Endpoints__servicio_ws_acceso=${ENDPOINT_WS_ACCESO} \
-                        -e ServiceSettings__Endpoints__servicio_ws_otp=${ENDPOINT_WS_OTP} \
-                        -e ServiceSettings__Endpoints__servicio_ws_alfresco=${ENDPOINT_WS_ALFRESCO} \
-                        -e ServiceSettings__Endpoints__servicio_ws_notificador=${ENDPOINT_WS_NOTIFICADOR} \
-                        -e ServiceSettings__BasicAuth__auth_ws_acceso=${AUTH_WS_ACCESO} \
-                        -e ServiceSettings__BasicAuth__auth_ws_ahorro_proposito=${AUTH_WS_AHORRO_PROPOSITO} \
-                        -e ServiceSettings__BasicAuth__auth_ws_notificador=${AUTH_WS_NOTIFICADOR} \
-                        -e ServiceSettings__BasicAuth__auth_ws_otp=${AUTH_WS_OTP} \
+                        -e TZ=${TZ} \
+                        -e SettingsApi__Endpoints__servicio_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
+                        -e SettingsApi__Endpoints__servicio_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
+                        -e SettingsApi__Endpoints__servicio_ws_acceso=${ENDPOINT_WS_ACCESO} \
+                        -e SettingsApi__Endpoints__servicio_ws_otp=${ENDPOINT_WS_OTP} \
+                        -e SettingsApi__Endpoints__servicio_ws_alfresco=${ENDPOINT_WS_ALFRESCO} \
+                        -e SettingsApi__Endpoints__servicio_ws_notificador=${ENDPOINT_WS_NOTIFICADOR} \
+                        -e SettingsApi__BasicAuth__auth_ws_acceso=${AUTH_WS_ACCESO} \
+                        -e SettingsApi__BasicAuth__auth_ws_ahorro_proposito=${AUTH_WS_AHORRO_PROPOSITO} \
+                        -e SettingsApi__BasicAuth__auth_ws_notificador=${AUTH_WS_NOTIFICADOR} \
+                        -e SettingsApi__BasicAuth__auth_ws_otp=${AUTH_WS_OTP} \
                         -v /app/wsTransferencias:/app/Logs/ ws_transferencias 
                     '''
             }
