@@ -145,7 +145,7 @@ namespace wsTransferencias.Neg.Utils
         public static void SaveHttpErrorLogs ( dynamic transaction, String str_metodo, String str_clase, dynamic obj_error )
         {
             var objError = new { peticion = transaction, error = obj_error };
-            infoLog.str_id_transaccion = transaction.str_id_transaccion;
+            infoLog.str_id_transaccion = String.Empty;
             infoLog.str_clase = str_clase;
             infoLog.str_objeto = objError.ToString()!;
             infoLog.str_metodo = str_metodo;
