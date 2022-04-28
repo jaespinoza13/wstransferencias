@@ -147,17 +147,17 @@ namespace wsTransferencias.Neg
             try
             {
                 var req_valida_transferencia = JsonSerializer.Deserialize<ReqValidacionTransferencia>( str_va_transferencia );
+                
+                var proceso = _settingsApi.ProcesoTransferencia.Find( e => e.proceso == req_valida_transferencia!.str_nemonico_tipo_transferencia);
 
-                switch(req_valida_transferencia!.str_nemonico_tipo_transferencia)
+               if(proceso != null)
                 {
-                    case "TRN_MIS_CUENTAS_COOPMEGO":
-                    case "TRN_OTRAS_CUENTAS_COOPMEGO":
-                        respuesta = new TransferenciasNeg( _settingsApi ).validar_transfer_interna( req_valida_transferencia!, str_operacion );
-                        break;
+                    req_valida_transferencia!.str_srv_transfer = proceso.servicio;
 
-                    case "TRN_EXTERNAS":
+                    if(proceso.tipo == "interna")
+                        respuesta = new TransferenciasNeg( _settingsApi ).validar_transfer_interna( req_valida_transferencia!, str_operacion );
+                    else if(proceso.tipo == "externa")
                         respuesta = new TransferenciasNeg( _settingsApi ).validar_transferencia_interbancaria( req_valida_transferencia!, str_operacion );
-                        break;
                 }
 
             }
@@ -182,16 +182,14 @@ namespace wsTransferencias.Neg
             {
                 var req_add_transferencia = JsonSerializer.Deserialize<ReqAddTransferencia>( str_va_transferencia );
 
-                switch(req_add_transferencia!.str_nemonico_tipo_transferencia)
-                {
-                    case "TRN_MIS_CUENTAS_COOPMEGO":
-                    case "TRN_OTRAS_CUENTAS_COOPMEGO":
-                        respuesta = new TransferenciasNeg( _settingsApi ).add_transferencia_interna( req_add_transferencia!, str_operacion );
-                        break;
+                var proceso = _settingsApi.ProcesoTransferencia.Find( e => e.proceso == req_add_transferencia!.str_nemonico_tipo_transferencia );
 
-                    case "TRN_EXTERNAS":
-                        respuesta = new TransferenciasNeg( _settingsApi ).add_transf_interbancarias( req_add_transferencia, str_operacion );
-                        break;
+                if(proceso != null)
+                {
+                    if(proceso.tipo == "interna")
+                        respuesta = new TransferenciasNeg( _settingsApi ).add_transferencia_interna( req_add_transferencia!, str_operacion );
+                    else if(proceso.tipo == "externa")
+                        respuesta = new TransferenciasNeg( _settingsApi ).add_transf_interbancarias( req_add_transferencia!, str_operacion );
                 }
 
             }

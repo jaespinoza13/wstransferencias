@@ -7,7 +7,8 @@ namespace wsTransferencias.Dto
     {
         public ValidacionTransferencia objValidacionTransferencia { get; set; }
         public Boolean bl_requiere_otp { get; set; }
-        
+        public int int_solicitud { get; set; }
+
         public class ValidacionTransferencia
         {
             public int int_id_cta_beneficiario { get; set; }
@@ -27,7 +28,6 @@ namespace wsTransferencias.Dto
             public decimal dec_comision { get; set; }
             public int int_id_comprobar_transfer { get; set; }
             public int int_enviar_banred { get; set; }
-
         }
         
     }

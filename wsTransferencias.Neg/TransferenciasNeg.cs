@@ -107,12 +107,15 @@ namespace wsTransferencias.Neg
 
                 var bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_transferencia, "TRN_EXTERNAS" ).Result;
 
-                if(bl_requiere_otp){
+                if(bl_requiere_otp)
+                {
 
                     res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_transferencia ).Result;
-                    res_tran = res_tran.codigo.Equals("000") ? new TransferenciasDat( _settingsApi ).add_transf_interbancarias( req_add_transferencia ) : res_tran;
+                    res_tran = res_tran.codigo.Equals( "000" ) ? new TransferenciasDat( _settingsApi ).add_transf_interbancarias( req_add_transferencia ) : res_tran;
 
-                }else {
+                }
+                else
+                {
 
                     res_tran = new TransferenciasDat( _settingsApi ).add_transf_interbancarias( req_add_transferencia );
 
@@ -198,7 +201,7 @@ namespace wsTransferencias.Neg
             catch(Exception exception)
             {
                 ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw new Exception( respuesta.str_id_transaccion );
+                throw new ArgumentException( respuesta.str_id_transaccion );
             }
 
             ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
@@ -228,7 +231,7 @@ namespace wsTransferencias.Neg
             catch(Exception exception)
             {
                 ServiceLogs.SaveHttpErrorLogs( respuesta, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw new Exception( str_id_transaccion );
+                throw new ArgumentException( str_id_transaccion );
             }
             return respuesta;
         }
@@ -338,7 +341,7 @@ namespace wsTransferencias.Neg
             }
             catch(Exception)
             {
-                throw new Exception( str_id_transaccion );
+                throw new ArgumentException( str_id_transaccion );
             }
 
         }
@@ -404,7 +407,7 @@ namespace wsTransferencias.Neg
             catch(Exception ex)
             {
                 Utils.ServiceLogs.SaveHttpErrorLogs( datos_validados, MethodBase.GetCurrentMethod()!.Name, str_clase, ex );
-                throw new Exception( datos_validados.str_id_transaccion );
+                throw new ArgumentException( datos_validados.str_id_transaccion );
             }
             return respuesta;
         }
@@ -421,20 +424,23 @@ namespace wsTransferencias.Neg
             {
                 var res_tran = new TransferenciasDat( _settingsApi ).validar_transfer_interna( req_validar_transferencia );
 
-                if(res_tran.codigo.Equals("000")){
+                if(res_tran.codigo.Equals( "000" ))
+                {
                     respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, req_validar_transferencia.str_nemonico_tipo_transferencia ).Result;
                 }
 
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
+                respuesta.int_solicitud = res_tran.codigo.Equals( "000" ) ? Convert.ToInt32( res_tran.diccionario["int_solicitud"].ToString() ) : 0;
+
                 ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                 return respuesta;
             }
             catch(Exception exception)
             {
                 ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw new Exception( respuesta.str_id_transaccion );
+                throw new ArgumentException( respuesta.str_id_transaccion );
             }
         }
 
@@ -448,12 +454,12 @@ namespace wsTransferencias.Neg
             try
             {
                 var bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_transferencia, req_add_transferencia.str_nemonico_tipo_transferencia ).Result;
-                
-                
-                if(bl_requiere_otp)
+
+                if(true)
                 {
-                    res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_transferencia ).Result;
-                    res_tran = res_tran.codigo.Equals("000") ? new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia ): res_tran;
+                    //res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_transferencia ).Result;
+                    res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
+                    //res_tran = res_tran.codigo.Equals( "000" ) ? new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia ) : res_tran;
 
                     if(res_tran.codigo.Equals( "000" ))
                     {
@@ -461,14 +467,16 @@ namespace wsTransferencias.Neg
                         respuesta.str_res_estado_transaccion = "OK";
                     }
                     else
+                    {
                         respuesta.str_res_estado_transaccion = "ERR";
+                    }
+                }
+                else
+                {
 
-                    
-
-                }else {
                     res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
                 }
-                
+
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
@@ -476,7 +484,7 @@ namespace wsTransferencias.Neg
             catch(Exception exception)
             {
                 ServiceLogs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
-                throw new Exception( respuesta.str_id_transaccion );
+                throw new ArgumentException( respuesta.str_id_transaccion )!;
             }
 
             ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
