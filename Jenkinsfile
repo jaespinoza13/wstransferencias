@@ -45,7 +45,7 @@ pipeline {
                         --name ${NOMBRE_CONTENEDOR} \
                         -e SettingsApi__Endpoints__servicio_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
                         -e SettingsApi__Endpoints__servicio_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
-                        -e SettingsApi__Endpoints__servicio_ws_acceso=${ENDPOINT_WS_ACCESO_QA} \
+                        -e SettingsApi__Endpoints__servicio_ws_acceso=${ENDPOINT_WS_ACCESO} \
                         -e SettingsApi__Endpoints__servicio_ws_otp=${ENDPOINT_WS_OTP} \
                         -e SettingsApi__Endpoints__servicio_ws_banred=${ENDPOINT_WS_BANRED} \
                         -e SettingsApi__Endpoints__servicio_ws_notificador=${ENDPOINT_WS_NOTIFICADOR} \
@@ -80,7 +80,7 @@ pipeline {
                     --name ${NOMBRE_CONTENEDOR} \
                     -e SettingsApi__Endpoints__servicio_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
                     -e SettingsApi__Endpoints__servicio_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
-                    -e SettingsApi__Endpoints__servicio_ws_acceso=${ENDPOINT_WS_ACCESO_QA} \
+                    -e SettingsApi__Endpoints__servicio_ws_acceso=${ENDPOINT_WS_ACCESO} \
                     -e SettingsApi__Endpoints__servicio_ws_otp=${ENDPOINT_WS_OTP} \
                     -e SettingsApi__Endpoints__servicio_ws_banred=${ENDPOINT_WS_BANRED} \
                     -e SettingsApi__Endpoints__servicio_ws_notificador=${ENDPOINT_WS_NOTIFICADOR} \
