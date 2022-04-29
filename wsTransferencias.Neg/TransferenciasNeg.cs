@@ -465,6 +465,9 @@ namespace wsTransferencias.Neg
                     {
                         respuesta.objAddTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResAddTransferencia.AddTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
                         respuesta.str_res_estado_transaccion = "OK";
+                        respuesta.objAddTransferencia.int_id_transaccion = Convert.ToInt32(res_tran.diccionario["int_id"]);
+
+
                     }
                     else
                     {
