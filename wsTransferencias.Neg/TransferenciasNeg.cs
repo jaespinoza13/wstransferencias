@@ -470,7 +470,6 @@ namespace wsTransferencias.Neg
                     else
                     {
                         respuesta.str_res_estado_transaccion = "ERR";
-                        respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                     }
                 }
                 else
