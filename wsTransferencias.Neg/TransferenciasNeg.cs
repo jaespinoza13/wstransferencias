@@ -455,7 +455,7 @@ namespace wsTransferencias.Neg
             {
                 var bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_transferencia, req_add_transferencia.str_nemonico_tipo_transferencia ).Result;
 
-                if(true)
+                if(bl_requiere_otp)
                 {
                     res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_transferencia ).Result;
                     res_tran = res_tran.codigo.Equals( "000" ) ? new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia ) : res_tran;
@@ -477,7 +477,6 @@ namespace wsTransferencias.Neg
                 {
 
                     res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
-                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                 }
 
                 respuesta.str_res_codigo = res_tran.codigo;
