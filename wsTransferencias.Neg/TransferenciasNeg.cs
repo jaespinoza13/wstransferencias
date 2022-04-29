@@ -464,24 +464,25 @@ namespace wsTransferencias.Neg
                     {
                         respuesta.objAddTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResAddTransferencia.AddTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
                         respuesta.str_res_estado_transaccion = "OK";
+                        respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                         respuesta.objAddTransferencia.int_id_transaccion = Convert.ToInt32(res_tran.diccionario["int_id"]);
-
-
                     }
                     else
                     {
                         respuesta.str_res_estado_transaccion = "ERR";
+                        respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                     }
                 }
                 else
                 {
 
                     res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
+                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                 }
 
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
-                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
+                
             }
             catch(Exception exception)
             {
