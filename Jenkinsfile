@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        VERSION_PRODUCCION  = '1.0.0'
+        VERSION_PRODUCCION  = '3.0.0'
         VERSION_ACTUAL      = '1.0.0'
         NOMBRE_CONTENEDOR   = 'servicio-transferencias-des'
         NOMBRE_IMAGEN       = 'ws_transferencias'
