@@ -151,8 +151,11 @@ namespace wsTransferencias.Model
         /// <summary>
         /// Id de Perfil
         /// </summary>
-        /// 
         public string str_id_perfil { get; set; } = String.Empty;
+        /// <summary>
+        /// Ente Socio
+        /// </summary>
+        public string str_ente { get; set; }
 
         public void LlenarResHeader(Header requerimiento)
         {

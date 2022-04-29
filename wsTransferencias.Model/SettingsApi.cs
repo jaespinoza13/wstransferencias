@@ -63,5 +63,9 @@ namespace wsTransferencias.Model
         public string coll_promedio_peticiones_diarias { get; set; } = String.Empty;
         public string coll_errores_http { get; set; } = String.Empty;
         #endregion
+
+        #region  TRANFERENCIAS
+        public List<ProcesoTransferencia> ProcesoTransferencia  { get; set; } = new List<ProcesoTransferencia>();
+        #endregion
     }
 }
