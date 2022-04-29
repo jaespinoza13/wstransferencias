@@ -457,9 +457,8 @@ namespace wsTransferencias.Neg
 
                 if(true)
                 {
-                    //res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_transferencia ).Result;
-                    res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
-                    //res_tran = res_tran.codigo.Equals( "000" ) ? new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia ) : res_tran;
+                    res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_transferencia ).Result;
+                    res_tran = res_tran.codigo.Equals( "000" ) ? new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia ) : res_tran;
 
                     if(res_tran.codigo.Equals( "000" ))
                     {
