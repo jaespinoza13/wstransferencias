@@ -104,7 +104,7 @@ namespace wsTransferencias.Neg
 
                 var bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_add_transferencia, "TRN_EXTERNAS" ).Result;
 
-                if(false)
+                if(bl_requiere_otp)
                 {
                     res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_transferencia ).Result;
                     res_tran = res_tran.codigo.Equals( "000" ) ? new TransferenciasDat( _settingsApi ).add_transf_interbancarias( req_add_transferencia ) : res_tran;
