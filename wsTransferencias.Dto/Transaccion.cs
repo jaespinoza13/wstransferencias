@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace wsTransferencias.Dto
+﻿namespace wsTransferencias.Dto
 {
     public class Transaccion
     {
@@ -26,26 +20,5 @@ namespace wsTransferencias.Dto
         public decimal dec_monto_tran { get; set; }
         public int int_id_comprobar_transfer { get; set; }
         public int int_num_referencia { get; set; } //Nuevo para enviar un numero de referencia para transacciones fuera de linea. Beebot es el id de cht_transacciones.
-        public override string ToString()
-        {
-            return " str_tipo_tran: " + str_tipo_tran +
-                 " int_secuencial: " + int_secuencial +
-                 " str_nom_ordenante: " + str_nom_ordenante +
-                 " int_fi_aut: " + int_fi_aut +
-                 " str_bin_aut: " + str_bin_aut +
-                 " str_cuenta_ordenante: " + str_cuenta_ordenante +
-                 " str_observaciones: " + str_observaciones +
-                 " str_identificacion_ordenante: " + str_identificacion_ordenante +
-                 " int_secuencial_cobis: " + int_secuencial_cobis +
-                 " str_nom_receptor: " + str_nom_receptor +
-                 " str_cuenta_receptor: " + str_cuenta_receptor +
-                 " str_banco_receptor: " + str_cuenta_bce +
-                 " str_info_adicional: " + str_info_adicional +
-                 " str_identificacion_receptor: " + str_identificacion_receptor +
-                 " str_tipo_cuenta_receptor: " + str_tipo_cuenta_receptor +
-                 " dec_monto_tran: " + dec_monto_tran +
-                 " int_id_comprobar_transfer: " + int_id_comprobar_transfer +
-                 " int_num_referencia " + int_num_referencia;
-        }
     }
 }

@@ -5,7 +5,6 @@ namespace wsTransferencias.Dto
 {
     public class ReqAddTransferencia : Header
     {
-        public int int_ente { get; set; }
         public string str_nemonico_tipo_transferencia { get; set; }
         public int int_id_cta_ordenante { get; set; }
         public int int_id_cta_beneficiario { get; set; }

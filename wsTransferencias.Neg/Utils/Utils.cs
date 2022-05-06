@@ -258,7 +258,7 @@ namespace wsTransferencias.Neg.Utils
             RespuestaTransaccion respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp, settings );
             
             if(respuesta.codigo.Equals("001"))
-                new Exception(respuesta.diccionario["str_error"]);
+                new Exception(respuesta.diccionario["str_error"].ToString());
 
             return respuesta;
         }

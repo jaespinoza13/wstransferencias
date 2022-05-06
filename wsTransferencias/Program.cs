@@ -40,6 +40,7 @@ builder.Services.Configure<SettingsApi>( builder.Configuration.GetSection( "Sett
 builder.Services.Configure<SettingsApi>( builder.Configuration.GetSection( "SettingsApi" ) );
 builder.Services.Configure<SettingsApi>( builder.Configuration.GetSection( "SettingsApi:ConfigBdMongo" ) );
 builder.Services.Configure<SettingsApi>( builder.Configuration.GetSection( "SettingsApi:Transferencia" ) );
+builder.Services.Configure<SettingsApi>( builder.Configuration.GetSection( "SettingsApi:DescripcionErrores" ) );
 builder.Services.Configure<LoadParameters>( builder.Configuration.GetSection( "LoadParameters" ) );
 
 builder.Services.AddOptions();
