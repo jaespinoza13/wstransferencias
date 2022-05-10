@@ -398,12 +398,12 @@ namespace wsTransferencias.Neg
                 {
                     respuesta.objAddTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResAddTransferencia.AddTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
                     respuesta.str_res_estado_transaccion = "OK";
-                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                     respuesta.objAddTransferencia.int_id_transaccion = Convert.ToInt32( res_tran.diccionario["int_id"] );
                 }
                 else
                 {
                     respuesta.str_res_estado_transaccion = "ERR";
+                    respuesta.str_res_info_adicional = res_tran.diccionario.ContainsKey("str_error") ? res_tran.diccionario["str_error"] : String.Empty;
                 }
 
                 respuesta.str_res_codigo = res_tran.codigo;
