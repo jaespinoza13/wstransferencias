@@ -26,7 +26,6 @@ namespace wsTransferencias.Dto
             public string str_correo_benef { get; set; }
             public decimal dec_monto_tran { get; set; }
             public decimal dec_comision { get; set; }
-            //public int int_id_comprobar_transfer { get; set; }
             public int int_enviar_banred { get; set; }
         }
         

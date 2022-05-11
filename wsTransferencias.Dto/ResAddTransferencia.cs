@@ -24,6 +24,7 @@ namespace wsTransferencias.Dto
 			public string str_observacion { get; set; }
 			public int int_enviar_banred { get; set; }
             public int int_id_transaccion { get; set; }
+			public int int_ente { get; set; }
 			
 
 			//public string str_tipo_prod_benef { get; set; }
