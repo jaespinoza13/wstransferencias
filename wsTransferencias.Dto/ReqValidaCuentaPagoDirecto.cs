@@ -5,7 +5,6 @@ namespace wsTransferencias.Dto
 {
     public class ReqValidaCuentaPagoDirecto : Header
     {
-        public int int_ente { get; set; }
         public string str_codigo_ifi { get; set; }
         public int int_tipo_cuenta { get; set; }
         public string str_num_documento { get; set; }

@@ -107,7 +107,15 @@ namespace wsTransferencias.Neg
                 if(bl_requiere_otp)
                 {
                     res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_transferencia ).Result;
-                    res_tran = res_tran.codigo.Equals( "000" ) ? new TransferenciasDat( _settingsApi ).add_transf_interbancarias( req_add_transferencia ) : res_tran;
+                    if(res_tran.codigo.Equals( "000" ))
+                    {
+                        res_tran = new TransferenciasDat( _settingsApi ).add_transf_interbancarias( req_add_transferencia );
+                    }
+                    else
+                    {
+                        respuesta.str_res_codigo = res_tran.codigo;
+                        respuesta.str_res_info_adicional = res_tran.diccionario["ERROR"];
+                    }
                 }
                 else
                 {
@@ -131,6 +139,10 @@ namespace wsTransferencias.Neg
                         respuesta.str_res_codigo = res_tran.codigo;
                         respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                     }
+                }
+                else
+                {
+                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                 }
 
                 respuesta.str_res_codigo = res_tran.codigo;
@@ -387,7 +399,14 @@ namespace wsTransferencias.Neg
                 if(bl_requiere_otp)
                 {
                     res_tran = Utils.Utils.ValidaOtp( _settingsApi, req_add_transferencia ).Result;
-                    res_tran = res_tran.codigo.Equals( "000" ) ? new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia ) : res_tran;
+                    if(res_tran.codigo.Equals( "000" ))
+                    {
+                        res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
+                    }else
+                    {
+                        respuesta.str_res_codigo = res_tran.codigo;
+                        respuesta.str_res_info_adicional = res_tran.diccionario["ERROR"];
+                    }
                 }
                 else
                 {

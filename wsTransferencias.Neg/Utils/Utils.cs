@@ -210,7 +210,7 @@ namespace wsTransferencias.Neg.Utils
             }
             else
             {
-                throw new Exception( res_tran_otp.diccionario["str_error"] );
+                throw new ArgumentException( res_tran_otp.diccionario["str_error"] );
             }
             return requiere_otp;
         }
@@ -238,7 +238,7 @@ namespace wsTransferencias.Neg.Utils
 
             var config_otp = new
             {
-                int_ente_socio = req_valida_otp.int_ente,
+                int_ente_socio = Convert.ToInt32(req_valida_otp.str_ente),
                 str_celular = datosOtp!.str_celular,
                 str_canal = req_valida_otp.str_nemonico_canal,
                 str_proceso = req_valida_otp.str_app,
@@ -258,7 +258,7 @@ namespace wsTransferencias.Neg.Utils
             RespuestaTransaccion respuesta = await service.PostRestServiceDataAsync( str_data, settings.servicio_ws_otp, parametros, settings.auth_ws_otp, settings );
             
             if(respuesta.codigo.Equals("001"))
-                new Exception(respuesta.diccionario["str_error"].ToString());
+               throw new ArgumentException(respuesta.diccionario["ERROR"]);
 
             return respuesta;
         }

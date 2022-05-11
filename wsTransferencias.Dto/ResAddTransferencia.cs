@@ -8,7 +8,6 @@ namespace wsTransferencias.Dto
 
 		public class AddTransferencia
 		{
-			public int int_ente { get; set; }
 			public string str_num_doc_ordenante { get; set; }
 			public string str_nombre_ordenante { get; set; }
 			public string str_num_cta_ordenante { get; set; }
@@ -26,8 +25,6 @@ namespace wsTransferencias.Dto
 			public int int_enviar_banred { get; set; }
             public int int_id_transaccion { get; set; }
 			
-
-
 
 			//public string str_tipo_prod_benef { get; set; }
 			//public string str_tipo_prod_ordenante { get; set; }
