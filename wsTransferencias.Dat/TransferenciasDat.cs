@@ -44,6 +44,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_num_registros", TipoDato = TipoDato.Integer } );
 
                 ds.NombreSP = "get_con_transferencias_v2";
+
                 ds.NombreBD = _settings.BD_megservicios;
 
                 var resultado = objClienteDal.ExecuteDataSet( ds );
