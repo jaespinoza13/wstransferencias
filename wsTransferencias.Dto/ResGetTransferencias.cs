@@ -4,7 +4,7 @@ namespace wsTransferencias.Dto
 {
     public class ResGetTransferencias : ResComun
     {
-        public int int_num_paginas { get; set; }
+        public int int_numero_registros { get; set; }
         public List<Transferencias>? lst_tranferencias { get; set; }
     }
 
