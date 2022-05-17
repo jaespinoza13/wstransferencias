@@ -13,6 +13,6 @@ namespace wsTransferencias.Dto
         public string str_correo_beneficiario { get; set; }
         public string str_otp { get; set; }
         public string str_id_log { get; set; } =  string.Empty;
-        public int int_id_solicitud { get; set; }
+        public int int_solicitud { get; set; }
     }
 }
