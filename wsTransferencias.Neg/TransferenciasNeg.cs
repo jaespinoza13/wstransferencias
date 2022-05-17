@@ -69,7 +69,7 @@ namespace wsTransferencias.Neg
                                 respuesta_error_validacion.str_res_codigo = _settingsApi.codigo_error_datos_incorrectos_coopmego;
                             }
                             respuesta.str_res_info_adicional = LoadConfigService.FindErrorCode( "1033" ).str_descripcion;
-                            
+
                         }
                     }
                 }
@@ -142,7 +142,7 @@ namespace wsTransferencias.Neg
                 }
                 else
                 {
-                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
+                    respuesta.str_res_info_adicional = res_tran.diccionario.ContainsKey( "str_error" ) ? res_tran.diccionario["str_error"] : res_tran.diccionario["ERROR"];
                 }
 
                 respuesta.str_res_codigo = res_tran.codigo;
@@ -402,7 +402,8 @@ namespace wsTransferencias.Neg
                     if(res_tran.codigo.Equals( "000" ))
                     {
                         res_tran = new TransferenciasDat( _settingsApi ).add_transferencia_interna( req_add_transferencia );
-                    }else
+                    }
+                    else
                     {
                         respuesta.str_res_codigo = res_tran.codigo;
                         respuesta.str_res_info_adicional = res_tran.diccionario["ERROR"];
@@ -422,7 +423,7 @@ namespace wsTransferencias.Neg
                 else
                 {
                     respuesta.str_res_estado_transaccion = "ERR";
-                    respuesta.str_res_info_adicional = res_tran.diccionario.ContainsKey("str_error") ? res_tran.diccionario["str_error"] : String.Empty;
+                    respuesta.str_res_info_adicional = res_tran.diccionario.ContainsKey( "str_error" ) ? res_tran.diccionario["str_error"] : String.Empty;
                 }
 
                 respuesta.str_res_codigo = res_tran.codigo;
