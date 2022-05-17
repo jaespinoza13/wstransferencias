@@ -173,7 +173,7 @@ namespace wsTransferencias.Neg
                 {
                     respuesta.lst_tranferencias = Utils.Utils.ConvertConjuntoDatosToListClass<Transferencias>( (ConjuntoDatos) res_tran.cuerpo );
                     respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-                    respuesta.int_num_paginas = Convert.ToInt32( res_tran.diccionario["num_total_pag"].ToString() );
+                    respuesta.int_numero_registros = Convert.ToInt32( res_tran.diccionario["int_num_registros"].ToString() );
                 }
 
                 respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals( "000" )) ? "OK" : "ERR";
