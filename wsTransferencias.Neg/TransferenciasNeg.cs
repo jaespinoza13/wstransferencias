@@ -375,6 +375,12 @@ namespace wsTransferencias.Neg
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
                 respuesta.int_solicitud = res_tran.codigo.Equals( "000" ) ? Convert.ToInt32( res_tran.diccionario["int_solicitud"].ToString() ) : 0;
 
+                if(res_tran.codigo.Equals( "000" ))
+                {
+                    respuesta.objValidacionTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResValidacionTransferencias.ValidacionTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
+                }
+
+
                 ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                 return respuesta;
             }
