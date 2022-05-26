@@ -368,12 +368,15 @@ namespace wsTransferencias.Neg
                 if(res_tran.codigo.Equals( "000" ))
                 {
                     respuesta.bl_requiere_otp = Utils.Utils.ValidaRequiereOtp( _settingsApi, req_validar_transferencia, req_validar_transferencia.str_nemonico_tipo_transferencia ).Result;
+                    respuesta.str_res_estado_transaccion = "OK";
+                    respuesta.int_solicitud = Convert.ToInt32(res_tran.diccionario["int_solicitud"].ToString());
+                    respuesta.objValidacionTransferencia = Utils.Utils.ConvertConjuntoDatosToClass<ResValidacionTransferencias.ValidacionTransferencia>( (ConjuntoDatos) res_tran.cuerpo )!;
                 }
+                else
+                    respuesta.str_res_estado_transaccion = "ERR";
 
                 respuesta.str_res_codigo = res_tran.codigo;
-                respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-                respuesta.int_solicitud = res_tran.codigo.Equals( "000" ) ? Convert.ToInt32( res_tran.diccionario["int_solicitud"].ToString() ) : 0;
 
                 ServiceLogs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
                 return respuesta;
@@ -423,7 +426,7 @@ namespace wsTransferencias.Neg
                 else
                 {
                     respuesta.str_res_estado_transaccion = "ERR";
-                    respuesta.str_res_info_adicional = res_tran.diccionario.ContainsKey( "str_error" ) ? res_tran.diccionario["str_error"] : String.Empty;
+                    respuesta.str_res_info_adicional = res_tran.diccionario.ContainsKey( "str_error" ) ? res_tran.diccionario["str_error"] : respuesta.str_res_info_adicional;
                 }
 
                 respuesta.str_res_codigo = res_tran.codigo;
