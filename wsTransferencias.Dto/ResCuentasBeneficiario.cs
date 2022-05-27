@@ -21,6 +21,7 @@ namespace wsTransferencias.Dto
             public string str_email { get; set; } = String.Empty;
             public string str_acronimo_producto {get; set; } = String.Empty;
             public string str_descripcion_tipo_producto { get; set; } = String.Empty;
+            public decimal dec_monto { get; set; } 
 
         }
     }
