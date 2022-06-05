@@ -1,12 +1,9 @@
 ﻿[*.cs]
 
-# Default severity for analyzer diagnostics with category 'Style'
-dotnet_analyzer_diagnostic.category-Style.severity = none
-
-# CS8618: Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de declararlo como que admite un valor NULL.
-dotnet_diagnostic.CS8618.severity = none
-csharp_space_between_method_declaration_parameter_list_parentheses=true
-csharp_space_between_method_declaration_name_and_open_parenthesis=true
+# IDE0059: Asignación innecesaria de un valor
+dotnet_diagnostic.IDE0059.severity = none
+csharp_space_between_method_declaration_parameter_list_parentheses=false
+csharp_space_between_method_declaration_name_and_open_parenthesis=false
+csharp_space_between_method_declaration_empty_parameter_list_parentheses=false
+csharp_space_between_method_call_name_and_opening_parenthesis=false
 csharp_space_between_method_call_parameter_list_parentheses=true
-csharp_space_after_keywords_in_control_flow_statements=false
-csharp_space_after_cast=true
