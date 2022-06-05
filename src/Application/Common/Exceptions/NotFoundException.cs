@@ -1,6 +1,8 @@
 ﻿namespace Application.Common.Exceptions;
 
+#pragma warning disable S3925 // "ISerializable" should be implemented correctly
 public class NotFoundException : Exception
+#pragma warning restore S3925 // "ISerializable" should be implemented correctly
 {
     public NotFoundException()
         : base()

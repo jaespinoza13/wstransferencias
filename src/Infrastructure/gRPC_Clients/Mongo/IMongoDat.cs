@@ -5,8 +5,8 @@ namespace Infrastructure.gGRPC_Clients.Mongo;
 
 public interface IMongoDat
 {
-    Task GuardarCabeceraMongo(Header cabecera);
-    Task GuardarRespuestaMongo(ResComun ObjRespPeticion);
+    Task GuardarCabeceraMongo(dynamic cabecera);
+    Task GuardarRespuestaMongo(dynamic ObjRespPeticion);
     Task GuardarExcepcionesMongo(dynamic obj_respuesta, object excepcion);
     Task GuardarExcepcionesDataBase(dynamic obj_respuesta, object excepcion);
     Task GuardarAmenazasMongo(ValidacionInyeccion obj_respuesta);

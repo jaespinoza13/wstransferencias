@@ -1,5 +1,4 @@
 ﻿using AccesoDatosGrpcMongo.Neg;
-using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Options;
@@ -19,53 +18,53 @@ public class LogsMongoDat : IMongoDat
         var handler = new SocketsHttpHandler
         {
             PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan,
-            KeepAlivePingDelay = TimeSpan.FromSeconds(_settings.delayOutGrpcMongo),
-            KeepAlivePingTimeout = TimeSpan.FromSeconds(_settings.timeoutGrpcMongo),
+            KeepAlivePingDelay = TimeSpan.FromSeconds( _settings.delayOutGrpcMongo ),
+            KeepAlivePingTimeout = TimeSpan.FromSeconds( _settings.timeoutGrpcMongo ),
             EnableMultipleHttp2Connections = true
         };
 
-        var canal = GrpcChannel.ForAddress(_settings.client_grpc_mongo!, new GrpcChannelOptions { HttpHandler = handler });
-        objClienteMongo = new DALMongoClient(canal);
+        var canal = GrpcChannel.ForAddress( _settings.client_grpc_mongo!, new GrpcChannelOptions { HttpHandler = handler } );
+        objClienteMongo = new DALMongoClient( canal );
 
     }
 
-    public async Task GuardarCabeceraMongo(Header cabecera)
+    public async Task GuardarCabeceraMongo(dynamic cabecera)
     {
         var ds = new DatosSolicitud();
         try
         {
-            String ser_cabecera = JsonSerializer.Serialize(cabecera);
+            String ser_cabecera = JsonSerializer.Serialize( cabecera );
             ds.StrNameBD = _settings.nombre_base_mongo;
             ds.NombreColeccion = _settings.coll_peticiones;
             ds.Filter = String.Empty;
             ds.SolTran = ser_cabecera;
 
-            await objClienteMongo.insertar_documentoAsync(ds);
+            await objClienteMongo.insertar_documentoAsync( ds );
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error en mongo: " + ex.Message);
+            Console.WriteLine( "Error en mongo: " + ex.Message );
         }
     }
 
 
-    public async Task GuardarRespuestaMongo(ResComun ObjRespPeticion)
+    public async Task GuardarRespuestaMongo(dynamic ObjRespPeticion)
     {
 
         var ds = new DatosSolicitud();
         try
         {
-            String ser_cabecera = JsonSerializer.Serialize(ObjRespPeticion);
+            String ser_cabecera = JsonSerializer.Serialize( ObjRespPeticion );
             ds.StrNameBD = _settings.nombre_base_mongo;
             ds.NombreColeccion = _settings.coll_respuesta;
             ds.Filter = String.Empty;
             ds.SolTran = ser_cabecera;
-            await objClienteMongo.insertar_documentoAsync(ds);
+            await objClienteMongo.insertar_documentoAsync( ds );
 
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error en mongo: " + ex.Message);
+            Console.WriteLine( "Error en mongo: " + ex.Message );
         }
     }
     public async Task GuardarExcepcionesMongo(dynamic obj_respuesta, object excepcion)
@@ -86,18 +85,18 @@ public class LogsMongoDat : IMongoDat
                 error = excepcion.ToString()
             };
 
-            String ser_cabecera = JsonSerializer.Serialize(bjson);
+            String ser_cabecera = JsonSerializer.Serialize( bjson );
             ds.StrNameBD = _settings.nombre_base_mongo;
             ds.NombreColeccion = _settings.coll_errores;
             ds.Filter = String.Empty;
             ds.SolTran = ser_cabecera;
 
-            await objClienteMongo.insertar_documentoAsync(ds);
+            await objClienteMongo.insertar_documentoAsync( ds );
 
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error en mongo: " + ex.Message);
+            Console.WriteLine( "Error en mongo: " + ex.Message );
         }
     }
 
@@ -118,18 +117,18 @@ public class LogsMongoDat : IMongoDat
                 error = excepcion.ToString()
             };
 
-            String ser_cabecera = JsonSerializer.Serialize(bjson);
+            String ser_cabecera = JsonSerializer.Serialize( bjson );
             ds.StrNameBD = _settings.nombre_base_mongo;
             ds.NombreColeccion = _settings.coll_errores_db;
             ds.Filter = String.Empty;
             ds.SolTran = ser_cabecera;
 
-            await objClienteMongo.insertar_documentoAsync(ds);
+            await objClienteMongo.insertar_documentoAsync( ds );
 
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error en mongo: " + ex.Message);
+            Console.WriteLine( "Error en mongo: " + ex.Message );
         }
 
     }
@@ -147,18 +146,18 @@ public class LogsMongoDat : IMongoDat
                 error = excepcion.ToString(),
             };
 
-            String ser_cabecera = JsonSerializer.Serialize(bjson);
+            String ser_cabecera = JsonSerializer.Serialize( bjson );
             ds.StrNameBD = _settings.nombre_base_mongo;
             ds.NombreColeccion = _settings.coll_errores_http;
             ds.Filter = String.Empty;
             ds.SolTran = ser_cabecera;
 
-            await objClienteMongo.insertar_documentoAsync(ds);
+            await objClienteMongo.insertar_documentoAsync( ds );
 
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error en mongo: " + ex.Message);
+            Console.WriteLine( "Error en mongo: " + ex.Message );
         }
     }
 
@@ -168,17 +167,17 @@ public class LogsMongoDat : IMongoDat
         try
         {
             var ds = new DatosSolicitud();
-            String ser_cabecera = JsonSerializer.Serialize(obj_respuesta);
+            String ser_cabecera = JsonSerializer.Serialize( obj_respuesta );
             ds.StrNameBD = _settings.nombre_base_mongo;
             ds.NombreColeccion = _settings.coll_amenazas;
             ds.Filter = String.Empty;
             ds.SolTran = ser_cabecera;
 
-            await objClienteMongo.insertar_documentoAsync(ds);
+            await objClienteMongo.insertar_documentoAsync( ds );
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error en mongo: " + ex.Message);
+            Console.WriteLine( "Error en mongo: " + ex.Message );
 
         }
     }
@@ -194,7 +193,7 @@ public class LogsMongoDat : IMongoDat
             ds.Filter = filtro;
             ds.SolTran = String.Empty;
 
-            DatosRespuesta res = objClienteMongo.buscar_documentos(ds);
+            DatosRespuesta res = objClienteMongo.buscar_documentos( ds );
 
             respuesta.codigo = "000";
             respuesta.cuerpo = res.Mensaje;
@@ -203,7 +202,7 @@ public class LogsMongoDat : IMongoDat
 
         {
             respuesta.codigo = "001";
-            respuesta.diccionario.Add("str_error", ex.ToString());
+            respuesta.diccionario.Add( "str_error", ex.ToString() );
         }
         return respuesta;
     }
@@ -218,12 +217,12 @@ public class LogsMongoDat : IMongoDat
             ds.NombreColeccion = _settings.coll_peticiones_diarias;
             ds.Filter = filtro;
             ds.SolTran = peticion;
-            objClienteMongo.actualizar_documento_avanzado(ds);
+            objClienteMongo.actualizar_documento_avanzado( ds );
 
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error en mongo: " + ex.Message);
+            Console.WriteLine( "Error en mongo: " + ex.Message );
         }
 
     }
@@ -239,14 +238,14 @@ public class LogsMongoDat : IMongoDat
             ds.NombreColeccion = _settings.coll_promedio_peticiones_diarias;
             ds.Filter = str_filtro;
             ds.SolTran = String.Empty;
-            DatosRespuesta res = objClienteMongo.buscar_documentos(ds);
+            DatosRespuesta res = objClienteMongo.buscar_documentos( ds );
             var resp_mongo = res.Mensaje;
-            int promedio = calcular_promedio(str_operacion);
+            int promedio = calcular_promedio( str_operacion );
             if (resp_mongo != null && resp_mongo.ToString() != "[]")
             {
-                var res_datos_mongo = resp_mongo.ToString()!.Replace("ObjectId(", " ").Replace(")", " ");
-                res_datos_mongo = res_datos_mongo.Replace("[", "").Replace("]", "");
-                var prom_peticion_diaria = JsonSerializer.Deserialize<PromedioPeticionDiaria>(res_datos_mongo);
+                var res_datos_mongo = resp_mongo.ToString()!.Replace( "ObjectId(", " " ).Replace( ")", " " );
+                res_datos_mongo = res_datos_mongo.Replace( "[", "" ).Replace( "]", "" );
+                var prom_peticion_diaria = JsonSerializer.Deserialize<PromedioPeticionDiaria>( res_datos_mongo );
 
                 if (prom_peticion_diaria!._id != null)
                 {
@@ -255,21 +254,21 @@ public class LogsMongoDat : IMongoDat
                     ds.Filter = str_filtro;
                     ds.SolTran = str_datos_update;
 
-                    objClienteMongo.actualizar_documento(ds);
+                    objClienteMongo.actualizar_documento( ds );
                 }
             }
             else
             {
                 object obj_sol = new { dbl_promedio_peticion = promedio, str_operacion, str_fecha_actualizacion = str_fecha };
                 ds.Filter = String.Empty;
-                ds.SolTran = JsonSerializer.Serialize(obj_sol);
-                objClienteMongo.insertar_documento(ds);
+                ds.SolTran = JsonSerializer.Serialize( obj_sol );
+                objClienteMongo.insertar_documento( ds );
 
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error en mongo: " + ex.Message);
+            Console.WriteLine( "Error en mongo: " + ex.Message );
         }
     }
 
@@ -286,14 +285,14 @@ public class LogsMongoDat : IMongoDat
             ds.Filter = str_filtro;
             ds.SolTran = String.Empty;
 
-            DatosRespuesta res = objClienteMongo.buscar_documentos_avanzado(ds);
+            DatosRespuesta res = objClienteMongo.buscar_documentos_avanzado( ds );
 
             string res_datos_mongo = res.Mensaje;
             if (res_datos_mongo != null && res_datos_mongo.ToString() != "[]")
             {
-                res_datos_mongo = res_datos_mongo.Replace("[", "").Replace("]", "");
-                var peticion_diaria = JsonSerializer.Deserialize<PromedioPeticionDiaria>(res_datos_mongo);
-                int_respuesta = Convert.ToInt32(peticion_diaria!.dbl_promedio_peticion);
+                res_datos_mongo = res_datos_mongo.Replace( "[", "" ).Replace( "]", "" );
+                var peticion_diaria = JsonSerializer.Deserialize<PromedioPeticionDiaria>( res_datos_mongo );
+                int_respuesta = Convert.ToInt32( peticion_diaria!.dbl_promedio_peticion );
 
             }
 
@@ -318,16 +317,16 @@ public class LogsMongoDat : IMongoDat
             ds.Filter = str_filtro;
             ds.SolTran = String.Empty;
 
-            DatosRespuesta res = objClienteMongo.buscar_documentos(ds);
+            DatosRespuesta res = objClienteMongo.buscar_documentos( ds );
 
             string res_datos_mongo = res.Mensaje;
             if (res_datos_mongo != null && res_datos_mongo.ToString() != "[]")
             {
-                res_datos_mongo = res_datos_mongo.ToString()!.Replace("ObjectId(", " ").Replace(")", " ");
+                res_datos_mongo = res_datos_mongo.ToString()!.Replace( "ObjectId(", " " ).Replace( ")", " " );
 
-                res_datos_mongo = res_datos_mongo.Replace("[", "").Replace("]", "");
-                var peticion_diaria = JsonSerializer.Deserialize<PromedioPeticionDiaria>(res_datos_mongo);
-                int_respuesta = Convert.ToInt32(peticion_diaria!.dbl_promedio_peticion);
+                res_datos_mongo = res_datos_mongo.Replace( "[", "" ).Replace( "]", "" );
+                var peticion_diaria = JsonSerializer.Deserialize<PromedioPeticionDiaria>( res_datos_mongo );
+                int_respuesta = Convert.ToInt32( peticion_diaria!.dbl_promedio_peticion );
 
             }
 

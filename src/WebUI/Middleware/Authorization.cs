@@ -29,25 +29,35 @@ namespace WebUI.Middleware
         {
             string authHeader = httpContext.Request.Headers["Authorization-Mego"];
 
-            if (authHeader != null && authHeader.StartsWith( "Auth-Mego" ))
+            try
             {
-                string encodeAuthorization = authHeader.Substring( "Auth-Mego ".Length ).Trim();
-                //DECODIFICA BASE 64
-                Encoding.UTF8.GetString( Convert.FromBase64String( encodeAuthorization ) );
 
-                if (encodeAuthorization.Equals( _settings.auth_ws_transferencias ))
+                if (authHeader != null && authHeader.StartsWith( "Auth-Mego" ))
                 {
-                    await _next( httpContext );
+                    string encodeAuthorization = authHeader.Substring( "Auth-Mego ".Length ).Trim();
+                    //DECODIFICA BASE 64
+                    Encoding.UTF8.GetString( Convert.FromBase64String( encodeAuthorization ) );
+
+                    if (encodeAuthorization.Equals( _settings.auth_ws_transferencias ))
+                    {
+                        await _next( httpContext );
+                    }
+                    else
+                    {
+                        await ResException( httpContext, "Credenciales erroneas", Convert.ToInt32( System.Net.HttpStatusCode.Unauthorized ), System.Net.HttpStatusCode.Unauthorized.ToString() );
+                    }
                 }
                 else
                 {
-                    await ResException( httpContext, "Credenciales erroneas", Convert.ToInt32( System.Net.HttpStatusCode.Unauthorized ), System.Net.HttpStatusCode.Unauthorized.ToString() );
+                    await ResException( httpContext, "No autorizado", Convert.ToInt32( System.Net.HttpStatusCode.Unauthorized ), System.Net.HttpStatusCode.Unauthorized.ToString() );
                 }
             }
-            else
+            catch (Exception)
             {
-                await ResException( httpContext, "No autorizado", Convert.ToInt32( System.Net.HttpStatusCode.Unauthorized ), System.Net.HttpStatusCode.Unauthorized.ToString() );
+
+                throw new UnauthorizedAccessException();
             }
+
         }
 
         internal async Task ResException(HttpContext httpContext, String infoAdicional, int statusCode, string str_res_id_servidor)
@@ -58,8 +68,6 @@ namespace WebUI.Middleware
             httpContext.Response.StatusCode = statusCode;
 
             respuesta.str_res_id_servidor = str_res_id_servidor;
-            respuesta.str_res_original_id_servicio = "";
-            respuesta.str_res_original_id_msj = "";
             respuesta.str_res_codigo = "001";
             respuesta.dt_res_fecha_msj_crea = DateTime.ParseExact( DateTime.Now.ToString( "yyyy-MM-dd HH:mm:ss" ), "yyyy-MM-dd HH:mm:ss", null );
             respuesta.str_res_estado_transaccion = "ERR";

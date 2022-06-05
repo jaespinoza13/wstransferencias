@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using FluentValidation.AspNetCore;
 using System.Text;
 using WebUI.Filters;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -12,11 +13,13 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddWebUIServices(this IServiceCollection services, IConfiguration configuration)
     {
-        //services.AddControllersWithViews( options =>
-        //     options.Filters.Add<ApiExceptionFilterAttribute>() )
-        //        .AddFluentValidation( x => x.AutomaticValidationEnabled = false );
+        services.AddHttpContextAccessor();
 
-        services.AddControllers();
+        services.AddControllersWithViews( options => options.Filters.Add<ApiExceptionFilterAttribute>() )
+                .AddFluentValidation( x => x.AutomaticValidationEnabled = false );
+
+        // Customise default API behaviour
+        services.Configure<ApiBehaviorOptions>( options => options.SuppressModelStateInvalidFilter = true );
 
         //AUTHORIZATION
         var llave = configuration.GetValue<string>( "llavejwt" );
@@ -47,9 +50,9 @@ public static class ConfigureServices
         {
             c.SwaggerDoc( "v1", new OpenApiInfo
             {
-                Title = "Servicio de utilidades",
+                Title = "API Transferencias",
                 Version = "v2",
-                Description = "API transferencias y beneficiarios de CoopMego"
+                Description = "servicio de transferencias y beneficiarios de CoopMego"
             } );
         } );
 

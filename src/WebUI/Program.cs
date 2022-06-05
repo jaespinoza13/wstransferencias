@@ -3,8 +3,8 @@
 var builder = WebApplication.CreateBuilder( args );
 
 
-builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices();
 builder.Services.AddWebUIServices( builder.Configuration );
 
 var AllowSpecificOrigins = "_AllowSpecificOrigins";
@@ -30,6 +30,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors( AllowSpecificOrigins );
 
 app.UseAuthotizationMego();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

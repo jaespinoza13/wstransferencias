@@ -21,8 +21,8 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
-
-Logs
+[Ll]ogs/
+Logs/
 
 # Cache/Directorio de opciones de Visual Studio 2015
 .vs/

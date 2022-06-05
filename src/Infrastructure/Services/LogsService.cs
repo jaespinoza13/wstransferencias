@@ -159,7 +159,7 @@ public class LogsService : ILogs
         infoLog.str_tipo = "e:<";
 
         //REGISTRA LOGS DE TEXTO 
-        TextFiles.RegistrarTramas(infoLog.str_tipo, infoLog, _settings.logs_path_errores_http);
+        TextFiles.RegistrarTramas(infoLog.str_tipo, infoLog, _settings.logs_path_errores_db);
 
         //REGISTRA LOGS DE MONGO
         await _mongoDat.GuardarExcepcionesDataBase(transaction, excepcion);

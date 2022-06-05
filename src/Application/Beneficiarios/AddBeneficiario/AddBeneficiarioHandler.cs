@@ -25,10 +25,12 @@ public class AddBeneficiarioHandler : RequestHandler<ReqAddBeneficiario, ResComu
 
     protected override ResComun Handle(ReqAddBeneficiario reqAddBeneficiario)
     {
+        string operacion = "ADD_BENEFICIARIO";
+        RespuestaTransaccion resTran = new();
         ResComun respuesta = new();
         respuesta.LlenarResHeader( reqAddBeneficiario );
-        RespuestaTransaccion resTran = new();
-        string operacion = "ADD_BENEFICIARIO";
+
+        _logs.SaveHeaderLogs( reqAddBeneficiario, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
         try
         {
             var requiereOtp = _wsOtp.ValidaRequiereOtp( reqAddBeneficiario, reqAddBeneficiario.str_tipo_beneficiario! ).Result;

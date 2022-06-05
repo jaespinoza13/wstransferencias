@@ -9,6 +9,7 @@ namespace WebUI.Filters
     public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
         private readonly IDictionary<Type, Action<ExceptionContext>> _exceptionHandlers;
+        private readonly ResBadRequestException resBadRequestException = new();
         private readonly ResException resException = new();
 
         private readonly ILogger<ApiExceptionFilterAttribute> logger;
@@ -18,6 +19,7 @@ namespace WebUI.Filters
             this.logger = logger;
             _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
+                { typeof(ArgumentException), HandleArgumentException },
                 { typeof(ValidationException), HandleValidationException },
                 { typeof(NotFoundException), HandleNotFoundException },
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
@@ -40,62 +42,62 @@ namespace WebUI.Filters
             if (_exceptionHandlers.ContainsKey( type ))
             {
                 _exceptionHandlers[type].Invoke( context );
-                return;
             }
 
             if (!context.ModelState.IsValid)
             {
                 HandleInvalidModelStateException( context );
-                return;
             }
         }
 
-        private void HandleValidationException(ExceptionContext context)
+        private void HandleArgumentException(ExceptionContext context)
         {
-            var exception = (ValidationException)context.Exception;
+            var exception = (ArgumentException)context.Exception;
 
-            var details = new ValidationProblemDetails( exception.Errors )
-            {
-                Type = "asdasdasdasd"
-            };
+            resException.str_id_transaccion = exception.Message;
+            resException.dt_res_fecha_msj_crea = DateTime.Now;
+            resException.str_res_codigo = "001";
+            resException.str_res_id_servidor = System.Net.HttpStatusCode.InternalServerError.ToString();
+            resException.str_res_estado_transaccion = "ERR";
+            resException.str_res_info_adicional = "Ocurrio un problema, intente nuevamente más tarde";
 
-            context.Result = new BadRequestObjectResult( details );
-
+            context.HttpContext.Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+            context.Result = new ObjectResult( resException );
             context.ExceptionHandled = true;
         }
 
         private void HandleInvalidModelStateException(ExceptionContext context)
         {
-            resException.dt_res_fecha_msj_crea = DateTime.Now;
-            resException.str_res_codigo = "001";
-            resException.str_res_id_servidor = "BadRequest";
-            resException.str_res_original_id_servicio = "";
-            resException.str_res_estado_transaccion = "ERR";
-            resException.str_res_info_adicional = "Modelo inválido";
+            var details = new ValidationProblemDetails( context.ModelState );
 
-            var details = new ValidationProblemDetails( context.ModelState )
-            {
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
-            };
+            resBadRequestException.dt_res_fecha_msj_crea = DateTime.Now;
+            resBadRequestException.str_res_codigo = "001";
+            resBadRequestException.str_res_id_servidor = System.Net.HttpStatusCode.BadRequest.ToString();
+            resBadRequestException.str_res_estado_transaccion = "ERR";
+            resBadRequestException.str_res_info_adicional = "Petición Inválida";
 
-            context.Result = new BadRequestObjectResult( details );
+            resBadRequestException.obj_res_detalle_errores = (Dictionary<string, string[]>)details.Errors;
 
+            context.Result = new BadRequestObjectResult( resBadRequestException );
             context.ExceptionHandled = true;
         }
 
-        private void HandleNotFoundException(ExceptionContext context)
+
+        private void HandleValidationException(ExceptionContext context)
         {
-            var exception = (NotFoundException)context.Exception;
+            var exception = (ValidationException)context.Exception;
 
-            var details = new ProblemDetails()
-            {
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
-                Title = "The specified resource was not found.",
-                Detail = exception.Message
-            };
+            var details = new ValidationProblemDetails( exception.Errors );
 
-            context.Result = new NotFoundObjectResult( details );
+            resBadRequestException.dt_res_fecha_msj_crea = DateTime.Now;
+            resBadRequestException.str_res_codigo = "001";
+            resException.str_res_id_servidor = System.Net.HttpStatusCode.BadRequest.ToString();
+            resBadRequestException.str_res_estado_transaccion = "ERR";
+            resBadRequestException.str_res_info_adicional = "Petición Inválida";
 
+            resBadRequestException.obj_res_detalle_errores = (Dictionary<string, string[]>)details.Errors;
+
+            context.Result = new BadRequestObjectResult( resException );
             context.ExceptionHandled = true;
         }
 
@@ -129,6 +131,22 @@ namespace WebUI.Filters
             {
                 StatusCode = StatusCodes.Status403Forbidden
             };
+
+            context.ExceptionHandled = true;
+        }
+
+        private void HandleNotFoundException(ExceptionContext context)
+        {
+            var exception = (NotFoundException)context.Exception;
+
+            var details = new ProblemDetails()
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
+                Title = "The specified resource was not found.",
+                Detail = exception.Message
+            };
+
+            context.Result = new NotFoundObjectResult( details );
 
             context.ExceptionHandled = true;
         }
