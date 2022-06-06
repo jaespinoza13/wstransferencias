@@ -1,5 +1,4 @@
 ﻿using Application.Common.Interfaces;
-using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 
 using Infrastructure.Common.Tramas;
@@ -30,7 +29,7 @@ public class LogsService : ILogs
     /// <param name="str_clase"></param>
     /// <returns></returns>
     /// 
-    public async Task SaveHeaderLogs(Header transaction, String str_operacion, String str_metodo, String str_clase)
+    public async Task SaveHeaderLogs(dynamic transaction, String str_operacion, String str_metodo, String str_clase)
     {
         infoLog.str_id_transaccion = transaction.str_id_transaccion;
         infoLog.str_clase = str_clase;
@@ -148,7 +147,7 @@ public class LogsService : ILogs
         await _mongoDat.GuardaErroresHttp(transaction, obj_error, str_id_transaccion);
     }
 
-    public async Task SaveExcepcionDataBaseSybase(Header transaction, String str_metodo, Exception excepcion, string str_clase)
+    public async Task SaveExcepcionDataBaseSybase(dynamic transaction, String str_metodo, Exception excepcion, string str_clase)
     {
         infoLog.str_id_transaccion = transaction.str_id_transaccion;
         infoLog.str_clase = str_clase;

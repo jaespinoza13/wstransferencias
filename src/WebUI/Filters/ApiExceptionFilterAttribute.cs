@@ -91,6 +91,7 @@ namespace WebUI.Filters
             resBadRequestException.str_res_estado_transaccion = "ERR";
             resBadRequestException.str_res_info_adicional = "Petición Inválida";
 
+            
             resBadRequestException.obj_res_detalle_errores = (Dictionary<string, string[]>)details.Errors;
 
             context.Result = new BadRequestObjectResult( resBadRequestException );
@@ -108,8 +109,7 @@ namespace WebUI.Filters
             resBadRequestException.str_res_codigo = "001";
             resException.str_res_id_servidor = System.Net.HttpStatusCode.BadRequest.ToString();
             resBadRequestException.str_res_estado_transaccion = "ERR";
-            resBadRequestException.str_res_info_adicional = "Petición Inválida";
-
+            resBadRequestException.str_res_info_adicional = "asda";
             resBadRequestException.obj_res_detalle_errores = (Dictionary<string, string[]>)details.Errors;
 
             context.Result = new BadRequestObjectResult( resException );
