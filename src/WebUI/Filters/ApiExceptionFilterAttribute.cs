@@ -19,6 +19,7 @@ namespace WebUI.Filters
             this.logger = logger;
             _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
+                { typeof(NullReferenceException), HandleNullReferenceException },
                 { typeof(ArgumentException), HandleArgumentException },
                 { typeof(ValidationException), HandleValidationException },
                 { typeof(NotFoundException), HandleNotFoundException },
@@ -48,6 +49,20 @@ namespace WebUI.Filters
             {
                 HandleInvalidModelStateException( context );
             }
+        }
+
+        private void HandleNullReferenceException(ExceptionContext context)
+        {
+            resException.str_id_transaccion = "NullReferenceException";
+            resException.dt_res_fecha_msj_crea = DateTime.Now;
+            resException.str_res_codigo = "001";
+            resException.str_res_id_servidor = System.Net.HttpStatusCode.InternalServerError.ToString();
+            resException.str_res_estado_transaccion = "ERR";
+            resException.str_res_info_adicional = "Ocurrio un problema, intente nuevamente más tarde";
+
+            context.HttpContext.Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+            context.Result = new ObjectResult( resException );
+            context.ExceptionHandled = true;
         }
 
         private void HandleArgumentException(ExceptionContext context)

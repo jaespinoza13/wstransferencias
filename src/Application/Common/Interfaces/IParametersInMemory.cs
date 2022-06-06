@@ -6,8 +6,8 @@ public interface IParametersInMemory
 {
     List<Parametro> lst_errores();
     List<Parametro> lst_parametros();
-    void ValidaParametros();
-    void LoadConfiguration();
+    void ValidateCachedParameters();
+    void LoadParameters();
     Parametro FindErrorCode(string str_codigo);
-    Parametro FindParametro(string str_nemonico);
+    Parametro FindParameter(string str_nemonico);
 }

@@ -6,6 +6,7 @@ using FluentValidation.AspNetCore;
 using System.Text;
 using WebUI.Filters;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -13,15 +14,14 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddWebUIServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddHttpContextAccessor();
-
+        // CUSTOMISE API EXCEPTIONS BEHAVIOUR
         services.AddControllersWithViews( options => options.Filters.Add<ApiExceptionFilterAttribute>() )
-                .AddFluentValidation( x => x.AutomaticValidationEnabled = false );
+                .AddFluentValidation( x => x.RegisterValidatorsFromAssembly( Assembly.GetExecutingAssembly() ) );
 
-        // Customise default API behaviour
+        // CUSTOMISE DEFAULT API BEHAVIOUR
         services.Configure<ApiBehaviorOptions>( options => options.SuppressModelStateInvalidFilter = true );
 
-        //AUTHORIZATION
+        //AUTHORIZATION 
         var llave = configuration.GetValue<string>( "llavejwt" );
 
         services.AddAuthentication( JwtBearerDefaults.AuthenticationScheme )
@@ -42,7 +42,7 @@ public static class ConfigureServices
 
 
         //FILTERS
-        services.AddTransient<RequestControl>();
+        services.AddTransient<DailyRequestFilter>();
 
         //SWAGGER
         services.AddEndpointsApiExplorer();

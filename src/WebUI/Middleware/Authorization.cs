@@ -1,7 +1,6 @@
 ﻿using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Microsoft.Extensions.Options;
-using System.Text;
 using System.Text.Json;
 
 namespace WebUI.Middleware
@@ -29,35 +28,23 @@ namespace WebUI.Middleware
         {
             string authHeader = httpContext.Request.Headers["Authorization-Mego"];
 
-            try
+            if (authHeader != null && authHeader.StartsWith( "Auth-Mego" ))
             {
+                string encodeAuthorization = authHeader.Substring( "Auth-Mego ".Length ).Trim();
 
-                if (authHeader != null && authHeader.StartsWith( "Auth-Mego" ))
+                if (encodeAuthorization.Equals( _settings.auth_ws_transferencias ))
                 {
-                    string encodeAuthorization = authHeader.Substring( "Auth-Mego ".Length ).Trim();
-                    //DECODIFICA BASE 64
-                    Encoding.UTF8.GetString( Convert.FromBase64String( encodeAuthorization ) );
-
-                    if (encodeAuthorization.Equals( _settings.auth_ws_transferencias ))
-                    {
-                        await _next( httpContext );
-                    }
-                    else
-                    {
-                        await ResException( httpContext, "Credenciales erroneas", Convert.ToInt32( System.Net.HttpStatusCode.Unauthorized ), System.Net.HttpStatusCode.Unauthorized.ToString() );
-                    }
+                    await _next( httpContext );
                 }
                 else
                 {
-                    await ResException( httpContext, "No autorizado", Convert.ToInt32( System.Net.HttpStatusCode.Unauthorized ), System.Net.HttpStatusCode.Unauthorized.ToString() );
+                    await ResException( httpContext, "Credenciales erroneas", Convert.ToInt32( System.Net.HttpStatusCode.Unauthorized ), System.Net.HttpStatusCode.Unauthorized.ToString() );
                 }
             }
-            catch (Exception)
+            else
             {
-
-                throw new UnauthorizedAccessException();
+                await ResException( httpContext, "No autorizado", Convert.ToInt32( System.Net.HttpStatusCode.Unauthorized ), System.Net.HttpStatusCode.Unauthorized.ToString() );
             }
-
         }
 
         internal async Task ResException(HttpContext httpContext, String infoAdicional, int statusCode, string str_res_id_servidor)

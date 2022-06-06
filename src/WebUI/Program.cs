@@ -27,11 +27,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseCors( AllowSpecificOrigins );
 
-app.UseAuthotizationMego();
+app.UseValidateCachedParameters();
 
-app.UseAuthentication();
+app.UseAuthotizationMego();
 
 app.UseAuthorization();
 

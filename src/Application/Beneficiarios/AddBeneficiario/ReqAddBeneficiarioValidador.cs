@@ -11,7 +11,7 @@ public class ReqAddBeneficiarioValidador : AbstractValidator<ReqAddBeneficiario>
 
         RuleFor( x => x.str_nombres)
             .NotEmpty()
-            .MaximumLength( Convert.ToInt32( parametersInMemory.FindParametro( "LIMITE_MAXIMO_CARACTERES" ).str_valor_ini ))
-            .WithMessage( parametersInMemory.FindParametro( "LIMITE_MAXIMO_CARACTERES" ).str_descripcion );
+            .MaximumLength( Convert.ToInt32( parametersInMemory.FindParameter( "LIMITE_MAXIMO_CARACTERES" ).str_valor_ini ))
+            .WithMessage( parametersInMemory.FindParameter( "LIMITE_MAXIMO_CARACTERES" ).str_descripcion );
     }
 }

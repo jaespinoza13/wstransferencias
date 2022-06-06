@@ -28,8 +28,8 @@ public class SqlInjectionValidationService : ISqlInjectionValidationService
         string str_expresion_cuerpo_palabras = String.Empty;
 
         string str_palabas_pattern = String.Empty;
-        str_palabas_pattern += _parameters.FindParametro( "UTIL_SQL_INJECTION_1" )!.str_valor_ini;
-        str_palabas_pattern += _parameters.FindParametro( "UTIL_SQL_INJECTION_2" )!.str_valor_ini;
+        str_palabas_pattern += _parameters.FindParameter( "UTIL_SQL_INJECTION_1" )!.str_valor_ini;
+        str_palabas_pattern += _parameters.FindParameter( "UTIL_SQL_INJECTION_2" )!.str_valor_ini;
 
 
 

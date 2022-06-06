@@ -49,7 +49,7 @@ public class DailyRequest : IDailyRequest
                         int_act_peticiones = peticion_diaria.int_num_peticion + 1;
 
                         int respuesta_promedio = _mongo.obtener_promedio(str_operacion);
-                        var cantidad_maxima = respuesta_promedio * Convert.ToInt32(_parameters.FindParametro("PRM_MAXIMO_PETICIONES_DIARIAS")!.str_valor_ini) / 100;
+                        var cantidad_maxima = respuesta_promedio * Convert.ToInt32(_parameters.FindParameter("PRM_MAXIMO_PETICIONES_DIARIAS")!.str_valor_ini) / 100;
 
                         if (_settings.valida_peticiones_diarias && int_act_peticiones > cantidad_maxima)
                             respuesta = false;

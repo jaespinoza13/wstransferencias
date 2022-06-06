@@ -30,7 +30,7 @@ internal class ParametersInMemory : IParametersInMemory
         this._memoryCache = memoryCache;
     }
 
-    public void LoadConfiguration()
+    public void LoadParameters()
     {
         try
         {
@@ -50,7 +50,6 @@ internal class ParametersInMemory : IParametersInMemory
                 req_get_parametros.str_id_sistema = item.ToString();
                 RespuestaTransaccion res_tran = _parametros.GetParametros( req_get_parametros );
                 lst_errores.AddRange( Conversions.ConvertConjuntoDatosToListClass<Parametro>( (ConjuntoDatos)res_tran.cuerpo ).Where( x => !lst_parametros.Any( y => y.str_nemonico == x.str_nemonico ) ) );
-
             }
 
             foreach (var item in lst_nombres_parametros)
@@ -72,11 +71,11 @@ internal class ParametersInMemory : IParametersInMemory
         }
     }
 
-    public void ValidaParametros()
+    public void ValidateCachedParameters()
     {
         if (DateTime.Compare( DateTime.Now, dt_fecha_codigos.AddDays( 1 ) ) > 0)
         {
-            LoadConfiguration();
+            LoadParameters();
         }
     }
 
@@ -85,7 +84,7 @@ internal class ParametersInMemory : IParametersInMemory
         var listadoErrores = _memoryCache.Get<List<Parametro>>( "Errores" );
         return listadoErrores.Find( x => x.str_valor_ini == str_codigo )!;
     }
-    public Parametro FindParametro(string str_nemonico)
+    public Parametro FindParameter(string str_nemonico)
     {
         var listadoParametros = _memoryCache.Get<List<Parametro>>( "Parametros" );
         return listadoParametros.Find( x => x.str_nemonico == str_nemonico )!;
