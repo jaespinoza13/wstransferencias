@@ -63,6 +63,8 @@ namespace Application.Common.Models
         #endregion
         public string codigo_error_datos_incorrectos_banred { get; set; } = String.Empty;
         public string codigo_error_datos_incorrectos_coopmego { get; set; } = String.Empty;
+        
+        public int mostrar_descripcion_badrequest { get; set; }
 
     }
 }

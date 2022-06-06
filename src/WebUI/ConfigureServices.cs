@@ -71,6 +71,7 @@ public static class ConfigureServices
         services.Configure<ApiSettings>( configuration.GetSection( "ApiSettings:AlfrescoSettings" ) );
         services.Configure<ApiSettings>( configuration.GetSection( "ApiSettings:Transferencia" ) );
         services.Configure<ApiSettings>( configuration.GetSection( "ApiSettings:DescripcionErrores" ) );
+        services.Configure<ApiSettings>( configuration.GetSection( "ApiSettings:ControlExcepciones" ) );
 
         return services;
     }

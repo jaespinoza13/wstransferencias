@@ -1,9 +1,8 @@
-﻿using Application.Common.ISO20022.Interfaces;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Application.Common.ISO20022.Models
 {
-    public class Header : IHeader
+    public class Header
     {
         /// <summary>
         /// Id de log
@@ -146,28 +145,5 @@ namespace Application.Common.ISO20022.Models
         /// Id de Perfil
         /// </summary>
         public string str_id_perfil { get; set; } = String.Empty;
-
-        public void LlenarResHeader(Header requerimiento)
-        {
-            str_nemonico_canal = requerimiento.str_nemonico_canal;
-            str_app = requerimiento.str_app;
-            str_id_servicio = requerimiento.str_id_servicio != null ? requerimiento.str_id_servicio.Replace( "REQ", "RES" ) : String.Empty;
-            str_version_servicio = requerimiento.str_version_servicio;
-            str_mac_dispositivo = requerimiento.str_mac_dispositivo;
-            str_ip_dispositivo = requerimiento.str_ip_dispositivo;
-            str_remitente = requerimiento.str_receptor;
-            str_receptor = requerimiento.str_remitente;
-            str_tipo_peticion = "RES";
-            str_id_msj = DateTime.Now.ToString( "yyMMddHHmmssffff" );
-            dt_fecha_operacion = DateTime.ParseExact( DateTime.Now.ToString( "yyyy-MM-dd HH:mm:ss" ), "yyyy-MM-dd HH:mm:ss", null );
-            bl_posible_duplicado = requerimiento.bl_posible_duplicado;
-            str_prioridad = requerimiento.str_prioridad;
-            str_login = requerimiento.str_login;
-            str_latitud = requerimiento.str_latitud;
-            str_longitud = requerimiento.str_longitud;
-            str_firma_digital = requerimiento.str_firma_digital;
-            str_num_sim = requerimiento.str_num_sim;
-            str_clave_secreta = requerimiento.str_clave_secreta;
-        }
     }
 }
