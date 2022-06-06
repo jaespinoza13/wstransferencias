@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Data;
+using System.Reflection;
 using System.Text.Json;
 using wsTransferencias.Dat;
 using wsTransferencias.Dto;
@@ -60,7 +61,10 @@ namespace wsTransferencias.Neg
 
                             if(respuesta_cambio_tipo_transfer.codigo == "000")
                             {
+                                // Se actualiza el costo de la comisión cuando se envia por spi
+                                decimal dec_comision = Convert.ToDecimal( respuesta_cambio_tipo_transfer.diccionario["dec_comision"] );
                                 respuesta.objValidacionTransferencia.int_enviar_banred = 0;
+                                respuesta.objValidacionTransferencia.dec_comision = dec_comision;
                             }
 
                             if(respuesta_validaciones_pago_directo.codigo == _settingsApi.codigo_error_datos_incorrectos_banred)

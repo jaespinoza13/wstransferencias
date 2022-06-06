@@ -206,7 +206,7 @@ namespace wsTransferencias.Dat
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_cta_beneficiario", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.int_id_cta_beneficiario.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@mny_monto_transfer", TipoDato = TipoDato.Decimal, ObjValue = req_validar_transferencia.dec_monto_tran.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_observacion", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_observacion } );
-
+                
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_enviar_banred", TipoDato = TipoDato.Integer } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_requiere_otp", TipoDato = TipoDato.Integer } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_id_solicitud", TipoDato = TipoDato.Integer } );
@@ -298,21 +298,23 @@ namespace wsTransferencias.Dat
                 Funciones.llenar_datos_auditoria_salida( ds, req_transferencia );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_comprobar_transfer", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.int_id_comprobar_transfer.ToString() } );
+                ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@mny_o_monto_comision", TipoDato = TipoDato.Money } );
 
                 ds.NombreSP = "set_envio_transf_por_spi2";
                 ds.NombreBD = _settings.BD_megservicios;
 
-                var resultado = objClienteDal.ExecuteNonQuery( ds );
+                var resultado = objClienteDal.ExecuteDataSet( ds );
                 var lst_valores = new List<ParametroSalidaValores>();
 
                 foreach(var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
                 var str_codigo = lst_valores.Find( x => x.StrNameParameter == "@int_o_error_cod" )!.ObjValue;
                 var str_error = lst_valores.Find( x => x.StrNameParameter == "@str_o_error" )!.ObjValue.Trim();
+                var dec_comision = lst_valores.Find( x => x.StrNameParameter == "@mny_o_monto_comision" )!.ObjValue.Trim();
 
                 respuesta.codigo = str_codigo.ToString().Trim().PadLeft( 3, '0' );
-                respuesta.cuerpo = resultado.NumAfectados;
+                respuesta.cuerpo = Funciones.ObtenerDatos( resultado );
                 respuesta.diccionario.Add( "str_error", str_error.ToString() );
-
+                respuesta.diccionario.Add( "dec_comision", dec_comision.ToString() );
 
             }
             catch(Exception exception)
