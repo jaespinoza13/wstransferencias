@@ -84,6 +84,9 @@ public class ValidaTransferenciaExternaHandler : RequestHandler<ValidaTransferen
 
                         if (respuesta_cambio_tipo_transfer.codigo == "000")
                         {
+                            // Se actualiza el costo de la comisión cuando se envia por spi
+                            decimal dec_comision = Convert.ToDecimal( respuesta_cambio_tipo_transfer.diccionario["dec_comision"] );
+                            respuesta.objValidacionTransferencia.dec_comision = dec_comision;
                             respuesta.objValidacionTransferencia.int_enviar_banred = 0;
                         }
 

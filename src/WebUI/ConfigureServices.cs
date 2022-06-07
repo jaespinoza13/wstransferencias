@@ -21,6 +21,16 @@ public static class ConfigureServices
         // CUSTOMISE DEFAULT API BEHAVIOUR
         services.Configure<ApiBehaviorOptions>( options => options.SuppressModelStateInvalidFilter = true );
 
+        //CORS
+        services.AddCors( options =>
+        {
+            options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins().WithMethods( "POST" ).AllowAnyHeader();
+                    } );
+        } );
+
         //AUTHORIZATION 
         var llave = configuration.GetValue<string>( "llavejwt" );
 

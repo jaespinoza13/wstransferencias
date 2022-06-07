@@ -83,7 +83,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             catch (Exception exception)
             {
-                respuesta.codigo = "001";
+                respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( req_validar_transferencia, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
                 throw new Exception( req_validar_transferencia.str_id_transaccion )!;
@@ -101,26 +101,29 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 Funciones.llenar_datos_auditoria_salida( ds, req_transferencia );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_comprobar_transfer", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.int_id_comprobar_transfer.ToString() } );
+                ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@mny_o_monto_comision", TipoDato = TipoDato.Money } );
 
                 ds.NombreSP = "set_envio_transf_por_spi2";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
-                var resultado = objClienteDal.ExecuteNonQuery( ds );
+                var resultado = objClienteDal.ExecuteDataSet( ds );
                 var lst_valores = new List<ParametroSalidaValores>();
 
                 foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
                 var str_codigo = lst_valores.Find( x => x.StrNameParameter == "@int_o_error_cod" )!.ObjValue;
                 var str_error = lst_valores.Find( x => x.StrNameParameter == "@str_o_error" )!.ObjValue.Trim();
+                var dec_comision = lst_valores.Find( x => x.StrNameParameter == "@mny_o_monto_comision" )!.ObjValue.Trim();
 
                 respuesta.codigo = str_codigo.ToString().Trim().PadLeft( 3, '0' );
-                respuesta.cuerpo = resultado.NumAfectados;
+                respuesta.cuerpo = Funciones.ObtenerDatos( resultado );
                 respuesta.diccionario.Add( "str_error", str_error.ToString() );
+                respuesta.diccionario.Add( "dec_comision", dec_comision.ToString() );
 
 
             }
             catch (Exception exception)
             {
-                respuesta.codigo = "001";
+                respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( req_transferencia, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
                 throw new Exception( req_transferencia.str_id_transaccion )!;
@@ -159,7 +162,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             catch (Exception exception)
             {
-                respuesta.codigo = "001";
+                respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( req_transferencia, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
                 throw new Exception( req_transferencia.str_id_transaccion )!;

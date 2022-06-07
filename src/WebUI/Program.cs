@@ -7,18 +7,6 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddWebUIServices( builder.Configuration );
 
-var AllowSpecificOrigins = "_AllowSpecificOrigins";
-builder.Services.AddCors( options =>
-{
-    options.AddPolicy(
-        AllowSpecificOrigins,
-            builder =>
-            {
-                builder.WithOrigins().WithMethods( "POST" ).AllowAnyHeader();
-            } );
-} );
-
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -28,11 +16,11 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseCors( AllowSpecificOrigins );
-
-app.UseValidateCachedParameters();
+app.UseCors();
 
 app.UseAuthotizationMego();
+
+app.UseValidateCachedParameters();
 
 app.UseAuthorization();
 

@@ -44,18 +44,12 @@ namespace Application.Common.Models
 
         public string servicio_ws_otp { get; set; } = String.Empty;
         public string servicio_ws_alfresco { get; set; } = String.Empty;
-        public string servicio_ws_notificador { get; set; } = String.Empty;
         public string servicio_ws_banred { get; set; } = String.Empty;
 
         public string auth_ws_transferencias { get; set; } = String.Empty;
         public string auth_ws_otp { get; set; } = String.Empty;
-        public string auth_ws_notificador { get; set; } = String.Empty;
         public string auth_ws_banred { get; set; } = String.Empty;
 
-        public string path_archivos_base { get; set; } = String.Empty;
-        public string path_archivos_nickname { get; set; } = String.Empty;
-        public string modelo_documento_alfresco { get; set; } = String.Empty;
-        
         public int pago_directo_pruebas { get; set; }
 
         #region  TRANFERENCIAS
