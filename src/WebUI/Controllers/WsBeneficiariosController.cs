@@ -1,4 +1,4 @@
-﻿using WebUI.Filters;
+using WebUI.Filters;
 
 // Authorization
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +23,7 @@ namespace WebUI.Controllers
     [Route( "api/wsBeneficiarios" )]
     [ApiController]
     [ServiceFilter( typeof( DailyRequestFilter ) )]
-    [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme )]
+    //[Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme )]
     [ProducesResponseType( StatusCodes.Status200OK )]
     [ProducesResponseType( StatusCodes.Status400BadRequest )]
     [ProducesResponseType( StatusCodes.Status401Unauthorized )]
