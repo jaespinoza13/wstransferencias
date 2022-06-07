@@ -11,14 +11,14 @@ public static class ConfigureApplication
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddTransient<IValidacionesPagoDirecto, ValidacionesPagoDirecto>();
-
+        //SERVICIOS
         services.AddValidatorsFromAssembly( Assembly.GetExecutingAssembly() );
-
         services.AddValidatorsFromAssemblyContaining<Header>();
-
         services.AddMediatR( Assembly.GetExecutingAssembly() );
         services.AddTransient( typeof( IPipelineBehavior<,> ), typeof( ValidationBehaviour<,> ) );
+        
+        //CASOS DE USO
+        services.AddTransient<IValidacionesPagoDirecto, ValidacionesPagoDirecto>();
 
         return services;
     }

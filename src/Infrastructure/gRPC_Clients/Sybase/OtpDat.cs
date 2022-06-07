@@ -76,7 +76,7 @@ internal class OtpDat : IOtpDat
         }
         catch (Exception exception)
         {
-            respuesta.codigo = "001";
+            respuesta.codigo = "003";
             respuesta.diccionario.Add( "str_error", exception.ToString() );
             await _logsService.SaveExcepcionDataBaseSybase( req_get_datos, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
             throw new Exception( req_get_datos.str_id_transaccion )!;

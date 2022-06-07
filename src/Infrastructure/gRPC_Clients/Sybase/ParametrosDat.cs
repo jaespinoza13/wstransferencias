@@ -73,7 +73,7 @@ internal class ParametrosDat : IParametrosDat
         }
         catch (Exception exception)
         {
-            respuesta.codigo = "001";
+            respuesta.codigo = "003";
             respuesta.diccionario.Add( "str_error", exception.ToString() );
             _logsService.SaveExcepcionDataBaseSybase( reqGetParametros, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
             throw new Exception( reqGetParametros.str_id_transaccion )!;

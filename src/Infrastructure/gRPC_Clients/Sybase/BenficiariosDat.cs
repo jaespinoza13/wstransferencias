@@ -77,7 +77,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             catch (Exception exception)
             {
-                respuesta.codigo = "001";
+                respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 await _logsService.SaveExcepcionDataBaseSybase( reqGetBeneficiarios, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
                 throw new Exception( reqGetBeneficiarios.str_id_transaccion )!;
@@ -121,7 +121,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             catch (Exception exception)
             {
-                respuesta.codigo = "001";
+                respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( reqAddBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
                 throw new Exception( reqAddBeneficiario.str_id_transaccion )!;
@@ -167,7 +167,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             catch (Exception exception)
             {
-                respuesta.codigo = "001";
+                respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( reqUpdateBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
                 throw new Exception( reqUpdateBeneficiario.str_id_transaccion )!;
@@ -208,7 +208,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             catch (Exception exception)
             {
-                respuesta.codigo = "001";
+                respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( reqDeleteBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
                 throw new Exception( reqDeleteBeneficiario.str_id_transaccion )!;
@@ -248,7 +248,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             catch (Exception exception)
             {
-                respuesta.codigo = "001";
+                respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 await _logsService.SaveExcepcionDataBaseSybase( reqGetCuentasBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
                 throw new ArgumentException( reqGetCuentasBeneficiario.str_id_transaccion )!;
@@ -290,7 +290,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             catch (Exception exception)
             {
-                respuesta.codigo = "001";
+                respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 await _logsService.SaveExcepcionDataBaseSybase( reqValidaRegistroBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
                 throw new ArgumentException( reqValidaRegistroBeneficiario.str_id_transaccion )!;
@@ -339,7 +339,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             catch (Exception exception)
             {
-                respuesta.codigo = "001";
+                respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 await _logsService.SaveExcepcionDataBaseSybase( reqValidaOtrasCuentasBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
                 throw new ArgumentException( reqValidaOtrasCuentasBeneficiario.str_id_transaccion )!;
@@ -379,7 +379,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             catch (Exception exception)
             {
-                respuesta.codigo = "001";
+                respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( reqValidaCuentaPagoDirecto, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
                 throw new Exception( reqValidaCuentaPagoDirecto.str_id_transaccion )!;

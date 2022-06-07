@@ -19,7 +19,7 @@ namespace WebUI.Controllers
     [Route( "api/wsTransferencias" )]
     [ApiController]
     [ServiceFilter( typeof( DailyRequestFilter ) )]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ProducesResponseType( StatusCodes.Status200OK )]
     [ProducesResponseType( StatusCodes.Status400BadRequest )]
     [ProducesResponseType( StatusCodes.Status401Unauthorized )]
