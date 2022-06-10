@@ -80,7 +80,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 await _logsService.SaveExcepcionDataBaseSybase( reqGetBeneficiarios, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new Exception( reqGetBeneficiarios.str_id_transaccion )!;
+                throw new ArgumentException( reqGetBeneficiarios.str_id_transaccion )!;
             }
             return respuesta;
         }
@@ -124,7 +124,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( reqAddBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new Exception( reqAddBeneficiario.str_id_transaccion )!;
+                throw new ArgumentException( reqAddBeneficiario.str_id_transaccion )!;
             }
             return respuesta;
         }
@@ -170,7 +170,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( reqUpdateBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new Exception( reqUpdateBeneficiario.str_id_transaccion )!;
+                throw new ArgumentException( reqUpdateBeneficiario.str_id_transaccion )!;
 
             }
             return respuesta;
@@ -211,7 +211,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( reqDeleteBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new Exception( reqDeleteBeneficiario.str_id_transaccion )!;
+                throw new ArgumentException( reqDeleteBeneficiario.str_id_transaccion )!;
             }
             return respuesta;
         }
@@ -382,7 +382,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( reqValidaCuentaPagoDirecto, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new Exception( reqValidaCuentaPagoDirecto.str_id_transaccion )!;
+                throw new ArgumentException( reqValidaCuentaPagoDirecto.str_id_transaccion )!;
             }
             return respuesta;
         }

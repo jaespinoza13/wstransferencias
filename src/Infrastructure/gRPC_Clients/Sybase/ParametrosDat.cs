@@ -76,7 +76,7 @@ internal class ParametrosDat : IParametrosDat
             respuesta.codigo = "003";
             respuesta.diccionario.Add( "str_error", exception.ToString() );
             _logsService.SaveExcepcionDataBaseSybase( reqGetParametros, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-            throw new Exception( reqGetParametros.str_id_transaccion )!;
+            throw new ArgumentException( reqGetParametros.str_id_transaccion )!;
         }
         return respuesta;
     }

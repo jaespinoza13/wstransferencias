@@ -32,19 +32,20 @@ public static class ConfigureServices
         } );
 
         //AUTHORIZATION 
-        var llave = configuration.GetValue<string>( "llavejwt" );
+        var secretKey = configuration.GetValue<string>( "secretKey" );
+        var issuer = configuration.GetValue<string>( "issuer" );
 
         services.AddAuthentication( JwtBearerDefaults.AuthenticationScheme )
                         .AddJwtBearer( opciones => opciones.TokenValidationParameters = new TokenValidationParameters
                         {
-                            ValidateIssuer = false,
+                            ValidateIssuer = true,
                             ValidateAudience = false,
                             ValidateLifetime = true,
                             ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes( llave ) ),
+                            ValidIssuer = issuer,
+                            IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes( secretKey ) ),
                             ClockSkew = TimeSpan.Zero
                         } );
-
 
         //SERVICES
         services.AddDataProtection();
@@ -54,6 +55,7 @@ public static class ConfigureServices
 
         //FILTERS
         services.AddTransient<DailyRequestFilter>();
+        services.AddTransient<SessionControlFilter>();
 
         //SWAGGER
         services.AddEndpointsApiExplorer();

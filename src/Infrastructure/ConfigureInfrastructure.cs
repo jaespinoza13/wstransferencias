@@ -9,6 +9,7 @@ using Infrastructure.Common.Interfaces;
 using Infrastructure.ExternalAPIs;
 using Application.Beneficiarios.InterfazBeneficiariosDat;
 using Application.Transferencias.InterfazDat;
+using Infrastructure.SessionControl;
 
 namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureInfrastructure
@@ -27,6 +28,8 @@ public static class ConfigureInfrastructure
         services.AddTransient<ISqlInjectionValidationService, SqlInjectionValidationService>();
         services.AddTransient<IWsOtp, WsOtp>();
         services.AddTransient<IOtpDat, OtpDat>();
+        services.AddTransient<ISessionControl, SessionControl>();
+        services.AddTransient<ISesionDat, SesionDat>();
 
         //INTERFACES DE CASOS DE USO
         services.AddTransient<IBeneficiariosDat, BenficiariosDat>();

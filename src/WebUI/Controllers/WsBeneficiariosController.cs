@@ -16,6 +16,7 @@ using Application.Beneficiarios.ValidaRegistroBeneficiario;
 using Application.Beneficiarios.ValidaUpdateBeneficiario;
 using Application.Beneficiarios.ValidaCuentasExterasBeneficiario;
 using Application.Beneficiarios.ValidaCuentaPagoDirecto;
+using Domain.Types;
 
 namespace WebUI.Controllers
 {
@@ -23,7 +24,8 @@ namespace WebUI.Controllers
     [Route( "api/wsBeneficiarios" )]
     [ApiController]
     [ServiceFilter( typeof( DailyRequestFilter ) )]
-    //[Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme )]
+    [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.Socio )]
+    [ServiceFilter( typeof( SessionControlFilter ) )]
     [ProducesResponseType( StatusCodes.Status200OK )]
     [ProducesResponseType( StatusCodes.Status400BadRequest )]
     [ProducesResponseType( StatusCodes.Status401Unauthorized )]

@@ -85,7 +85,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( req_validar_transferencia, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new Exception( req_validar_transferencia.str_id_transaccion )!;
+                throw new ArgumentException( req_validar_transferencia.str_id_transaccion )!;
 
             }
             return respuesta;
@@ -131,7 +131,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 respuesta.codigo = "003";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( req_add_transferencia_interna, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new Exception( req_add_transferencia_interna.str_id_transaccion )!;
+                throw new ArgumentException( req_add_transferencia_interna.str_id_transaccion )!;
 
             }
             return respuesta;

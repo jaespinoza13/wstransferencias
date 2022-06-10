@@ -13,13 +13,14 @@ using Application.Transferencias.Internas;
 using Application.Transferencias.Externas.Validaciones;
 using Application.Transferencias.DTO;
 using Application.Transferencias.Externas.Registro;
+using Domain.Types;
 
 namespace WebUI.Controllers
 {
     [Route( "api/wsTransferencias" )]
     [ApiController]
     [ServiceFilter( typeof( DailyRequestFilter ) )]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.Socio )]
     [ProducesResponseType( StatusCodes.Status200OK )]
     [ProducesResponseType( StatusCodes.Status400BadRequest )]
     [ProducesResponseType( StatusCodes.Status401Unauthorized )]
