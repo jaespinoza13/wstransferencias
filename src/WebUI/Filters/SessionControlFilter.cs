@@ -30,11 +30,12 @@ namespace WebUI.Filters
             {
                 ResException resException = new();
                 resException.str_res_codigo = "001";
-                resException.str_res_id_servidor = System.Net.HttpStatusCode.Unauthorized.ToString();
+                resException.str_res_id_servidor = "Sesion Caducada";
                 resException.str_res_estado_transaccion = "ERR";
                 resException.dt_res_fecha_msj_crea = DateTime.Now;
                 resException.str_res_info_adicional = respuesta.diccionario["str_error"];
 
+                context.HttpContext.Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 context.Result = new UnauthorizedObjectResult( resException );
             }
         }

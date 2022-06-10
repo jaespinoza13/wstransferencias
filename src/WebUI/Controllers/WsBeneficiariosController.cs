@@ -24,7 +24,7 @@ namespace WebUI.Controllers
     [Route( "api/wsBeneficiarios" )]
     [ApiController]
     [ServiceFilter( typeof( DailyRequestFilter ) )]
-    [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.Socio )]
+    //[Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.Socio )]
     [ServiceFilter( typeof( SessionControlFilter ) )]
     [ProducesResponseType( StatusCodes.Status200OK )]
     [ProducesResponseType( StatusCodes.Status400BadRequest )]

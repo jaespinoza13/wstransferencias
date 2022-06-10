@@ -13,7 +13,7 @@ using Application.Transferencias.Internas;
 using Application.Transferencias.Externas.Validaciones;
 using Application.Transferencias.DTO;
 using Application.Transferencias.Externas.Registro;
-using Domain.Types;
+
 
 namespace WebUI.Controllers
 {
