@@ -36,7 +36,7 @@ namespace WebUI.Filters
                 resException.str_res_info_adicional = respuesta.diccionario["str_error"];
 
                 context.HttpContext.Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                context.Result = new UnauthorizedObjectResult( resException );
+                context.Result = new ObjectResult( resException );
             }
         }
     }
