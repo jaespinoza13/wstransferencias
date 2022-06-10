@@ -6,6 +6,7 @@ pipeline {
         }
     }
 
+
     environment {
         VERSION_PRODUCCION  = '3.0.0'
         VERSION_ACTUAL      = '1.0.0'
