@@ -5,6 +5,7 @@ using Application.Common.Converting;
 using Application.Common.Functions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.Transferencias.Externas.Validaciones;
 using Domain.Entities;
 using Domain.Types;
 using MediatR;
@@ -24,10 +25,11 @@ public class ValidaCuentaPagoDirectoHandler : RequestHandler<ReqValidaCuentaPago
     private readonly IHttpService _httpService;
     private readonly ApiSettings _settings;
     private readonly IParametersInMemory _parametersInMemory;
-
+    private readonly IValidacionesPagoDirecto _validacionesPagoDirecto;
 
     public ValidaCuentaPagoDirectoHandler(ILogs logs,
                                             IBeneficiariosDat beneficiariosDat,
+                                            IValidacionesPagoDirecto validacionesPagoDirecto,
                                             IWsOtp wsOtp,
                                             IHttpService httpService,
                                             IOptionsMonitor<ApiSettings> options,
@@ -37,6 +39,7 @@ public class ValidaCuentaPagoDirectoHandler : RequestHandler<ReqValidaCuentaPago
         _clase = GetType().FullName!;
         _logs = logs;
         _beneficiariosDat = beneficiariosDat;
+        _validacionesPagoDirecto = validacionesPagoDirecto;
         _wsOtp = wsOtp;
         _httpService = httpService;
         _settings = options.CurrentValue;
@@ -61,37 +64,29 @@ public class ValidaCuentaPagoDirectoHandler : RequestHandler<ReqValidaCuentaPago
 
                 var datosValidaCuenta = Conversions.ConvertConjuntoDatosToClass<Transaccion>( (ConjuntoDatos)res_obtiene_datos.cuerpo );
 
-                datosValidaCuenta!.str_tipo_tran = "CON";
-                datosValidaCuenta.int_secuencial = Convert.ToInt32( DateTime.Now.ToString( "HHmm" ) );
-                datosValidaCuenta.dec_monto_tran = 0;
-                datosValidaCuenta.str_cuenta_receptor = reqValidaCuentaPagoDirecto.str_num_cuenta;
-                datosValidaCuenta.str_nom_receptor = String.Empty;
-                datosValidaCuenta.str_observaciones = String.Empty;
-                datosValidaCuenta.int_secuencial_cobis = 0;
-                datosValidaCuenta.str_identificacion_receptor = Convert.ToString( datosValidaCuenta.int_fi_aut );
+                var res_validacion_transferencia = JsonSerializer.Deserialize<ValidacionTransaccion>( JsonSerializer.Serialize( datosValidaCuenta ));
+
+                res_validacion_transferencia!.str_tipo_tran = "CON";
+                res_validacion_transferencia.int_secuencial = Convert.ToInt32( DateTime.Now.ToString( "HHmm" ) );
+                res_validacion_transferencia.dec_monto_tran = 0;
+                res_validacion_transferencia.str_num_cta_benef = reqValidaCuentaPagoDirecto.str_num_cuenta;
+                res_validacion_transferencia.str_nombre_benef = String.Empty;
+                res_validacion_transferencia.str_observaciones = String.Empty;
+                res_validacion_transferencia.int_secuencial_cobis = 0;
+                res_validacion_transferencia.str_tipo_cta_benef = reqValidaCuentaPagoDirecto.int_tipo_producto.ToString();
+                res_validacion_transferencia.str_num_doc_benef = reqValidaCuentaPagoDirecto.str_num_documento;
+                res_validacion_transferencia.str_num_cta_ordenante = String.Empty;
+                res_validacion_transferencia.str_num_doc_ordenante = datosValidaCuenta.str_identificacion_ordenante;
+                res_validacion_transferencia.str_nombre_ordenante = datosValidaCuenta.str_nom_ordenante;
 
                 var cabecera = Functions.LlenarCabeceraSolicitud( reqValidaCuentaPagoDirecto );
-
-                var sol_tran = new SolicitudTransaccion
-                {
-                    cabecera = cabecera,
-                    cuerpo = datosValidaCuenta
-                };
-
-                string str_data = JsonSerializer.Serialize( sol_tran );
-                RespuestaTransaccion res_banred = _httpService.PostRestServiceDataAsync<RespuestaTransaccion>
-                                                                    ( str_data,
-                                                                        _settings.servicio_ws_banred,
-                                                                        String.Empty,
-                                                                        _settings.auth_ws_banred,
-                                                                        AuthorizationType.BASIC,
-                                                                        reqValidaCuentaPagoDirecto.str_id_transaccion
-                                                                     ).Result;
-
+              
+                RespuestaTransaccion res_banred = _validacionesPagoDirecto.ValidaPagoDirecto( res_validacion_transferencia, cabecera, respuesta.str_id_transaccion );
+               
                 if (res_banred.codigo.Equals( "000" ) || res_banred.codigo.Equals( "0000" ))
                 {
 
-                    respuesta.str_nombre = (string)res_banred.cuerpo;
+                    respuesta.str_nombre = JsonSerializer.Deserialize<string>(JsonSerializer.Serialize( res_banred.cuerpo));//(string)res_banred.cuerpo;
                 }
                 else
                 {

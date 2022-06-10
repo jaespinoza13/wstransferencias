@@ -16,5 +16,7 @@ public class ReqValidaCuentaPagoDirecto : Header, IRequest<ResValidaCuentaPagoDi
     public string? str_num_cuenta { get; set; }
     public string? str_ref_transaccion { get; set; }
     public string? str_tipo_beneficiario { get; set; }
+    public int int_tipo_producto { get; set; }
+    
 
 }
