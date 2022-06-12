@@ -1,4 +1,4 @@
-﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces;
 using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +29,7 @@ namespace WebUI.Filters
             if (!respuesta.codigo.Equals( "000" ))
             {
                 ResException resException = new();
-                resException.str_res_codigo = "001";
+                resException.str_res_codigo = respuesta.codigo;
                 resException.str_res_id_servidor = "Sesion Caducada";
                 resException.str_res_estado_transaccion = "ERR";
                 resException.dt_res_fecha_msj_crea = DateTime.Now;
