@@ -10,6 +10,7 @@ using Infrastructure.ExternalAPIs;
 using Application.Beneficiarios.InterfazBeneficiariosDat;
 using Application.Transferencias.InterfazDat;
 using Infrastructure.SessionControl;
+using Application.Transferencias.Consulta;
 
 namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureInfrastructure
@@ -33,8 +34,9 @@ public static class ConfigureInfrastructure
 
         //INTERFACES DE CASOS DE USO
         services.AddTransient<IBeneficiariosDat, BenficiariosDat>();
-        services.AddTransient<ITransferenciasExternasDat, TransferenciasExternasDat> ();
-        services.AddTransient<ITransferenciasInternasDat, TransferenciasInternasDat> ();
+        services.AddTransient<ITransferenciasExternasDat, TransferenciasExternasDat>();
+        services.AddTransient<ITransferenciasInternasDat, TransferenciasInternasDat>();
+        services.AddTransient<IConsultaTransferencias, ConsultaTransferenciasDat>();
 
 
         return services;
