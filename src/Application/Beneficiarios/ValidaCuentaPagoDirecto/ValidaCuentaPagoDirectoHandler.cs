@@ -87,6 +87,7 @@ public class ValidaCuentaPagoDirectoHandler : RequestHandler<ReqValidaCuentaPago
                 {
 
                     respuesta.str_nombre = JsonSerializer.Deserialize<string>(JsonSerializer.Serialize( res_banred.cuerpo));//(string)res_banred.cuerpo;
+                    res_banred.codigo = "000";
                 }
                 else
                 {
