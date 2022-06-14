@@ -13,7 +13,7 @@ using Application.Transferencias.Internas;
 using Application.Transferencias.Externas.Validaciones;
 using Application.Transferencias.DTO;
 using Application.Transferencias.Externas.Registro;
-
+using Application.Transferencias.Consulta;
 
 namespace WebUI.Controllers
 {
@@ -52,7 +52,7 @@ namespace WebUI.Controllers
                 }
                 return Ok( respuesta );
             }
-           
+
             return BadRequest();
         }
 
@@ -77,6 +77,12 @@ namespace WebUI.Controllers
                 return Ok( respuesta );
             }
             return NotFound();
+        }
+
+        [HttpPost( "GET_CONSULTA_TRANSFERENCIAS" )]
+        public async Task<ResConsultaTransferencias> ConsultaTransferencias(ReqConsultaTransferencias reqConsultaTransferencias)
+        {
+            return await Mediator.Send( reqConsultaTransferencias );
         }
     }
 }
