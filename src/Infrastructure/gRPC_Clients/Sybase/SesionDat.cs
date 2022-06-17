@@ -75,6 +75,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( validaSesion, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                throw new ArgumentException( validaSesion.str_id_transaccion );
             }
             return respuesta;
         }
