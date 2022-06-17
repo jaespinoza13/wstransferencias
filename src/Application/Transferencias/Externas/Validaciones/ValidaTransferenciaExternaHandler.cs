@@ -79,7 +79,8 @@ public class ValidaTransferenciaExternaHandler : RequestHandler<ValidaTransferen
                     else
                     {
                         //Se actualiza el registro para que la transacción se enviada por SPI                            
-                        var obj_transferencia = JsonSerializer.Deserialize<ReqTransferencia>( JsonSerializer.Serialize( validaTransferenciaExterna ) );
+                        var obj_transferencia = JsonSerializer.Deserialize<ReqTransferencia>( JsonSerializer.Serialize( validaTransferenciaExterna ) )!;
+                        obj_transferencia.int_id_comprobar_transfer = Convert.ToInt32( res_tran.diccionario["int_id_solicitud"]);
                         RespuestaTransaccion respuesta_cambio_tipo_transfer = _externasDat.SetEnvioTransferenciaSPI( obj_transferencia! );
 
                         if (respuesta_cambio_tipo_transfer.codigo == "000")
