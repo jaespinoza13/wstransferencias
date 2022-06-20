@@ -14,14 +14,15 @@ using Application.Transferencias.Externas.Validaciones;
 using Application.Transferencias.DTO;
 using Application.Transferencias.Externas.Registro;
 using Application.Transferencias.Consulta;
+using Domain.Types;
 
 namespace WebUI.Controllers
 {
     [Route( "api/wsTransferencias" )]
     [ApiController]
     [ServiceFilter( typeof( DailyRequestFilter ) )]
-    //[Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.Socio )]
-    //[ServiceFilter( typeof( SessionControlFilter ) )]
+    [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.Socio )]
+    [ServiceFilter( typeof( SessionControlFilter ) )]
     [ProducesResponseType( StatusCodes.Status200OK )]
     [ProducesResponseType( StatusCodes.Status400BadRequest )]
     [ProducesResponseType( StatusCodes.Status401Unauthorized )]
