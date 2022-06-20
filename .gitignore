@@ -26,7 +26,9 @@ Logs/
 
 # Cache/Directorio de opciones de Visual Studio 2015
 .vs/
+.vscode/
 .sonarqube/
+.sonarlint/
 
 
 

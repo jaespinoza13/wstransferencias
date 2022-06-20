@@ -9,10 +9,10 @@ pipeline {
 
     environment {
         VERSION_PRODUCCION  = '3.0.0'
-        VERSION_ACTUAL      = '1.0.0'
+        VERSION_ACTUAL      = '2.0.0'
         NOMBRE_CONTENEDOR   = 'servicio-transferencias'
         NOMBRE_IMAGEN       = 'ws_transferencias'
-        PUERTO              = '9015'
+        PUERTO              = '9003'
         PUERTO_CONTENEDOR   = '80'
         RUTA_LOGS           = 'wsTransferencias'
     }
