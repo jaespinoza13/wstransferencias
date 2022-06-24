@@ -14,7 +14,7 @@ pipeline {
         NOMBRE_IMAGEN       = 'ws_transferencias'
         PUERTO              = '9003'
         PUERTO_CONTENEDOR   = '80'
-        RUTA_LOGS           = 'wsTransferencias'
+        RUTA_LOGS           = '/app/wsTransferencias'
     }
 
     stages {
