@@ -67,7 +67,6 @@ public class ValidaTransferenciaExternaHandler : RequestHandler<ValidaTransferen
                     var res_validacion_transferencia = Conversions.ConvertConjuntoDatosToClass<ValidacionTransaccion>( (ConjuntoDatos)res_tran.cuerpo )!;
                     Cabecera cabecera = Functions.LlenarCabeceraSolicitud( validaTransferenciaExterna! );
 
-
                     RespuestaTransaccion respuesta_validaciones_pago_directo = _validacionesPagoDirecto.ValidaPagoDirecto( res_validacion_transferencia, cabecera, respuesta.str_id_transaccion );
 
                     if (respuesta_validaciones_pago_directo.codigo == "0000")

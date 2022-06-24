@@ -70,20 +70,22 @@ public class AddTransferenciaExternaHandler : RequestHandler<AddTransferenciaExt
 
             if (res_tran.codigo.Equals( "000" ))
             {
+
+                datos_validados = Conversions.ConvertConjuntoDatosToClass<ValidacionTransaccion>( (ConjuntoDatos)res_tran.cuerpo )!;
+
                 //Se debe tratar de enviar por banred
                 if (datos_validados.int_enviar_banred == 1 && datos_validados.int_estado == 4)
                 {
-                    datos_validados = Conversions.ConvertConjuntoDatosToClass<ValidacionTransaccion>( (ConjuntoDatos)res_tran.cuerpo )!;
+                    
                     var cabecera = Functions.LlenarCabeceraSolicitud( reqAddTransferencia );
-
                     var res_pago_directo = ejecutar_pago_directo( datos_validados, cabecera, respuesta.str_id_transaccion );
-                    respuesta.str_res_codigo = res_pago_directo.codigo;
-                    respuesta.str_res_info_adicional = res_pago_directo.diccionario["ERROR"];
+                    //respuesta.str_res_codigo = res_tran.codigo;
+                    respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                 }
                 else
                 {
                     respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
-                    respuesta.str_res_codigo = res_tran.codigo;
+                    //respuesta.str_res_codigo = res_tran.codigo;
                     respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                 }
             }
