@@ -26,6 +26,10 @@ namespace Application.Transferencias.Consulta
         public string str_observaciones { get; set; } = String.Empty;
         public string str_hora { get; set; } = String.Empty;
         public string str_canal { get; set; } = String.Empty;
+        public string str_descripcion_tipo_transf { get; set; } = String.Empty;
+        public string str_tipo_movimiento { get; set; } = String.Empty;
+        public string str_documento_ordenante { get; set; } = String.Empty;
+        public decimal dec_comision { get; set; } = Decimal.Zero;
     }
 
 }
