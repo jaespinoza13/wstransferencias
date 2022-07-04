@@ -14,6 +14,7 @@ namespace WebUI.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+
             int estadoSesion = Convert.ToInt32( context.HttpContext.Request.Headers["int_estado"] );
 
             context.HttpContext.Request.EnableBuffering();
@@ -23,25 +24,23 @@ namespace WebUI.Filters
             context.HttpContext.Request.Body.Position = 0;
 
             var raw = JsonSerializer.Deserialize<ValidaSesion>( requestBody )!;
+            raw.int_estado = estadoSesion;
 
-            if (!raw.str_nemonico_canal.Equals( "CANBMO" ))
+            var respuesta = _session.SessionControlFilter( raw );
+
+            if (!respuesta.codigo.Equals( "000" ))
             {
-                raw.int_estado = estadoSesion;
-                var respuesta = _session.SessionControlFilter( raw );
+                ResException resException = new();
+                resException.str_res_codigo = respuesta.codigo;
+                resException.str_res_id_servidor = "Sesion Caducada";
+                resException.str_res_estado_transaccion = "ERR";
+                resException.dt_res_fecha_msj_crea = DateTime.Now;
+                resException.str_res_info_adicional = respuesta.diccionario["str_error"];
 
-                if (!respuesta.codigo.Equals( "000" ))
-                {
-                    ResException resException = new();
-                    resException.str_res_codigo = respuesta.codigo;
-                    resException.str_res_id_servidor = "Sesion Caducada";
-                    resException.str_res_estado_transaccion = "ERR";
-                    resException.dt_res_fecha_msj_crea = DateTime.Now;
-                    resException.str_res_info_adicional = respuesta.diccionario["str_error"];
-
-                    context.HttpContext.Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                    context.Result = new ObjectResult( resException );
-                }
+                context.HttpContext.Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                context.Result = new ObjectResult( resException );
             }
+
         }
     }
 }

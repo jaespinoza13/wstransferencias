@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
+using Application.Common.Interfaces;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace WebUI.Filters;
@@ -14,10 +15,18 @@ public class DailyRequestFilter : IActionFilter
     }
     void IActionFilter.OnActionExecuting(ActionExecutingContext context)
     {
-        //DAILY REQUEST FILTER
-        var endpoint = context.HttpContext.Request.Path;
-        string[] operacion = endpoint.Value!.Split( "/" );
-        _dailyRequest.controlPeticionesDiaras( operacion[3].ToUpper() );
+        if (context.ModelState.IsValid)
+        {
+            //DAILY REQUEST FILTER
+            var endpoint = context.HttpContext.Request.Path;
+            string[] operacion = endpoint.Value!.Split( "/" );
+            _dailyRequest.controlPeticionesDiaras( operacion[3].ToUpper() );
+        }
+        else
+        {
+            throw new ValidationException();
+        }
+
     }
     void IActionFilter.OnActionExecuted(ActionExecutedContext context)
     {
