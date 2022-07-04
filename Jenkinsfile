@@ -2,19 +2,19 @@ pipeline {
     
     agent {
         node {
-            label 'web-service-production-server'
+            label 'web-service-development-server'
         }
     }
 
 
     environment {
-        VERSION_PRODUCCION  = '3.0.0'
-        VERSION_ACTUAL      = '2.0.0'
-        NOMBRE_CONTENEDOR   = 'servicio-transferencias'
+        VERSION_PRODUCCION  = '4.0.0'
+        VERSION_ACTUAL      = '1.0.0'
+        NOMBRE_CONTENEDOR   = 'api-transferencias-des'
         NOMBRE_IMAGEN       = 'ws_transferencias'
-        PUERTO              = '9003'
+        PUERTO              = '5003'
         PUERTO_CONTENEDOR   = '80'
-        RUTA_LOGS           = '/app/wsTransferencias'
+        NOMBRE_CARPETA_LOGS = 'wsTransferencias'
     }
 
     stages {
@@ -76,7 +76,7 @@ pipeline {
         }
 
         failure {
-            sh  'docker rm -f ${NOMBRE_CONTENEDOR}'
+            sh  'docker rm -f ${PUERTO_CONTENEDOR}'
             sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
                     --name ${NOMBRE_CONTENEDOR} \
                     -v ${RUTA_LOGS}:/app/Logs/ \
@@ -97,4 +97,3 @@ pipeline {
         }
     }
 }
-
