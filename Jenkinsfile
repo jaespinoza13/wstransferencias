@@ -76,7 +76,7 @@ pipeline {
         }
 
         failure {
-            sh  'docker rm -f ${PUERTO_CONTENEDOR}'
+            sh  'docker rm -f ${NOMBRE_CONTENEDOR}'
             sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
                     --name ${NOMBRE_CONTENEDOR} \
                     -v ${RUTA_LOGS}:/app/Logs/ \
