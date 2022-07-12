@@ -16,27 +16,19 @@ namespace Infrastructure.gRPC_Clients.Sybase
     internal class TransferenciasExternasDat : ITransferenciasExternasDat
     {
         private readonly ApiSettings _settings;
-        private readonly DALClient objClienteDal;
+        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
 
-        public TransferenciasExternasDat(IOptionsMonitor<ApiSettings> options, ILogs logsService)
+        public TransferenciasExternasDat(IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
 
             this.str_clase = GetType().FullName!;
 
-            var handler = new SocketsHttpHandler
-            {
-                PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan,
-                KeepAlivePingDelay = TimeSpan.FromSeconds( _settings.delayOutGrpcSybase ),
-                KeepAlivePingTimeout = TimeSpan.FromSeconds( _settings.timeoutGrpcSybase ),
-                EnableMultipleHttp2Connections = true
-            };
+            _objClienteDal = objClienteDal;
 
-            var canal = GrpcChannel.ForAddress( _settings.client_grpc_sybase!, new GrpcChannelOptions { HttpHandler = handler } );
-            objClienteDal = new DALClient( canal );
         }
 
 
@@ -63,7 +55,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.NombreSP = "get_val_transf_interbancarias3";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
-                var resultado = objClienteDal.ExecuteDataSet( ds );
+                var resultado = _objClienteDal.ExecuteDataSet( ds );
                 var lst_valores = new List<ParametroSalidaValores>();
 
                 foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
@@ -106,7 +98,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.NombreSP = "set_envio_transf_por_spi2";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
-                var resultado = objClienteDal.ExecuteDataSet( ds );
+                var resultado = _objClienteDal.ExecuteDataSet( ds );
                 var lst_valores = new List<ParametroSalidaValores>();
 
                 foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
@@ -148,7 +140,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.NombreSP = "add_transf_interbancarias3";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
-                var resultado = objClienteDal.ExecuteDataSet( ds );
+                var resultado = _objClienteDal.ExecuteDataSet( ds );
                 var lst_valores = new List<ParametroSalidaValores>();
 
                 foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add( item );

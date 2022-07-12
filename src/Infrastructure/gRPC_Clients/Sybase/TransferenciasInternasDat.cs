@@ -14,27 +14,19 @@ namespace Infrastructure.gRPC_Clients.Sybase
     internal class TransferenciasInternasDat : ITransferenciasInternasDat
     {
         private readonly ApiSettings _settings;
-        private readonly DALClient objClienteDal;
+        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
 
-        public TransferenciasInternasDat(IOptionsMonitor<ApiSettings> options, ILogs logsService)
+        public TransferenciasInternasDat(IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
 
             this.str_clase = GetType().FullName!;
 
-            var handler = new SocketsHttpHandler
-            {
-                PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan,
-                KeepAlivePingDelay = TimeSpan.FromSeconds( _settings.delayOutGrpcSybase ),
-                KeepAlivePingTimeout = TimeSpan.FromSeconds( _settings.timeoutGrpcSybase ),
-                EnableMultipleHttp2Connections = true
-            };
+            _objClienteDal = objClienteDal;
 
-            var canal = GrpcChannel.ForAddress( _settings.client_grpc_sybase!, new GrpcChannelOptions { HttpHandler = handler } );
-            objClienteDal = new DALClient( canal );
         }
 
 
@@ -43,9 +35,10 @@ namespace Infrastructure.gRPC_Clients.Sybase
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
             {
-                DatosSolicitud ds = new DatosSolicitud();
+                DatosSolicitud ds = new ();
                 Funciones.llenar_datos_auditoria_salida( ds, req_validar_transferencia );
 
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nemo_tipo_trans", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_nemonico_tipo_transferencia } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_cta_ordenante", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.int_id_cta_ordenante.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_cta_beneficiario", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.int_id_cta_beneficiario.ToString() } );
@@ -63,7 +56,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.NombreSP = "validar_transfer_interna_v3";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
-                var resultado = objClienteDal.ExecuteDataSet( ds );
+                var resultado = _objClienteDal.ExecuteDataSet( ds );
                 var lst_valores = new List<ParametroSalidaValores>();
 
                 foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
@@ -102,6 +95,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_correo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = req_add_transferencia_interna.str_correo_beneficiario } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_solicitud", TipoDato = TipoDato.Integer, ObjValue = req_add_transferencia_interna.int_solicitud.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = req_add_transferencia_interna.str_ente.ToString() } );
 
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer } );
 
@@ -109,7 +103,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.NombreSP = "add_transferencia_interna_v3";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
-                var resultado = objClienteDal.ExecuteDataSet( ds );
+                var resultado = _objClienteDal.ExecuteDataSet( ds );
                 var lst_valores = new List<ParametroSalidaValores>();
 
                 foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
