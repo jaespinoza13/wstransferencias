@@ -21,7 +21,7 @@ namespace WebUI.Controllers
     [Route( "api/wsTransferencias" )]
     [ApiController]
     [ServiceFilter( typeof( DailyRequestFilter ) )]
-    [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.Socio )]
+    [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.SocioInvitadoInterno )]
     [ServiceFilter( typeof( SessionControlFilter ) )]
     [ProducesResponseType( StatusCodes.Status200OK )]
     [ProducesResponseType( StatusCodes.Status400BadRequest )]
