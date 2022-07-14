@@ -22,7 +22,7 @@ namespace WebUI.Controllers
     [ApiController]
     [ServiceFilter( typeof( DailyRequestFilter ) )]
     [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.SocioInvitadoInterno )]
-    [ServiceFilter( typeof( SessionControlFilter ) )]
+   // [ServiceFilter( typeof( SessionControlFilter ) )]
     [ProducesResponseType( StatusCodes.Status200OK )]
     [ProducesResponseType( StatusCodes.Status400BadRequest )]
     [ProducesResponseType( StatusCodes.Status401Unauthorized )]
