@@ -59,7 +59,12 @@ public class ValidaTransferenciaExternaHandler : RequestHandler<ValidaTransferen
             if (res_tran.codigo.Equals( "000" ))
             {
                 respuesta.int_solicitud = Convert.ToInt32( res_tran.diccionario["int_id_solicitud"] );
-                respuesta.bl_requiere_otp = res_tran.diccionario["str_requiere_otp"].Equals( "1009" );
+                if (res_tran.diccionario["str_requiere_otp"].Equals( "1009" ))
+                    respuesta.bl_requiere_otp = true;
+                else if (res_tran.diccionario["str_requiere_otp"].Equals( "1006" ))
+                    respuesta.bl_requiere_otp = false;
+                else
+                    throw new ArgumentException( "Error de proceso" );
                 respuesta.objValidacionTransferencia = Conversions.ConvertConjuntoDatosToClass<ValidacionTransferencia>( (ConjuntoDatos)res_tran.cuerpo )!;
 
                 if (respuesta.objValidacionTransferencia.int_enviar_banred == 1)
