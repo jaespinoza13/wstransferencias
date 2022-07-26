@@ -48,7 +48,20 @@ public class AddTransferenciaExternaHandler : RequestHandler<AddTransferenciaExt
             respuesta.LlenarResHeader( reqAddTransferencia );
             _logs.SaveHeaderLogs( reqAddTransferencia, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
 
-            var bl_requiere_otp = _wsOtp.ValidaRequiereOtp( reqAddTransferencia, "TRN_EXTERNAS" ).Result;
+            var bl_requiere_otp = false;
+            res_tran = _externasDat.ValidaOtpTransferenciaInternbancaria( reqAddTransferencia );
+            if (res_tran.diccionario["str_requiere_otp"].Equals( "1009" ))
+                bl_requiere_otp = true;
+            else if (res_tran.diccionario["str_requiere_otp"].Equals( "1006" ))
+                bl_requiere_otp = false;
+            else
+            {
+                respuesta.str_res_codigo = res_tran.diccionario["str_requiere_otp"];
+                respuesta.str_res_info_adicional = "Proceso no configurado";
+                _logs.SaveResponseLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+                throw new ArgumentException( "Proceso no configurado" );
+
+            }
 
             if (bl_requiere_otp)
             {
