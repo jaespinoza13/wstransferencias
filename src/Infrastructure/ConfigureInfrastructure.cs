@@ -31,6 +31,8 @@ public static class ConfigureInfrastructure
         services.AddSingleton<IOtpDat, OtpDat>();
         services.AddTransient<ISessionControl, SessionControl>();
         services.AddSingleton<ISesionDat, SesionDat>();
+        services.AddSingleton<IKeysDat, KeysDat>();
+
 
         //INTERFACES DE CASOS DE USO
         services.AddSingleton<IBeneficiariosDat, BenficiariosDat>();

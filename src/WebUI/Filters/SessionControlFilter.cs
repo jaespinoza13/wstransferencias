@@ -14,7 +14,6 @@ namespace WebUI.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-
             int estadoSesion = Convert.ToInt32( context.HttpContext.Request.Headers["int_estado"] );
 
             context.HttpContext.Request.EnableBuffering();
@@ -25,7 +24,6 @@ namespace WebUI.Filters
 
             var raw = JsonSerializer.Deserialize<ValidaSesion>( requestBody )!;
             raw.int_estado = estadoSesion;
-
             var respuesta = _session.SessionControlFilter( raw );
 
             if (!respuesta.codigo.Equals( "000" ))
@@ -40,7 +38,6 @@ namespace WebUI.Filters
                 context.HttpContext.Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 context.Result = new ObjectResult( resException );
             }
-
         }
     }
 }
