@@ -7,22 +7,20 @@ using System.Text.Json;
 
 namespace WebUI.Filters
 {
-    public class SessionControlFilter : IAuthorizationFilter
+    public class SessionControlFilter : IActionFilter
     {
         private readonly ISessionControl _session;
         public SessionControlFilter(ISessionControl sessionControl) => _session = sessionControl;
 
-        public void OnAuthorization(AuthorizationFilterContext context)
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+        }
+
+        public void OnActionExecuting(ActionExecutingContext context)
         {
             int estadoSesion = Convert.ToInt32( context.HttpContext.Request.Headers["int_estado"] );
-
-            context.HttpContext.Request.EnableBuffering();
-
-            var streaming = new StreamReader( context.HttpContext.Request.Body );
-            var requestBody = streaming.ReadToEndAsync().Result;
-            context.HttpContext.Request.Body.Position = 0;
-
-            var raw = JsonSerializer.Deserialize<ValidaSesion>( requestBody )!;
+            var model = context.ActionArguments.First();
+            var raw = JsonSerializer.Deserialize<ValidaSesion>( JsonSerializer.Serialize( model.Value ) )!;
             raw.int_estado = estadoSesion;
             var respuesta = _session.SessionControlFilter( raw );
 
@@ -39,5 +37,7 @@ namespace WebUI.Filters
                 context.Result = new ObjectResult( resException );
             }
         }
+
+
     }
 }
