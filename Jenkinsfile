@@ -8,8 +8,8 @@ pipeline {
 
 
     environment {
-        VERSION_PRODUCCION  = '3.0.0'
-        VERSION_ACTUAL      = '2.0.0'
+        VERSION_PRODUCCION  = '3.0.1'
+        VERSION_ACTUAL      = '3.0.0'
         NOMBRE_CONTENEDOR   = 'servicio-transferencias'
         NOMBRE_IMAGEN       = 'ws_transferencias'
         PUERTO              = '9003'
