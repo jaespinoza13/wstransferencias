@@ -124,7 +124,46 @@ namespace Infrastructure.gRPC_Clients.Sybase
         }
 
 
-        public RespuestaTransaccion AddTransferenciaInternbancaria(ReqAddTransferencia req_transferencia)
+        public RespuestaTransaccion ValidaOtpTransferenciaInternbancaria(ReqAddTransferencia req_transferencia)
+        {
+            RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            try
+            {
+
+                DatosSolicitud ds = new DatosSolicitud();
+                Funciones.llenar_datos_auditoria_salida( ds, req_transferencia );
+
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.str_ente } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_solicitud", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.int_solicitud.ToString() } );
+                ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_requiere_otp", TipoDato = TipoDato.Integer } );
+
+                ds.NombreSP = "get_val_otp_transf_interb";
+                ds.NombreBD = _settings.DB_meg_servicios;
+
+                var resultado = _objClienteDal.ExecuteDataSet( ds );
+                var lst_valores = new List<ParametroSalidaValores>();
+
+                foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
+                var str_codigo = lst_valores.Find( x => x.StrNameParameter == "@int_o_error_cod" )!.ObjValue;
+                var str_error = lst_valores.Find( x => x.StrNameParameter == "@str_o_error" )!.ObjValue.Trim();
+                var str_requiere_otp = lst_valores.Find( x => x.StrNameParameter == "@o_requiere_otp" )!.ObjValue.Trim();
+
+                respuesta.codigo = str_codigo.ToString().Trim().PadLeft( 3, '0' );
+                respuesta.cuerpo = Funciones.ObtenerDatos( resultado );
+                respuesta.diccionario.Add( "str_error", str_error.ToString() );
+                respuesta.diccionario.Add( "str_requiere_otp", str_requiere_otp.ToString() );
+
+            }
+            catch (Exception exception)
+            {
+                respuesta.codigo = "003";
+                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                _logsService.SaveExcepcionDataBaseSybase( req_transferencia, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                throw new ArgumentException( req_transferencia.str_id_transaccion )!;
+
+            }
+            return respuesta;
+        } public RespuestaTransaccion AddTransferenciaInternbancaria(ReqAddTransferencia req_transferencia)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try

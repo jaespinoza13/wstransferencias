@@ -25,6 +25,7 @@ namespace WebUI.Controllers
     [ApiController]
     [ServiceFilter( typeof( DailyRequestFilter ) )]
     [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.Socio )]
+    [ServiceFilter( typeof( ClaimControlFilter ) )]
     [ServiceFilter( typeof( SessionControlFilter ) )]
     [ProducesResponseType( StatusCodes.Status200OK )]
     [ProducesResponseType( StatusCodes.Status400BadRequest )]

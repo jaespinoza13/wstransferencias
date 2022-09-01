@@ -55,6 +55,7 @@ public static class ConfigureServices
 
         //FILTERS
         services.AddTransient<DailyRequestFilter>();
+        services.AddTransient<ClaimControlFilter>();
         services.AddTransient<SessionControlFilter>();
 
         //SWAGGER

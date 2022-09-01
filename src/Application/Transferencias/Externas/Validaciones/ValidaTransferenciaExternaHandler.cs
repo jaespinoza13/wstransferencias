@@ -59,7 +59,17 @@ public class ValidaTransferenciaExternaHandler : RequestHandler<ValidaTransferen
             if (res_tran.codigo.Equals( "000" ))
             {
                 respuesta.int_solicitud = Convert.ToInt32( res_tran.diccionario["int_id_solicitud"] );
-                respuesta.bl_requiere_otp = res_tran.diccionario["str_requiere_otp"].Equals( "1009" );
+                if (res_tran.diccionario["str_requiere_otp"].Equals( "1009" ))
+                    respuesta.bl_requiere_otp = true;
+                else if (res_tran.diccionario["str_requiere_otp"].Equals( "1006" ))
+                    respuesta.bl_requiere_otp = false;
+                else {
+                    respuesta.str_res_codigo = res_tran.diccionario["str_requiere_otp"];
+                    respuesta.str_res_info_adicional = "Proceso no configurado";
+                    _logs.SaveResponseLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+                    throw new ArgumentException( "Proceso no configurado" );
+
+                }
                 respuesta.objValidacionTransferencia = Conversions.ConvertConjuntoDatosToClass<ValidacionTransferencia>( (ConjuntoDatos)res_tran.cuerpo )!;
 
                 if (respuesta.objValidacionTransferencia.int_enviar_banred == 1)
