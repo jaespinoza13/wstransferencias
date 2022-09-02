@@ -22,7 +22,7 @@ namespace WebUI.Controllers
     [ApiController]
     [ServiceFilter( typeof( DailyRequestFilter ) )]
     [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.SocioInvitadoInterno )]
-  //  [ServiceFilter( typeof( CifradoAESFilter ) )]
+    [ServiceFilter( typeof( CifradoAESFilter ) )]
     [ServiceFilter( typeof( ClaimControlFilter ) )]
     [ServiceFilter( typeof( SessionControlFilter ) )]
     [ProducesResponseType( StatusCodes.Status200OK )]

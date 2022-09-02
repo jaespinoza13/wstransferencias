@@ -7,6 +7,7 @@ using System.Text;
 using WebUI.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
+using System.Security.Cryptography;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -34,6 +35,13 @@ public static class ConfigureServices
         //AUTHORIZATION 
         var secretKey = configuration.GetValue<string>( "secretKey" );
         var issuer = configuration.GetValue<string>( "issuer" );
+        var privateKeyBytes = Convert.FromBase64String( "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyokLGrnqRUToy6kYNe/WyY3d0WEzXaUK+G2M8h4xtKGfPIYRTKPZvX93D6IgoyqZxfvjeyXDJGUfZqskBTwSq+j+cy3X0xDGe8pL+FUavvuV2BkNdPWKWxqoy0PKW0GaaT3wUQOQNQmxKTgryHIeT+n/97lmZNx4K2p5z6bhIpj6ZltQ4O5FWGswtUM0wWk7Svw/Tk9Br6W4OlEcudXPA99swy7JW0BmKgKgnTbt9V7hhUx22BiQE19XGlFB5mKxRz1CaePuv3b9EuO16Ym/Dg60Ex4RtNpbu6nlKDFXffgCH09Tj8bmDO/Dk7PMJHe9f5UULZekRBz7DeJg09I2/wIDAQAB" );
+        RSA rsa = RSA.Create();
+        rsa.ImportSubjectPublicKeyInfo( privateKeyBytes, out _ );
+        var key = new RsaSecurityKey( rsa );
+
+        var securityKey1 = new SymmetricSecurityKey( Encoding.Default.GetBytes( "ProEMLh5e_qnzdNU" ) );
+
 
         services.AddAuthentication( JwtBearerDefaults.AuthenticationScheme )
                         .AddJwtBearer( opciones => opciones.TokenValidationParameters = new TokenValidationParameters
@@ -43,9 +51,11 @@ public static class ConfigureServices
                             ValidateLifetime = true,
                             ValidateIssuerSigningKey = true,
                             ValidIssuer = issuer,
-                            IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes( secretKey ) ),
+                            IssuerSigningKey = key,
+                            TokenDecryptionKey = securityKey1,
                             ClockSkew = TimeSpan.Zero
                         } );
+
 
         //SERVICES
         services.AddDataProtection();
