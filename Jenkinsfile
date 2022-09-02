@@ -10,9 +10,9 @@ pipeline {
     environment {
         VERSION_PRODUCCION  = '4.0.0'
         VERSION_ACTUAL      = '1.0.0'
-        NOMBRE_CONTENEDOR   = 'api-transferencias-des'
-        NOMBRE_IMAGEN       = 'ws_transferencias'
-        PUERTO              = '5003'
+        NOMBRE_CONTENEDOR   = 'api-transferencias-des-encriptar-info-lmorocho'
+        NOMBRE_IMAGEN       = 'ws_transferencias_des_encriptar_info_lmorocho'
+        PUERTO              = '5303'
         PUERTO_CONTENEDOR   = '80'
         NOMBRE_CARPETA_LOGS = 'wsTransferencias'
     }
