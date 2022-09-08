@@ -14,7 +14,6 @@ public class ResGetCuentasBeneficiario : ResComun
         lst_cuentas_beneficiario.ForEach( cuenta =>
         {
             cuenta.str_id = CryptographyAES.Encrypt( cuenta.str_id!, Key.str_llave_simetrica );
-            cuenta.str_id = "";
 
         } );
 
