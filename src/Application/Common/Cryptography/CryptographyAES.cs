@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Application.Common.Cryptography
 {
-    public class CifradoAES
+    public class CryptographyAES
     {
         #region Decrypt
 

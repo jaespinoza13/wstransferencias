@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace Application.Common.Cryptography;
 
-public static class CifradoRSA
+public static class CryptographyRSA
 {
     public static DatosLlaveRsa GenerarLlavePublicaPrivada(string NemonicoCanal)
     {

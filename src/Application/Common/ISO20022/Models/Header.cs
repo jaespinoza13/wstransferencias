@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Application.Common.Cryptography;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Common.ISO20022.Models
 {
@@ -145,5 +146,24 @@ namespace Application.Common.ISO20022.Models
         /// Id de Perfil
         /// </summary>
         public string str_id_perfil { get; set; } = String.Empty;
+
+
+        public void EncryptAESHeader(ResGetKeys Key)
+        {
+
+            str_ente = CryptographyAES.Encrypt( str_ente!, Key.str_llave_simetrica );
+            str_id_usuario = CryptographyAES.Encrypt( str_id_usuario!, Key.str_llave_simetrica );
+            str_login = CryptographyAES.Encrypt( str_login!, Key.str_llave_simetrica );
+
+        }
+
+        public void DecryptAESHeader(ResGetKeys Key)
+        {
+
+            str_ente = CryptographyAES.Decrypt( str_ente!, Key.str_llave_simetrica );
+            str_id_usuario = CryptographyAES.Decrypt( str_id_usuario!, Key.str_llave_simetrica );
+            str_login = CryptographyAES.Decrypt( str_login!, Key.str_llave_simetrica );
+
+        }
     }
 }
