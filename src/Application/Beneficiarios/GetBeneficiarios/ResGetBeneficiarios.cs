@@ -14,7 +14,7 @@ public class ResGetBeneficiarios : ResComun
         lst_beneficiarios!.ForEach( beneficiario =>
         {
             beneficiario.str_id = CryptographyAES.Encrypt( beneficiario.str_id!, Key.str_llave_simetrica );
-            beneficiario.str_id = CryptographyAES.Encrypt( beneficiario.str_ente_registra!, Key.str_llave_simetrica );
+            beneficiario.str_ente_registra = CryptographyAES.Encrypt( beneficiario.str_ente_registra!, Key.str_llave_simetrica );
 
         } );
 
