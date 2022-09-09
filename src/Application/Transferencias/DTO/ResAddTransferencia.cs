@@ -23,7 +23,6 @@ namespace Application.Transferencias.DTO
             public string? str_observacion { get; set; }
             public int int_enviar_banred { get; set; }
             public int int_id_transaccion { get; set; }
-            //public int int_ente { get; set; }
 
         }
     }
