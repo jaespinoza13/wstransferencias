@@ -140,7 +140,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_alias_cta", TipoDato = TipoDato.VarChar, ObjValue = reqUpdateBeneficiario.str_alias_cta } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = reqUpdateBeneficiario.str_tipo_beneficiario } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.str_ente } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.int_id.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.str_id } );
 
                 ds.NombreSP = "update_cuentas_beneficiarios2";
                 ds.NombreBD = _settings.DB_meg_servicios;
