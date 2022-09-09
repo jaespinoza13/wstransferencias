@@ -178,7 +178,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 DatosSolicitud ds = new DatosSolicitud();
                 Funciones.llenar_datos_auditoria_salida( ds, reqDeleteBeneficiario );
 
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqDeleteBeneficiario.int_id.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqDeleteBeneficiario.str_id } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqDeleteBeneficiario.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_motivo_elimina", TipoDato = TipoDato.VarChar, ObjValue = reqDeleteBeneficiario.str_motivo_elimina } );
 
