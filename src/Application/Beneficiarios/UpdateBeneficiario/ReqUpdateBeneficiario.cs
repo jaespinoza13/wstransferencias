@@ -4,10 +4,10 @@ using Application.Common.Cryptography;
 using Application.Common.ISO20022.Models;
 using MediatR;
 
-namespace Application.Beneficiarios.UpdateBeneficiario;
+namespace Application.Beneficiarios;
 
 
-public class ReqUpdateBeneficiario : Header, IRequest<ResComun>
+public class ReqUpdateBeneficiario : Header, IRequest<ResUpdateBeneficiario>
 {
     public string? str_id { get; set; }
     public string? str_codigo_ifi { get; set; }

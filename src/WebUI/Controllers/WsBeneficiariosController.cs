@@ -7,15 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 //USE CASE
 using Application.Common.ISO20022.Models;
-using Application.Beneficiarios.GetBeneficiarios;
-using Application.Beneficiarios.AddBeneficiario;
-using Application.Beneficiarios.UpdateBeneficiario;
-using Application.Beneficiarios.DeleteBeneficiario;
-using Application.Beneficiarios.GetCuentasBeneficiario;
-using Application.Beneficiarios.ValidaRegistroBeneficiario;
-using Application.Beneficiarios.ValidaUpdateBeneficiario;
-using Application.Beneficiarios.ValidaCuentasExterasBeneficiario;
-using Application.Beneficiarios.ValidaCuentaPagoDirecto;
+using Application.Beneficiarios;
 using Domain.Types;
 
 namespace WebUI.Controllers
@@ -42,19 +34,19 @@ namespace WebUI.Controllers
 
         [HttpPost( "ADD_BENEFICIARIO" )]
 
-        public Task<ResComun> AddBeneficiarios(ReqAddBeneficiario reqAddBeneficiario)
+        public Task<ResAddBeneficiario> AddBeneficiarios(ReqAddBeneficiario reqAddBeneficiario)
         {
             return Mediator.Send( reqAddBeneficiario );
         }
 
         [HttpPost( "UPDATE_BENEFICIARIO" )]
-        public Task<ResComun> UpdateBeneficiarios(ReqUpdateBeneficiario reqUpdateBeneficiario)
+        public Task<ResUpdateBeneficiario> UpdateBeneficiarios(ReqUpdateBeneficiario reqUpdateBeneficiario)
         {
             return Mediator.Send( reqUpdateBeneficiario );
         }
 
         [HttpPost( "DELETE_BENEFICIARIO" )]
-        public Task<ResComun> DeleteBeneficiarios(ReqDeleteBeneficiario reqDeleteBeneficiario)
+        public Task<ResDeleteBeneficiario> DeleteBeneficiarios(ReqDeleteBeneficiario reqDeleteBeneficiario)
         {
             return Mediator.Send( reqDeleteBeneficiario );
         }

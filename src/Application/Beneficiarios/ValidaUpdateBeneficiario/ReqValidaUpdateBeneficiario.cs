@@ -3,7 +3,7 @@
 using Application.Common.ISO20022.Models;
 using MediatR;
 
-namespace Application.Beneficiarios.ValidaUpdateBeneficiario;
+namespace Application.Beneficiarios;
 
 
 public class ReqValidaUpdateBeneficiario : Header, IRequest<ResValidaUpdateBeneficiario>

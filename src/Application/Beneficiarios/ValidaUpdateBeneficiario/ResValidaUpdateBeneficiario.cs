@@ -1,6 +1,6 @@
 ﻿using Application.Common.ISO20022.Models;
 
-namespace Application.Beneficiarios.ValidaUpdateBeneficiario;
+namespace Application.Beneficiarios;
 
 public class ResValidaUpdateBeneficiario : ResComun
 {

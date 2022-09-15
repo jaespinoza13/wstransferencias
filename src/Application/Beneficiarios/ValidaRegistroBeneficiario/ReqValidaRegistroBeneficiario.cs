@@ -2,7 +2,7 @@
 using Application.Common.ISO20022.Models;
 using MediatR;
 
-namespace Application.Beneficiarios.ValidaRegistroBeneficiario;
+namespace Application.Beneficiarios;
 
 public class ReqValidaRegistroBeneficiario : Header, IRequest<ResValidaRegistroBeneficiario>
 {

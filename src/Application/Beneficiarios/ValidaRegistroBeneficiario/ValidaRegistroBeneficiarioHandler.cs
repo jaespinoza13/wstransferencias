@@ -3,10 +3,9 @@ using MediatR;
 
 using System.Reflection;
 
-using Application.Beneficiarios.InterfazBeneficiariosDat;
 using Application.Common.Interfaces;
 
-namespace Application.Beneficiarios.ValidaRegistroBeneficiario;
+namespace Application.Beneficiarios;
 
 public class ValidaRegistroBeneficiarioHandler : IRequestHandler<ReqValidaRegistroBeneficiario, ResValidaRegistroBeneficiario>
 {

@@ -2,7 +2,7 @@
 using MediatR;
 using System.Reflection;
 
-namespace Application.Beneficiarios.ValidaUpdateBeneficiario;
+namespace Application.Beneficiarios;
 
 public class ValidaUpdateBeneficiarioHandler : IRequestHandler<ReqValidaUpdateBeneficiario, ResValidaUpdateBeneficiario>
 {

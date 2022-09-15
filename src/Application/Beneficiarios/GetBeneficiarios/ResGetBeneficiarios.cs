@@ -3,7 +3,7 @@ using Domain.Entities;
 using Application.Common.ISO20022.Models;
 using Application.Common.Cryptography;
 
-namespace Application.Beneficiarios.GetBeneficiarios;
+namespace Application.Beneficiarios;
 
 public class ResGetBeneficiarios : ResComun
 {

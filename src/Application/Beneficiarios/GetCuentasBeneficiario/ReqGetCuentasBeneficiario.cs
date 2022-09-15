@@ -2,7 +2,7 @@
 using MediatR;
 using Application.Common.ISO20022.Models;
 
-namespace Application.Beneficiarios.GetCuentasBeneficiario;
+namespace Application.Beneficiarios;
 
 public class ReqGetCuentasBeneficiario : Header, IRequest<ResGetCuentasBeneficiario>
 {

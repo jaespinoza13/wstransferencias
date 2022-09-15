@@ -1,14 +1,13 @@
 ﻿
 using MediatR;
-using Application.Beneficiarios.InterfazBeneficiariosDat;
 using Application.Common.Interfaces;
 using System.Reflection;
 using Application.Common.Models;
 using Application.Common.ISO20022.Models;
 
-namespace Application.Beneficiarios.UpdateBeneficiario;
+namespace Application.Beneficiarios;
 
-public class UpdateBeneficiarioHandler : RequestHandler<ReqUpdateBeneficiario, ResComun>
+public class UpdateBeneficiarioHandler : RequestHandler<ReqUpdateBeneficiario, ResUpdateBeneficiario>
 {
 
     private readonly ILogs _logs;
@@ -24,11 +23,11 @@ public class UpdateBeneficiarioHandler : RequestHandler<ReqUpdateBeneficiario, R
         _wsOtp = wsOtp;
     }
 
-    protected override ResComun Handle(ReqUpdateBeneficiario reqUpdateBeneficiario)
+    protected override ResUpdateBeneficiario Handle(ReqUpdateBeneficiario reqUpdateBeneficiario)
     {
         string operacion = "UPDATE_BENEFICIARIO";
 
-        ResComun respuesta = new();
+        ResUpdateBeneficiario respuesta = new();
         respuesta.LlenarResHeader( reqUpdateBeneficiario );
 
         _logs.SaveHeaderLogs( reqUpdateBeneficiario, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );

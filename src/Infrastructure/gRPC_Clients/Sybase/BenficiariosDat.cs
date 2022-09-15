@@ -1,15 +1,5 @@
-﻿
-
-using AccesoDatosGrpcAse.Neg;
-using Application.Beneficiarios.AddBeneficiario;
-using Application.Beneficiarios.DeleteBeneficiario;
-using Application.Beneficiarios.GetBeneficiarios;
-using Application.Beneficiarios.GetCuentasBeneficiario;
-using Application.Beneficiarios.InterfazBeneficiariosDat;
-using Application.Beneficiarios.UpdateBeneficiario;
-using Application.Beneficiarios.ValidaCuentaPagoDirecto;
-using Application.Beneficiarios.ValidaCuentasExterasBeneficiario;
-using Application.Beneficiarios.ValidaRegistroBeneficiario;
+﻿using AccesoDatosGrpcAse.Neg;
+using Application.Beneficiarios;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Grpc.Net.Client;

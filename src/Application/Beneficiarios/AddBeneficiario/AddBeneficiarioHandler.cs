@@ -1,14 +1,12 @@
 ﻿
-using Application.Beneficiarios.InterfazBeneficiariosDat;
 using Application.Common.Interfaces;
-using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using MediatR;
 using System.Reflection;
 
-namespace Application.Beneficiarios.AddBeneficiario;
+namespace Application.Beneficiarios;
 
-public class AddBeneficiarioHandler : RequestHandler<ReqAddBeneficiario, ResComun>
+public class AddBeneficiarioHandler : RequestHandler<ReqAddBeneficiario, ResAddBeneficiario>
 {
     private readonly ILogs _logs;
     private readonly string _clase;
@@ -23,11 +21,11 @@ public class AddBeneficiarioHandler : RequestHandler<ReqAddBeneficiario, ResComu
         _wsOtp = wsOtp;
     }
 
-    protected override ResComun Handle(ReqAddBeneficiario reqAddBeneficiario)
+    protected override ResAddBeneficiario Handle(ReqAddBeneficiario reqAddBeneficiario)
     {
         string operacion = "ADD_BENEFICIARIO";
         RespuestaTransaccion resTran = new();
-        ResComun respuesta = new();
+        ResAddBeneficiario respuesta = new();
         respuesta.LlenarResHeader( reqAddBeneficiario );
 
         _logs.SaveHeaderLogs( reqAddBeneficiario, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );

@@ -2,7 +2,7 @@
 using Application.Common.ISO20022.Models;
 using Domain.Entities;
 
-namespace Application.Beneficiarios.ValidaCuentasExterasBeneficiario;
+namespace Application.Beneficiarios;
 public class ResValidaOtrasCuentasBeneficiario : ResComun
 {
     public List<Beneficiario> lst_beneficiario { get; set; } = new();

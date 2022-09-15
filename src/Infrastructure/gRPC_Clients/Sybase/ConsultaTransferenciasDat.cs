@@ -1,8 +1,8 @@
 ﻿using AccesoDatosGrpcAse.Neg;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.Transferencias;
 using Application.Transferencias.Consulta;
-using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
 using System.Reflection;
