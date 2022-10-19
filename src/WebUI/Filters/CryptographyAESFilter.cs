@@ -88,10 +88,10 @@ namespace WebUI.Filters
                             }
                             catch (Exception)
                             {
-                                throw new ArgumentException( "Error: Credenciales inválidas 002" );
+                                throw new ArgumentException( "Error: Credenciales invÃ¡lidas 002" );
                             }
                         else
-                            throw new ArgumentException( "Error: Credenciales inválidas 001" );
+                            throw new ArgumentException( "Error: Credenciales invÃ¡lidas 001" );
                     }
                 }
             }
@@ -101,10 +101,10 @@ namespace WebUI.Filters
         {
             ResException resException = new();
             resException.str_res_codigo = Convert.ToInt32( HttpStatusCode.Unauthorized ).ToString();
-            resException.str_res_id_servidor = "Error: Credenciales inválidas";
+            resException.str_res_id_servidor = "Error: Credenciales invÃ¡lidas";
             resException.str_res_estado_transaccion = "ERR";
             resException.dt_res_fecha_msj_crea = DateTime.Now;
-            resException.str_res_info_adicional = "Tu sesión ha caducado, por favor ingresa nuevamente.";
+            resException.str_res_info_adicional = "Tu sesiÃ³n ha caducado, por favor ingresa nuevamente.";
 
             context.HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
             context.Result = new ObjectResult( resException );
