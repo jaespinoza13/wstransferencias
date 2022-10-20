@@ -1,15 +1,5 @@
-﻿
-
-using AccesoDatosGrpcAse.Neg;
-using Application.Beneficiarios.AddBeneficiario;
-using Application.Beneficiarios.DeleteBeneficiario;
-using Application.Beneficiarios.GetBeneficiarios;
-using Application.Beneficiarios.GetCuentasBeneficiario;
-using Application.Beneficiarios.InterfazBeneficiariosDat;
-using Application.Beneficiarios.UpdateBeneficiario;
-using Application.Beneficiarios.ValidaCuentaPagoDirecto;
-using Application.Beneficiarios.ValidaCuentasExterasBeneficiario;
-using Application.Beneficiarios.ValidaRegistroBeneficiario;
+﻿using AccesoDatosGrpcAse.Neg;
+using Application.Beneficiarios;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Grpc.Net.Client;
@@ -140,7 +130,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_alias_cta", TipoDato = TipoDato.VarChar, ObjValue = reqUpdateBeneficiario.str_alias_cta } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = reqUpdateBeneficiario.str_tipo_beneficiario } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.str_ente } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.int_id.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.str_id } );
 
                 ds.NombreSP = "update_cuentas_beneficiarios2";
                 ds.NombreBD = _settings.DB_meg_servicios;
@@ -178,7 +168,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 DatosSolicitud ds = new DatosSolicitud();
                 Funciones.llenar_datos_auditoria_salida( ds, reqDeleteBeneficiario );
 
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqDeleteBeneficiario.int_id.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqDeleteBeneficiario.str_id } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqDeleteBeneficiario.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_motivo_elimina", TipoDato = TipoDato.VarChar, ObjValue = reqDeleteBeneficiario.str_motivo_elimina } );
 

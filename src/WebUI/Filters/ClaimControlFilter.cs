@@ -8,12 +8,15 @@ using System.Text.Json;
 
 namespace WebUI.Filters
 {
-    public class ClaimControlFilter : IAuthorizationFilter
+    public class ClaimControlFilter : IActionFilter
     {
-
-        public void OnAuthorization(AuthorizationFilterContext context)
+        public void OnActionExecuted(ActionExecutedContext context)
         {
-            if (!validarClaims(context))
+        }
+
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
+            if (!validarClaims( context ))
             {
                 ResException resException = new();
                 resException.str_res_codigo = Convert.ToInt32( HttpStatusCode.Unauthorized ).ToString();
@@ -25,23 +28,21 @@ namespace WebUI.Filters
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
                 context.Result = new ObjectResult( resException );
             }
-            
         }
 
-        private bool validarClaims(AuthorizationFilterContext context) {
+
+        private bool validarClaims(ActionExecutingContext context)
+        {
             var blValidacion = false;
             context.HttpContext.Request.EnableBuffering();
             var user = context.HttpContext.User;
             var claimRol = user.Claims.FirstOrDefault( c => c.Type == ClaimTypes.Role );
-            var streaming = new StreamReader( context.HttpContext.Request.Body );
-            var requestBody = streaming.ReadToEndAsync().Result;
-            context.HttpContext.Request.Body.Position = 0;
-
-            var header = JsonSerializer.Deserialize<Header>( requestBody )!;
+            var model = context.ActionArguments.First();
+            var header = JsonSerializer.Deserialize<Header>( JsonSerializer.Serialize( model.Value ) )!;
 
             if (claimRol != null && (
-                claimRol!.Value.Equals( Rol.Socio )|| 
-                claimRol!.Value.Equals( Rol.Usuario ))|| 
+                claimRol!.Value.Equals( Rol.Socio ) ||
+                claimRol!.Value.Equals( Rol.Usuario )) ||
                 claimRol!.Value.Equals( Rol.InvitadoExterno )
                 )
             {
@@ -62,11 +63,11 @@ namespace WebUI.Filters
                 blValidacion = (header.str_login.Equals( claimLogin!.Value ) &&
                     header.str_nemonico_canal.Equals( claimCanal!.Value )) ? true : false;
             }
-           
+
 
             return blValidacion;
-        
+
         }
- 
+
     }
 }

@@ -1,6 +1,5 @@
 ﻿
 
-using Application.Beneficiarios.InterfazBeneficiariosDat;
 using Application.Common.Converting;
 using Application.Common.Functions;
 using Application.Common.Interfaces;
@@ -13,7 +12,7 @@ using Microsoft.Extensions.Options;
 using System.Reflection;
 using System.Text.Json;
 
-namespace Application.Beneficiarios.ValidaCuentaPagoDirecto;
+namespace Application.Beneficiarios;
 
 
 public class ValidaCuentaPagoDirectoHandler : RequestHandler<ReqValidaCuentaPagoDirecto, ResValidaCuentaPagoDirecto>

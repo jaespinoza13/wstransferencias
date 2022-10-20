@@ -3,7 +3,7 @@ using MediatR;
 
 using Application.Common.ISO20022.Models;
 
-namespace Application.Beneficiarios.ValidaCuentasExterasBeneficiario;
+namespace Application.Beneficiarios;
 
 public class ReqValidaOtrasCuentasBeneficiario : Header, IRequest<ResValidaOtrasCuentasBeneficiario>
 {

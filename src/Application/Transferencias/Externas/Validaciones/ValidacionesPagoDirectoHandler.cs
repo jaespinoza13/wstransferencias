@@ -16,13 +16,13 @@ public interface IValidacionesPagoDirecto
     RespuestaTransaccion ProcesarSolicitud(SolicitudTransaccion sol_tran, string str_id_transaccion);
 }
 
-public class ValidacionesPagoDirecto : IValidacionesPagoDirecto
+public class ValidacionesPagoDirectoHandler : IValidacionesPagoDirecto
 {
     private readonly ApiSettings _settings;
     private readonly IHttpService _httpService;
     private readonly ILogs _logs;
     private readonly string _clase;
-    public ValidacionesPagoDirecto(IOptionsMonitor<ApiSettings> options, IHttpService httpService, ILogs logs)
+    public ValidacionesPagoDirectoHandler(IOptionsMonitor<ApiSettings> options, IHttpService httpService, ILogs logs)
     {
         _settings = options.CurrentValue;
         _httpService = httpService;

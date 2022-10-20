@@ -76,7 +76,6 @@ artifacts/
 *.svclog
 *.scc
 
-
 # Archivos de prueba Chutzpah
 _Chutzpah*
 
@@ -267,4 +266,3 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
-

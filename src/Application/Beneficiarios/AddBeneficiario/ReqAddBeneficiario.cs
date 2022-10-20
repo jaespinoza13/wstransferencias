@@ -2,11 +2,10 @@
 using Application.Common.ISO20022.Models;
 using MediatR;
 
-namespace Application.Beneficiarios.AddBeneficiario;
+namespace Application.Beneficiarios;
 
-public class ReqAddBeneficiario : Header, IRequest<ResComun>
+public class ReqAddBeneficiario : Header, IRequest<ResAddBeneficiario>
 {
-    public int int_ente { get; set; }
     public string? str_codigo_ifi { get; set; }
     public int int_tipo_producto { get; set; }
     public string? str_num_cta { get; set; }

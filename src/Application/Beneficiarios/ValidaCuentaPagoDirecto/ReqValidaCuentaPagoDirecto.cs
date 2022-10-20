@@ -2,7 +2,7 @@
 using Application.Common.ISO20022.Models;
 using MediatR;
 
-namespace Application.Beneficiarios.ValidaCuentaPagoDirecto;
+namespace Application.Beneficiarios;
 
 public class ReqValidaCuentaPagoDirecto : Header, IRequest<ResValidaCuentaPagoDirecto>
 {

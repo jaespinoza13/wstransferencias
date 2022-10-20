@@ -7,10 +7,11 @@ using Infrastructure.Services;
 using Infrastructure.MemoryCache;
 using Infrastructure.Common.Interfaces;
 using Infrastructure.ExternalAPIs;
-using Application.Beneficiarios.InterfazBeneficiariosDat;
 using Application.Transferencias.InterfazDat;
 using Infrastructure.SessionControl;
 using Application.Transferencias.Consulta;
+using Application.Beneficiarios;
+using Application.Transferencias;
 
 namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureInfrastructure
@@ -31,6 +32,8 @@ public static class ConfigureInfrastructure
         services.AddSingleton<IOtpDat, OtpDat>();
         services.AddTransient<ISessionControl, SessionControl>();
         services.AddSingleton<ISesionDat, SesionDat>();
+        services.AddSingleton<IKeysDat, KeysDat>();
+
 
         //INTERFACES DE CASOS DE USO
         services.AddSingleton<IBeneficiariosDat, BenficiariosDat>();

@@ -2,14 +2,13 @@
 
 using MediatR;
 
-using Application.Beneficiarios.InterfazBeneficiariosDat;
 using Application.Common.Interfaces;
 using System.Reflection;
 using Application.Common.Models;
 using Application.Common.Converting;
 using Domain.Entities;
 
-namespace Application.Beneficiarios.GetCuentasBeneficiario;
+namespace Application.Beneficiarios;
 
 public class GetCuentasBeneficiarioHandler : IRequestHandler<ReqGetCuentasBeneficiario, ResGetCuentasBeneficiario>
 {

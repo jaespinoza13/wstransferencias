@@ -2,7 +2,7 @@
 using Application.Common.Interfaces;
 using FluentValidation;
 
-namespace Application.Beneficiarios.AddBeneficiario;
+namespace Application.Beneficiarios;
 public class ReqAddBeneficiarioValidador : AbstractValidator<ReqAddBeneficiario>
 {
 

@@ -7,6 +7,7 @@ using System.Text;
 using WebUI.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
+using System.Security.Cryptography;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -32,8 +33,14 @@ public static class ConfigureServices
         } );
 
         //AUTHORIZATION 
-        var secretKey = configuration.GetValue<string>( "secretKey" );
         var issuer = configuration.GetValue<string>( "issuer" );
+        var publicKeyBytes = Convert.FromBase64String( configuration.GetValue<string>( "Key_token_pub" ) );
+        RSA rsa = RSA.Create();
+        rsa.ImportSubjectPublicKeyInfo( publicKeyBytes, out _ );
+        var keyRSA = new RsaSecurityKey( rsa );
+
+        var securityKeyDecrypt = new SymmetricSecurityKey( Encoding.Default.GetBytes( configuration.GetValue<string>( "Key_encrypt_token" ) ) );
+
 
         services.AddAuthentication( JwtBearerDefaults.AuthenticationScheme )
                         .AddJwtBearer( opciones => opciones.TokenValidationParameters = new TokenValidationParameters
@@ -43,9 +50,11 @@ public static class ConfigureServices
                             ValidateLifetime = true,
                             ValidateIssuerSigningKey = true,
                             ValidIssuer = issuer,
-                            IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes( secretKey ) ),
+                            IssuerSigningKey = keyRSA,
+                            TokenDecryptionKey = securityKeyDecrypt,
                             ClockSkew = TimeSpan.Zero
                         } );
+
 
         //SERVICES
         services.AddDataProtection();
@@ -55,6 +64,7 @@ public static class ConfigureServices
 
         //FILTERS
         services.AddTransient<DailyRequestFilter>();
+        services.AddTransient<CryptographyAESFilter>();
         services.AddTransient<ClaimControlFilter>();
         services.AddTransient<SessionControlFilter>();
 

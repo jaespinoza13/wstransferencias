@@ -1,6 +1,5 @@
 ﻿
 
-using Application.Beneficiarios.InterfazBeneficiariosDat;
 using Application.Common.Converting;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -8,7 +7,7 @@ using Domain.Entities;
 using MediatR;
 using System.Reflection;
 
-namespace Application.Beneficiarios.ValidaCuentasExterasBeneficiario;
+namespace Application.Beneficiarios;
 
 
 public class ValidaOtrasCuentasBeneficiarioHandler : IRequestHandler<ReqValidaOtrasCuentasBeneficiario, ResValidaOtrasCuentasBeneficiario>

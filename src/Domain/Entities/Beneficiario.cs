@@ -4,8 +4,8 @@ namespace Domain.Entities
 {
     public class Beneficiario
     {
-        public int int_id { get; set; }
-        public int int_ente_registra { get; set; }
+        public string? str_id { get; set; }
+        public string? str_ente_registra { get; set; }
         public string? str_num_documento { get; set; }
         public string? str_nombres { get; set; }
         public string? str_email { get; set; }

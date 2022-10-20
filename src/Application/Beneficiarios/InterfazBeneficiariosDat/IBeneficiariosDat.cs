@@ -1,14 +1,6 @@
-﻿using Application.Beneficiarios.AddBeneficiario;
-using Application.Beneficiarios.DeleteBeneficiario;
-using Application.Beneficiarios.GetBeneficiarios;
-using Application.Beneficiarios.GetCuentasBeneficiario;
-using Application.Beneficiarios.UpdateBeneficiario;
-using Application.Beneficiarios.ValidaCuentaPagoDirecto;
-using Application.Beneficiarios.ValidaCuentasExterasBeneficiario;
-using Application.Beneficiarios.ValidaRegistroBeneficiario;
-using Application.Common.Models;
+﻿using Application.Common.Models;
 
-namespace Application.Beneficiarios.InterfazBeneficiariosDat;
+namespace Application.Beneficiarios;
 
 public interface IBeneficiariosDat
 {

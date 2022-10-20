@@ -3,7 +3,6 @@ using MediatR;
 
 using Domain.Entities;
 
-using Application.Beneficiarios.InterfazBeneficiariosDat;
 using Application.Common.Converting;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -11,7 +10,7 @@ using Application.Common.Models;
 
 using System.Reflection;
 
-namespace Application.Beneficiarios.GetBeneficiarios;
+namespace Application.Beneficiarios;
 
 public class GetBeneficiarioHandler : IRequestHandler<ReqGetBeneficiarios, ResGetBeneficiarios>
 {
