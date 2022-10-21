@@ -6,10 +6,9 @@ pipeline {
         }
     }
 
-
     environment {
-        VERSION_PRODUCCION  = '3.0.1'
-        VERSION_ACTUAL      = '3.0.0'
+        VERSION_DESPLIEGUE  = '1.0.'
+        VERSION_PRODUCCION  = '0.0.0'
         NOMBRE_CONTENEDOR   = 'servicio-transferencias'
         NOMBRE_IMAGEN       = 'ws_transferencias'
         PUERTO              = '9003'
@@ -21,27 +20,27 @@ pipeline {
         
         stage('Build') {
             steps {
-                echo 'Building..'
-                sh 'docker build -t ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION} --no-cache .'
+                echo 'Building ...'
+                sh 'docker build -t ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE} --no-cache .'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Testing..'
+                echo 'Testing ...'
             }
         }
 
         stage('Clean') {
             steps {
-                echo 'Cleaning..'
+                echo 'Cleaning ...'
                 sh 'docker rm -f ${NOMBRE_CONTENEDOR}'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                echo 'Deploying ...'
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
                         --name ${NOMBRE_CONTENEDOR} \
                         -v ${RUTA_LOGS}:/app/Logs/ \
@@ -58,13 +57,13 @@ pipeline {
                         -e ApiSettings__EndpointsAuth__auth_ws_transferencias=${AUTH_WS_TRANSFERENCIAS} \
                         -e ApiSettings__EndpointsAuth__auth_ws_otp=${AUTH_WS_OTP} \
                         -e ApiSettings__EndpointsAuth__auth_ws_banred=${AUTH_WS_BANRED} \
-                        ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
+                        ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
                     '''
             }
         }
         stage('Restart') {
             steps {
-                echo 'Deploying....'
+                echo 'Restarting ...'
                  sh 'docker restart ${NOMBRE_CONTENEDOR}'
             }
         }
@@ -74,7 +73,7 @@ pipeline {
     post {
 
         success {
-            slackSend color: '#BADA55', message: "Despliegue exitoso  - ${env.JOB_NAME} versión publicada ${VERSION_PRODUCCION} (<${env.BUILD_URL}|Open>)"
+            slackSend color: '#BADA55', message: "Despliegue exitoso  - ${env.JOB_NAME} versión publicada ${VERSION_DESPLIEGUE} (<${env.BUILD_URL}|Open>)"
         }
 
         failure {
@@ -95,9 +94,9 @@ pipeline {
                     -e ApiSettings__EndpointsAuth__auth_ws_transferencias=${AUTH_WS_TRANSFERENCIAS} \
                     -e ApiSettings__EndpointsAuth__auth_ws_otp=${AUTH_WS_OTP} \
                     -e ApiSettings__EndpointsAuth__auth_ws_banred=${AUTH_WS_BANRED} \
-                    ${NOMBRE_IMAGEN}:${VERSION_ACTUAL}
+                    ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
                 '''
-            slackSend color: '#FE2D00', failOnError:true, message:"Despliegue fallido 😬 - ${env.JOB_NAME} he reversado a la versión ${VERSION_ACTUAL} - (<${env.BUILD_URL}|Open>)"
+            slackSend color: '#FE2D00', failOnError:true, message:"Despliegue fallido 😬 - ${env.JOB_NAME} he reversado a la versión ${VERSION_PRODUCCION} - (<${env.BUILD_URL}|Open>)"
         }
     }
 }
