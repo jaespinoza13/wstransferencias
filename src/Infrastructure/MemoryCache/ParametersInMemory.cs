@@ -90,6 +90,11 @@ internal class ParametersInMemory : IParametersInMemory
         return listadoParametros.Find( x => x.str_nemonico == str_nemonico )!;
     }
 
+    public List<Parametro> FindParameterName(string str_nombre)
+    {
+        var lst_parametros = _memoryCache.Get<List<Parametro>>( "Parametros" );
+        return lst_parametros.FindAll( x => x.str_nombre == str_nombre );
+    }
 
     public List<Parametro> lst_errores() => _memoryCache.Get<List<Parametro>>( "Errores" );
     public List<Parametro> lst_parametros() => _memoryCache.Get<List<Parametro>>( "Parametros" );

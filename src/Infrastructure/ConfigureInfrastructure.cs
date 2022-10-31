@@ -40,6 +40,7 @@ public static class ConfigureInfrastructure
         services.AddSingleton<ITransferenciasExternasDat, TransferenciasExternasDat>();
         services.AddSingleton<ITransferenciasInternasDat, TransferenciasInternasDat>();
         services.AddSingleton<IConsultaTransferencias, ConsultaTransferenciasDat>();
+        services.AddSingleton<IComprobanteTransferencia, ComprobanteTransferenciaDat>();
 
 
         return services;

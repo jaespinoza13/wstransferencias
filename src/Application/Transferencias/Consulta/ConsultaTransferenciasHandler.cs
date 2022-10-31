@@ -1,5 +1,4 @@
-﻿
-using Application.Common.Converting;
+﻿using Application.Common.Converting;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using MediatR;

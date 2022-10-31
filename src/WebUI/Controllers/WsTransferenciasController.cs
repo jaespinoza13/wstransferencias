@@ -14,17 +14,18 @@ using Application.Transferencias.Externas.Validaciones;
 using Application.Transferencias.DTO;
 using Application.Transferencias.Externas.Registro;
 using Application.Transferencias.Consulta;
+using Application.Transferencias.Comprobante;
 using Domain.Types;
 
 namespace WebUI.Controllers
 {
     [Route( "api/wsTransferencias" )]
     [ApiController]
-    [ServiceFilter( typeof( DailyRequestFilter ) )]
-    [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.SocioInvitadoInterno )]
-    [ServiceFilter( typeof( CryptographyAESFilter ) )]
-    [ServiceFilter( typeof( ClaimControlFilter ) )]
-    [ServiceFilter( typeof( SessionControlFilter ) )]
+    //[ServiceFilter( typeof( DailyRequestFilter ) )]
+    //[Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.SocioInvitadoInterno )]
+    //[ServiceFilter( typeof( CryptographyAESFilter ) )]
+    //[ServiceFilter( typeof( ClaimControlFilter ) )]
+    //[ServiceFilter( typeof( SessionControlFilter ) )]
     [ProducesResponseType( StatusCodes.Status200OK )]
     [ProducesResponseType( StatusCodes.Status400BadRequest )]
     [ProducesResponseType( StatusCodes.Status401Unauthorized )]
@@ -86,6 +87,12 @@ namespace WebUI.Controllers
         public async Task<ResConsultaTransferencias> ConsultaTransferencias(ReqConsultaTransferencias reqConsultaTransferencias)
         {
             return await Mediator.Send( reqConsultaTransferencias );
+        }
+
+        [HttpPost( "GET_COMPROBANTE_TRANSFERENCIA" )]
+        public async Task<ResComprobanteTransferencia> ComprobanteTransferencias(ReqComprobanteTransferencia reqComprobanteTransferencia)
+        {
+            return await Mediator.Send( reqComprobanteTransferencia );
         }
     }
 }

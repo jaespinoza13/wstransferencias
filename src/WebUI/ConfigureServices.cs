@@ -95,6 +95,8 @@ public static class ConfigureServices
         services.Configure<ApiSettings>( configuration.GetSection( "ApiSettings:Transferencia" ) );
         services.Configure<ApiSettings>( configuration.GetSection( "ApiSettings:DescripcionErrores" ) );
         services.Configure<ApiSettings>( configuration.GetSection( "ApiSettings:ControlExcepciones" ) );
+        services.Configure<ApiSettings>( configuration.GetSection( "ApiSettings:TemplatesPath" ) );
+        services.Configure<ApiSettings>( configuration.GetSection( "ApiSettings:LogosPath" ) );
 
         return services;
     }
