@@ -45,6 +45,7 @@ pipeline {
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
                         --name ${NOMBRE_CONTENEDOR} \
                         -v ${RUTA_LOGS}:/app/Logs/ \
+                        -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
                         -e TZ=${TZ} \
                         -e secretKey=${SECRETKEY} \
                         -e Key_token_pub=${SECRET_KEY_TOKEN_PUB} \
@@ -82,10 +83,11 @@ pipeline {
             sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
                     --name ${NOMBRE_CONTENEDOR} \
                     -v ${RUTA_LOGS}:/app/Logs/ \
+                    -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
                     -e TZ=${TZ} \
                     -e secretKey=${SECRETKEY} \
                     -e Key_token_pub=${SECRET_KEY_TOKEN_PUB} \
-                        -e Key_encrypt_token=${SECRET_KEY_ENCRYPT_TOKEN} \
+                    -e Key_encrypt_token=${SECRET_KEY_ENCRYPT_TOKEN} \
                     -e issuer=${ISSUER} \
                     -e ApiSettings__GrpcSettings__client_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
                     -e ApiSettings__GrpcSettings__client_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
