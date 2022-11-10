@@ -8,6 +8,7 @@ public class ReqAddBeneficiario : Header, IRequest<ResAddBeneficiario>
 {
     public string? str_codigo_ifi { get; set; }
     public int int_tipo_producto { get; set; }
+    public int int_favorito { get; set; }
     public string? str_num_cta { get; set; }
     public string? str_num_documento { get; set; }
     public string? str_nombres { get; set; }

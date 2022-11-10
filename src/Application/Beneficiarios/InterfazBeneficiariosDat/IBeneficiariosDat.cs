@@ -12,4 +12,6 @@ public interface IBeneficiariosDat
     Task<RespuestaTransaccion> ValidaRegistrBeneficiario(ReqValidaRegistroBeneficiario reqValidaRegistroBeneficiario);
     Task<RespuestaTransaccion> ValidaOtrasCuentasBeneficiario(ReqValidaOtrasCuentasBeneficiario reqValidaOtrasCuentasBeneficiario);
     RespuestaTransaccion GetDatosPagoDirecto(ReqValidaCuentaPagoDirecto reqValidaCuentaPagoDirecto);
+    RespuestaTransaccion UpdateFavoritoBeneficiario(ReqUpdateFavoritoBeneficiario reqUpdateFavoritoBeneficiario);
+
 }

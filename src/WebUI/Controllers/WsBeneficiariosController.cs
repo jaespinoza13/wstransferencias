@@ -81,5 +81,11 @@ namespace WebUI.Controllers
         {
             return Mediator.Send( reqValidaCuentaPagoDirecto );
         }
+
+        [HttpPost( "UPDATE_FAVORITO_BENEFICIARIO" )]
+        public Task<ResUpdateFavoritoBeneficiario> UpdateFavoritoBeneficiario(ReqUpdateFavoritoBeneficiario reqUpdateFavoritoBeneficiario)
+        {
+            return Mediator.Send( reqUpdateFavoritoBeneficiario );
+        }
     }
 }
