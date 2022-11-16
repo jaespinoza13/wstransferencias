@@ -2,46 +2,45 @@ pipeline {
     
     agent {
         node {
-            label 'web-service-development-server'
+            label 'web-service-production-server'
         }
     }
 
-
     environment {
-        VERSION_PRODUCCION  = '4.0.0'
-        VERSION_ACTUAL      = '1.0.0'
-        NOMBRE_CONTENEDOR   = 'api-transferencias-des-encriptar-info-lmorocho'
-        NOMBRE_IMAGEN       = 'ws_transferencias_des_encriptar_info_lmorocho'
-        PUERTO              = '5303'
+        VERSION_DESPLIEGUE  = '1.0.0'
+        VERSION_PRODUCCION  = '0.0.0'
+        NOMBRE_CONTENEDOR   = 'servicio-transferencias'
+        NOMBRE_IMAGEN       = 'ws_transferencias'
+        PUERTO              = '9003'
         PUERTO_CONTENEDOR   = '80'
-        NOMBRE_CARPETA_LOGS = 'wsTransferencias'
+        RUTA_LOGS           = '/app/wsTransferencias'
     }
 
     stages {
         
         stage('Build') {
             steps {
-                echo 'Building..'
-                sh 'docker build -t ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION} --no-cache .'
+                echo 'Building ...'
+                sh 'docker build -t ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE} --no-cache .'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Testing..'
+                echo 'Testing ...'
             }
         }
 
         stage('Clean') {
             steps {
-                echo 'Cleaning..'
+                echo 'Cleaning ...'
                 sh 'docker rm -f ${NOMBRE_CONTENEDOR}'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                echo 'Deploying ...'
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
                         --name ${NOMBRE_CONTENEDOR} \
                         -v ${RUTA_LOGS}:/app/Logs/ \
@@ -59,13 +58,13 @@ pipeline {
                         -e ApiSettings__EndpointsAuth__auth_ws_transferencias=${AUTH_WS_TRANSFERENCIAS} \
                         -e ApiSettings__EndpointsAuth__auth_ws_otp=${AUTH_WS_OTP} \
                         -e ApiSettings__EndpointsAuth__auth_ws_banred=${AUTH_WS_BANRED} \
-                        ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
+                        ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
                     '''
             }
         }
         stage('Restart') {
             steps {
-                echo 'Deploying....'
+                echo 'Restarting ...'
                  sh 'docker restart ${NOMBRE_CONTENEDOR}'
             }
         }
@@ -75,7 +74,7 @@ pipeline {
     post {
 
         success {
-            slackSend color: '#BADA55', message: "Despliegue exitoso  - ${env.JOB_NAME} versión publicada ${VERSION_PRODUCCION} (<${env.BUILD_URL}|Open>)"
+            slackSend color: '#BADA55', message: "Despliegue exitoso  - ${env.JOB_NAME} versión publicada ${VERSION_DESPLIEGUE} (<${env.BUILD_URL}|Open>)"
         }
 
         failure {
@@ -87,7 +86,7 @@ pipeline {
                     -e TZ=${TZ} \
                     -e secretKey=${SECRETKEY} \
                     -e Key_token_pub=${SECRET_KEY_TOKEN_PUB} \
-                    -e Key_encrypt_token=${SECRET_KEY_ENCRYPT_TOKEN} \
+                        -e Key_encrypt_token=${SECRET_KEY_ENCRYPT_TOKEN} \
                     -e issuer=${ISSUER} \
                     -e ApiSettings__GrpcSettings__client_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
                     -e ApiSettings__GrpcSettings__client_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
@@ -97,9 +96,9 @@ pipeline {
                     -e ApiSettings__EndpointsAuth__auth_ws_transferencias=${AUTH_WS_TRANSFERENCIAS} \
                     -e ApiSettings__EndpointsAuth__auth_ws_otp=${AUTH_WS_OTP} \
                     -e ApiSettings__EndpointsAuth__auth_ws_banred=${AUTH_WS_BANRED} \
-                    ${NOMBRE_IMAGEN}:${VERSION_ACTUAL}
+                    ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
                 '''
-            slackSend color: '#FE2D00', failOnError:true, message:"Despliegue fallido 😬 - ${env.JOB_NAME} he reversado a la versión ${VERSION_ACTUAL} - (<${env.BUILD_URL}|Open>)"
+            slackSend color: '#FE2D00', failOnError:true, message:"Despliegue fallido 😬 - ${env.JOB_NAME} he reversado a la versión ${VERSION_PRODUCCION} - (<${env.BUILD_URL}|Open>)"
         }
     }
 }
