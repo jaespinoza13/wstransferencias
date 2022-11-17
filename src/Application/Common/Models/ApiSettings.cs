@@ -61,5 +61,12 @@ namespace Application.Common.Models
         
         public int mostrar_descripcion_badrequest { get; set; }
 
+        #region  COMPROBANTES
+        public string transf_otras_cta { get; set; } = String.Empty;
+        public string transf_mis_cta_mego { get; set; } = String.Empty;
+        public string pago_tarjetas { get; set; } = String.Empty;
+        public string logos_canales { get; set; } = String.Empty;
+        #endregion
+
     }
 }
