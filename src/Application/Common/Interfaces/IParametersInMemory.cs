@@ -10,4 +10,5 @@ public interface IParametersInMemory
     void LoadParameters();
     Parametro FindErrorCode(string str_codigo);
     Parametro FindParameter(string str_nemonico);
+    List<Parametro> FindParameterName(string str_nombre);
 }

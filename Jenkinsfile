@@ -44,6 +44,7 @@ pipeline {
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
                         --name ${NOMBRE_CONTENEDOR} \
                         -v ${RUTA_LOGS}:/app/Logs/ \
+                        -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
                         -e TZ=${TZ} \
                         -e secretKey=${SECRETKEY} \
                         -e Key_token_pub=${SECRET_KEY_TOKEN_PUB} \
@@ -81,6 +82,7 @@ pipeline {
             sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
                     --name ${NOMBRE_CONTENEDOR} \
                     -v ${RUTA_LOGS}:/app/Logs/ \
+                    -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
                     -e TZ=${TZ} \
                     -e secretKey=${SECRETKEY} \
                     -e Key_token_pub=${SECRET_KEY_TOKEN_PUB} \

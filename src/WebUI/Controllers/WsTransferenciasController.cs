@@ -14,6 +14,7 @@ using Application.Transferencias.Externas.Validaciones;
 using Application.Transferencias.DTO;
 using Application.Transferencias.Externas.Registro;
 using Application.Transferencias.Consulta;
+using Application.Transferencias.Comprobante;
 using Domain.Types;
 
 namespace WebUI.Controllers
@@ -86,6 +87,12 @@ namespace WebUI.Controllers
         public async Task<ResConsultaTransferencias> ConsultaTransferencias(ReqConsultaTransferencias reqConsultaTransferencias)
         {
             return await Mediator.Send( reqConsultaTransferencias );
+        }
+
+        [HttpPost( "GET_COMPROBANTE_TRANSFERENCIA" )]
+        public async Task<ResComprobanteTransferencia> ComprobanteTransferencias(ReqComprobanteTransferencia reqComprobanteTransferencia)
+        {
+            return await Mediator.Send( reqComprobanteTransferencia );
         }
     }
 }
