@@ -13,12 +13,16 @@ public class UpdateFavoritoBeneficiarioHandler : RequestHandler<ReqUpdateFavorit
     private readonly ILogs _logs;
     private readonly string _clase;
     private readonly IBeneficiariosDat _beneficiariosDat;
+    private readonly IWsOtp _wsOtp;
 
-    public UpdateFavoritoBeneficiarioHandler(ILogs logs, IBeneficiariosDat beneficiariosDat)
+
+    public UpdateFavoritoBeneficiarioHandler(ILogs logs, IBeneficiariosDat beneficiariosDat, IWsOtp wsOtp)
     {
         _clase = GetType().FullName!;
         _logs = logs;
         _beneficiariosDat = beneficiariosDat;
+        _wsOtp = wsOtp;
+
     }
 
     protected override ResUpdateFavoritoBeneficiario Handle(ReqUpdateFavoritoBeneficiario reqUpdateFavoritoBeneficiario)
@@ -33,8 +37,19 @@ public class UpdateFavoritoBeneficiarioHandler : RequestHandler<ReqUpdateFavorit
         RespuestaTransaccion resTran = new();
         try
         {
-           
-              resTran = _beneficiariosDat.UpdateFavoritoBeneficiario( reqUpdateFavoritoBeneficiario );
+            
+            var requiereOtp = (reqUpdateFavoritoBeneficiario.int_favorito==1) && _wsOtp.ValidaRequiereOtp( reqUpdateFavoritoBeneficiario, reqUpdateFavoritoBeneficiario.str_tipo_beneficiario! ).Result;
+            
+            if (requiereOtp)
+            {
+                resTran = _wsOtp.ValidaOtp( reqUpdateFavoritoBeneficiario ).Result;
+                resTran = resTran.codigo.Equals( "000" ) ? _beneficiariosDat.UpdateFavoritoBeneficiario( reqUpdateFavoritoBeneficiario): resTran;
+            }
+            else
+                resTran = _beneficiariosDat.UpdateFavoritoBeneficiario( reqUpdateFavoritoBeneficiario );
+            
+
+            resTran = _beneficiariosDat.UpdateFavoritoBeneficiario( reqUpdateFavoritoBeneficiario );
             
 
             respuesta.str_res_estado_transaccion = resTran.codigo.Equals( "000" ) ? "OK" : "ERR";

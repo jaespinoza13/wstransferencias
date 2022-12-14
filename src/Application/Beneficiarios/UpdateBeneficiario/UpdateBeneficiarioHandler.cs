@@ -39,12 +39,12 @@ public class UpdateBeneficiarioHandler : RequestHandler<ReqUpdateBeneficiario, R
             if (requiereOtp)
             {
                 resTran = _wsOtp.ValidaOtp( reqUpdateBeneficiario ).Result;
-                resTran = true ? _beneficiariosDat.UpdateCuentaBeneficiario( reqUpdateBeneficiario ) : resTran;
+                resTran = resTran.codigo.Equals( "000" ) ? _beneficiariosDat.UpdateCuentaBeneficiario( reqUpdateBeneficiario ) : resTran;
             }
             else
-            {
+          
                 resTran = _beneficiariosDat.UpdateCuentaBeneficiario( reqUpdateBeneficiario );
-            }
+            
 
             respuesta.str_res_estado_transaccion = resTran.codigo.Equals( "000" ) ? "OK" : "ERR";
             respuesta.str_res_codigo = resTran.codigo;
