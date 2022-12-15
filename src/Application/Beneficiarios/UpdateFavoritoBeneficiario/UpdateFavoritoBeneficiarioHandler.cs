@@ -48,10 +48,6 @@ public class UpdateFavoritoBeneficiarioHandler : RequestHandler<ReqUpdateFavorit
             else
                 resTran = _beneficiariosDat.UpdateFavoritoBeneficiario( reqUpdateFavoritoBeneficiario );
             
-
-            resTran = _beneficiariosDat.UpdateFavoritoBeneficiario( reqUpdateFavoritoBeneficiario );
-            
-
             respuesta.str_res_estado_transaccion = resTran.codigo.Equals( "000" ) ? "OK" : "ERR";
             respuesta.str_res_codigo = resTran.codigo;
             respuesta.str_res_info_adicional = resTran.diccionario.ContainsKey( "str_error" ) ? resTran.diccionario["str_error"] : resTran.diccionario["ERROR"];
