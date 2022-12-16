@@ -10,6 +10,7 @@ namespace Application.Beneficiarios;
 public class ReqUpdateFavoritoBeneficiario : Header, IRequest<ResUpdateFavoritoBeneficiario>
 {
     public string? str_id { get; set; }
+    public string? str_otp{ get; set; }
     public string? str_tipo_beneficiario { get; set; }
     public int int_favorito { get; set; }
  
