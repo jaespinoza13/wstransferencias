@@ -396,6 +396,6 @@ namespace Infrastructure.gRPC_Clients.Sybase
             return respuesta;
         }
 
-
+         
     }
 }
