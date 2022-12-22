@@ -131,7 +131,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 Funciones.llenar_datos_auditoria_salida( ds, req_transferencia );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.str_ente } );
-               // ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_tipo_transferencia", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.str_nemonico_tipo_transferencia } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_tipo_transferencia", TipoDato = TipoDato.VarChar, ObjValue = req_transferencia.str_nemonico_tipo_transferencia } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_solicitud", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.int_solicitud.ToString() } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_requiere_otp", TipoDato = TipoDato.Integer } );
 
