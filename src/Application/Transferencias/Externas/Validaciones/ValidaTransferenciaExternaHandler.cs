@@ -62,6 +62,7 @@ public class ValidaTransferenciaExternaHandler : RequestHandler<ValidaTransferen
                 
                 var reqAddTransferencia = JsonSerializer.Deserialize<ReqAddTransferencia>( JsonSerializer.Serialize( validaTransferenciaExterna ) )!;
                 reqAddTransferencia.int_solicitud = Convert.ToInt32( res_tran.diccionario["int_id_solicitud"] );
+                reqAddTransferencia.str_nemonico_tipo_transferencia = validaTransferenciaExterna.str_srv_transfer;
                 var res_tran_otp = _externasDat.ValidaOtpTransferenciaInternbancaria( reqAddTransferencia );
 
                 if (res_tran_otp.diccionario["str_requiere_otp"].Equals( "1009" ))
