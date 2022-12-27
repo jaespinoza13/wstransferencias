@@ -8,5 +8,7 @@ namespace Application.Transferencias.InterfazDat
     {
         RespuestaTransaccion ValidaTransferenciaInterna(ReqValidaTransferencia req_validar_transferencia);
         RespuestaTransaccion AddTransferenciaInterna(ReqAddTransferencia req_add_transferencia_interna);
+        RespuestaTransaccion ValidaOtpTransferenciaInterna(ReqAddTransferencia req_transferencia);
+
     }
 }
