@@ -44,7 +44,7 @@ public class ValidaTransferenciaInternaHandler : RequestHandler<ValidaTransferen
             if (res_tran.codigo.Equals( "000" ))
             {
                 respuesta.bl_requiere_otp = _wsOtp.ValidaRequiereOtp( validaTransferenciaInterna, validaTransferenciaInterna.str_nemonico_tipo_transferencia! ).Result;
-                if (respuesta.bl_requiere_otp) {
+                if (respuesta.bl_requiere_otp && validaTransferenciaInterna.str_nemonico_tipo_transferencia!.Equals( "TRN_OTRAS_CUENTAS_COOPMEGO" )) {
                     var reqAddTransferencia = JsonSerializer.Deserialize<ReqAddTransferencia>( JsonSerializer.Serialize( validaTransferenciaInterna ) )!;
                     reqAddTransferencia.int_solicitud = Convert.ToInt32( res_tran.diccionario["int_id_solicitud"] );
                     var res_tran_otp = _internasDat.ValidaOtpTransferenciaInterna( reqAddTransferencia );

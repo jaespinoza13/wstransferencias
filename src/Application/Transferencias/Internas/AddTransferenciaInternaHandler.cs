@@ -43,7 +43,8 @@ public class AddTransferenciaInternaHandler : RequestHandler<AddTransferenciaInt
         {
             var bl_requiere_otp = _wsOtp.ValidaRequiereOtp( reqAddTransferencia, reqAddTransferencia.str_nemonico_tipo_transferencia! ).Result;
             var res_tran_otp = _internasDat.ValidaOtpTransferenciaInterna( reqAddTransferencia );
-            bl_requiere_otp = res_tran_otp.diccionario["str_requiere_otp"].Equals( "1006" ) ? false : bl_requiere_otp;
+            if(reqAddTransferencia.str_nemonico_tipo_transferencia!.Equals( "TRN_OTRAS_CUENTAS_COOPMEGO" ))
+                 bl_requiere_otp = res_tran_otp.diccionario["str_requiere_otp"].Equals( "1006" ) ? false : bl_requiere_otp;
 
             if (bl_requiere_otp)
             {
