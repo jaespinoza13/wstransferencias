@@ -60,12 +60,7 @@ public class GetCuentasBeneficiarioHandler : IRequestHandler<ReqGetCuentasBenefi
                         else
                         {
                             respuesta.lst_cuentas_beneficiario[i].str_avatar = " ";
-                            respuesta.lst_cuentas_beneficiario[i].avatar = null;
                         }
-                    }
-                    else
-                    {
-                        respuesta.lst_cuentas_beneficiario[i].avatar = null;
                     }
                 }
             }
