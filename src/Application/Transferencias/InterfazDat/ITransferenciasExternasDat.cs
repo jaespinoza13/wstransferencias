@@ -11,6 +11,5 @@ namespace Application.Transferencias.InterfazDat
         RespuestaTransaccion SetEnvioTransferenciaSPI(ReqTransferencia req_transferencia);
         RespuestaTransaccion AddTransferenciaInternbancaria(ReqAddTransferencia req_transferencia);
         RespuestaTransaccion ValidaOtpTransferenciaInternbancaria(ReqAddTransferencia req_transferencia);
-
     }
 }

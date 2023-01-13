@@ -7,6 +7,7 @@ using Application.Transferencias.InterfazDat;
 using Domain.Entities;
 using MediatR;
 using System.Reflection;
+using System.Text.Json;
 
 namespace Application.Transferencias.Internas;
 
@@ -43,6 +44,12 @@ public class ValidaTransferenciaInternaHandler : RequestHandler<ValidaTransferen
             if (res_tran.codigo.Equals( "000" ))
             {
                 respuesta.bl_requiere_otp = _wsOtp.ValidaRequiereOtp( validaTransferenciaInterna, validaTransferenciaInterna.str_nemonico_tipo_transferencia! ).Result;
+                if (respuesta.bl_requiere_otp && validaTransferenciaInterna.str_nemonico_tipo_transferencia!.Equals( "TRN_OTRAS_CUENTAS_COOPMEGO" )) {
+                    var reqAddTransferencia = JsonSerializer.Deserialize<ReqAddTransferencia>( JsonSerializer.Serialize( validaTransferenciaInterna ) )!;
+                    reqAddTransferencia.int_solicitud = Convert.ToInt32( res_tran.diccionario["int_solicitud"].ToString() );
+                    var res_tran_otp = _internasDat.ValidaOtpTransferenciaInterna( reqAddTransferencia );
+                    respuesta.bl_requiere_otp= res_tran_otp.diccionario["str_requiere_otp"].Equals( "1006" )?false: respuesta.bl_requiere_otp;
+                }
                 respuesta.str_res_estado_transaccion = "OK";
                 respuesta.int_solicitud = Convert.ToInt32( res_tran.diccionario["int_solicitud"].ToString() );
                 respuesta.objValidacionTransferencia = Conversions.ConvertConjuntoDatosToClass<ValidacionTransferencia>( (ConjuntoDatos)res_tran.cuerpo )!;

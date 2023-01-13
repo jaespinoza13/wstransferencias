@@ -59,9 +59,14 @@ public class ValidaTransferenciaExternaHandler : RequestHandler<ValidaTransferen
             if (res_tran.codigo.Equals( "000" ))
             {
                 respuesta.int_solicitud = Convert.ToInt32( res_tran.diccionario["int_id_solicitud"] );
-                if (res_tran.diccionario["str_requiere_otp"].Equals( "1009" ))
+                
+                var reqAddTransferencia = JsonSerializer.Deserialize<ReqAddTransferencia>( JsonSerializer.Serialize( validaTransferenciaExterna ) )!;
+                reqAddTransferencia.int_solicitud = Convert.ToInt32( res_tran.diccionario["int_id_solicitud"] );
+                var res_tran_otp = _externasDat.ValidaOtpTransferenciaInternbancaria( reqAddTransferencia );
+
+                if (res_tran_otp.diccionario["str_requiere_otp"].Equals( "1009" ))
                     respuesta.bl_requiere_otp = true;
-                else if (res_tran.diccionario["str_requiere_otp"].Equals( "1006" ))
+                else if (res_tran_otp.diccionario["str_requiere_otp"].Equals( "1006" ))
                     respuesta.bl_requiere_otp = false;
                 else {
                     respuesta.str_res_codigo = res_tran.diccionario["str_requiere_otp"];

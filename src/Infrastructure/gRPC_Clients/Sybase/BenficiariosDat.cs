@@ -66,7 +66,6 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             return respuesta;
         }
-
         public RespuestaTransaccion AddBeneficiario(ReqAddBeneficiario reqAddBeneficiario)
         {
             var respuesta = new RespuestaTransaccion();
@@ -85,6 +84,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_alias_cta", TipoDato = TipoDato.VarChar, ObjValue = reqAddBeneficiario.str_alias_cta } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = reqAddBeneficiario.str_tipo_beneficiario } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqAddBeneficiario.str_ente } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_favorito", TipoDato = TipoDato.Integer, ObjValue = reqAddBeneficiario.int_favorito.ToString() } );
 
 
                 ds.NombreSP = "add_cuentas_beneficiarios2";
@@ -110,8 +110,6 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             return respuesta;
         }
-
-
         public RespuestaTransaccion UpdateCuentaBeneficiario(ReqUpdateBeneficiario reqUpdateBeneficiario)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
@@ -131,6 +129,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = reqUpdateBeneficiario.str_tipo_beneficiario } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.str_id } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_favorito", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.int_favorito.ToString() } );
 
                 ds.NombreSP = "update_cuentas_beneficiarios2";
                 ds.NombreBD = _settings.DB_meg_servicios;
@@ -157,8 +156,6 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             return respuesta;
         }
-
-
         public RespuestaTransaccion DeleteCuentaBeneficiario(ReqDeleteBeneficiario reqDeleteBeneficiario)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
@@ -197,9 +194,6 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             return respuesta;
         }
-
-
-
         public async Task<RespuestaTransaccion> GetCuentasBeneciairioTrans(ReqGetCuentasBeneficiario reqGetCuentasBeneficiario)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
@@ -237,8 +231,6 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             return respuesta;
         }
-
-
         public async Task<RespuestaTransaccion> ValidaRegistrBeneficiario(ReqValidaRegistroBeneficiario reqValidaRegistroBeneficiario)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
@@ -279,8 +271,6 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             return respuesta;
         }
-
-
         public async Task<RespuestaTransaccion> ValidaOtrasCuentasBeneficiario(ReqValidaOtrasCuentasBeneficiario reqValidaOtrasCuentasBeneficiario)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
@@ -328,7 +318,6 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             return respuesta;
         }
-
         public RespuestaTransaccion GetDatosPagoDirecto(ReqValidaCuentaPagoDirecto reqValidaCuentaPagoDirecto)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
@@ -368,6 +357,45 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             return respuesta;
         }
+        public RespuestaTransaccion UpdateFavoritoBeneficiario(ReqUpdateFavoritoBeneficiario reqUpdateFavoritoBeneficiario)
+        {
+            RespuestaTransaccion respuesta = new RespuestaTransaccion();
 
+            try
+            {
+                DatosSolicitud ds = new DatosSolicitud();
+                Funciones.llenar_datos_auditoria_salida( ds, reqUpdateFavoritoBeneficiario );
+
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqUpdateFavoritoBeneficiario.str_ente } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqUpdateFavoritoBeneficiario.str_id } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_favorito", TipoDato = TipoDato.Integer, ObjValue = reqUpdateFavoritoBeneficiario.int_favorito.ToString() } );
+
+                ds.NombreSP = "update_favorito_beneficiario";
+                ds.NombreBD = _settings.DB_meg_servicios;
+
+                var resultado = _objClienteDal.ExecuteNonQuery( ds );
+                var lst_valores = new List<ParametroSalidaValores>();
+
+                foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
+                var str_codigo = lst_valores.Find( x => x.StrNameParameter == "@int_o_error_cod" )!.ObjValue;
+                var str_error = lst_valores.Find( x => x.StrNameParameter == "@str_o_error" )!.ObjValue.Trim();
+
+                respuesta.codigo = str_codigo.ToString().Trim().PadLeft( 3, '0' );
+                respuesta.cuerpo = resultado.NumAfectados;
+                respuesta.diccionario.Add( "str_error", str_error.ToString() );
+
+            }
+            catch (Exception exception)
+            {
+                respuesta.codigo = "003";
+                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                _logsService.SaveExcepcionDataBaseSybase( reqUpdateFavoritoBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                throw new ArgumentException( reqUpdateFavoritoBeneficiario.str_id_transaccion )!;
+
+            }
+            return respuesta;
+        }
+
+         
     }
 }
