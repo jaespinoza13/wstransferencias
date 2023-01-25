@@ -48,7 +48,7 @@ public class GetCuentasBeneficiarioHandler : IRequestHandler<ReqGetCuentasBenefi
             {
                 for (int i = 0; i < respuesta.lst_cuentas_beneficiario.Count; i++)
                 {
-                    if (respuesta.lst_cuentas_beneficiario[i].str_avatar != " ")
+                    if (respuesta.lst_cuentas_beneficiario[i].str_avatar != " " && respuesta.lst_cuentas_beneficiario[i].int_favorito == 1)
                     {
                         ResGetDocAlfresco resGetDocAlfresco = _wsAlfresco.GetDocumentoAlfresco( respuesta.lst_cuentas_beneficiario[i].str_avatar, operacion, reqGetCuentasBeneficiario.str_id_transaccion );
                         if (resGetDocAlfresco != null && resGetDocAlfresco.file_bytes != null && resGetDocAlfresco.file_bytes.Length > 0)
