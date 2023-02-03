@@ -2,16 +2,16 @@ pipeline {
     
     agent {
         node {
-            label 'web-service-development-server'
+            label 'web-service-production-server'
         }
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '1.0.0'
-        VERSION_PRODUCCION  = '0.0.0'
-        NOMBRE_CONTENEDOR   = 'servicio-transferencias-fav'
-        NOMBRE_IMAGEN       = 'ws_transferencias_fav'
-        PUERTO              = '5303'
+        VERSION_DESPLIEGUE  = '1.1.0'
+        VERSION_PRODUCCION  = '1.0.1'
+        NOMBRE_CONTENEDOR   = 'servicio-transferencias'
+        NOMBRE_IMAGEN       = 'ws_transferencias'
+        PUERTO              = '9003'
         PUERTO_CONTENEDOR   = '80'
         RUTA_LOGS           = '/app/wsTransferencias'
     }
