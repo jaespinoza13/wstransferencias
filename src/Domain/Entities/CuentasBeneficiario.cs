@@ -1,4 +1,6 @@
 ﻿
+using Domain.Services.Alfresco;
+
 namespace Domain.Entities
 {
     public class CuentasBeneficiario
@@ -13,5 +15,7 @@ namespace Domain.Entities
         public string str_descripcion_tipo_producto { get; set; } = String.Empty;
         public decimal dec_monto { get; set; }
         public int int_favorito { get; set; }
+        public string str_avatar { get; set; } = String.Empty;
+        public ResGetDocAlfresco? avatar { get; set; } = new();
     }
 }
