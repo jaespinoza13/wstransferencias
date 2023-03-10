@@ -43,7 +43,7 @@ public class GetCuentasBeneficiarioHandler : IRequestHandler<ReqGetCuentasBenefi
             respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
             respuesta.str_res_codigo = res_tran.codigo;
             respuesta.lst_cuentas_beneficiario = Conversions.ConvertConjuntoDatosToListClass<CuentasBeneficiario>( (ConjuntoDatos)res_tran.cuerpo );
-            
+             
             //if(reqGetCuentasBeneficiario.str_tipo_beneficiario == "BEN_OTRAS_CTAS_COOPMEGO")
             //{
             //    for (int i = 0; i < respuesta.lst_cuentas_beneficiario.Count; i++)
