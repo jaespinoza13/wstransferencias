@@ -16,6 +16,7 @@ namespace Domain.Entities
         public decimal dec_monto { get; set; }
         public int int_favorito { get; set; }
         public string str_avatar { get; set; } = String.Empty;
+        public string str_tipo_beneficiario { get; set; } = String.Empty;
         public ResGetDocAlfresco? avatar { get; set; } = new();
     }
 }
