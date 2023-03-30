@@ -19,5 +19,6 @@ namespace Domain.Entities
         public int int_tipo_tarjeta_cred { get; set; }
         public int int_favorito { get; set; }
         public string? str_descrip_tipo_tarjeta_cred { get; set; }
+        public string? str_avatar{ get; set; }
     }
 }
