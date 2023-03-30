@@ -85,7 +85,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = reqAddBeneficiario.str_tipo_beneficiario } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqAddBeneficiario.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_favorito", TipoDato = TipoDato.Integer, ObjValue = reqAddBeneficiario.int_favorito.ToString() } );
-
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_tarjeta_cred", TipoDato = TipoDato.Integer, ObjValue = reqAddBeneficiario.int_tipo_tarjeta_cred.ToString() } );
 
                 ds.NombreSP = "add_cuentas_beneficiarios2";
                 ds.NombreBD = _settings.DB_meg_servicios;
@@ -130,6 +130,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.str_id } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_favorito", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.int_favorito.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_tarjeta_cred", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.int_tipo_tarjeta_cred.ToString() } );
 
                 ds.NombreSP = "update_cuentas_beneficiarios2";
                 ds.NombreBD = _settings.DB_meg_servicios;
