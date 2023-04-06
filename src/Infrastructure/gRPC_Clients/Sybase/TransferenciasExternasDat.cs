@@ -39,7 +39,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
 
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, req_validar_transferencia );
+                Funciones.llenarDatosAuditoriaSalida( ds, req_validar_transferencia );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_cta_ordenante", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.str_id_cta_ordenante } ); 
@@ -87,7 +87,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, req_transferencia );
+                Funciones.llenarDatosAuditoriaSalida( ds, req_transferencia );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_comprobar_transfer", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.int_id_comprobar_transfer.ToString() } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@mny_o_monto_comision", TipoDato = TipoDato.Money } );
@@ -128,7 +128,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
 
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, req_transferencia );
+                Funciones.llenarDatosAuditoriaSalida( ds, req_transferencia );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_solicitud", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.int_solicitud.ToString() } );
@@ -169,7 +169,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
 
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, req_transferencia );
+                Funciones.llenarDatosAuditoriaSalida( ds, req_transferencia );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_solicitud", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.int_solicitud.ToString() } );

@@ -37,7 +37,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
 
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, reqComprobanteTransferencia );
+                Funciones.llenarDatosAuditoriaSalida( ds, reqComprobanteTransferencia );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_num_referencia", TipoDato = TipoDato.Integer, ObjValue = reqComprobanteTransferencia.int_num_referencia.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_documento_ordenante", TipoDato = TipoDato.VarChar, ObjValue = reqComprobanteTransferencia.str_documento_ordenante.ToString() } );

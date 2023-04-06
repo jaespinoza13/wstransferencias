@@ -36,7 +36,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             try
             {
                 DatosSolicitud ds = new ();
-                Funciones.llenar_datos_auditoria_salida( ds, req_validar_transferencia );
+                Funciones.llenarDatosAuditoriaSalida( ds, req_validar_transferencia );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nemo_tipo_trans", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_nemonico_tipo_transferencia } );
@@ -91,7 +91,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, req_add_transferencia_interna );
+                Funciones.llenarDatosAuditoriaSalida( ds, req_add_transferencia_interna );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_correo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = req_add_transferencia_interna.str_correo_beneficiario } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_solicitud", TipoDato = TipoDato.Integer, ObjValue = req_add_transferencia_interna.int_solicitud.ToString() } );
@@ -137,7 +137,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
 
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, req_transferencia );
+                Funciones.llenarDatosAuditoriaSalida( ds, req_transferencia );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_solicitud", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.int_solicitud.ToString() } );

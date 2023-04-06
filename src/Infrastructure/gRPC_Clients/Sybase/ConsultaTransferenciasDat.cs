@@ -37,7 +37,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
 
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, reqConsultaTransferencias );
+                Funciones.llenarDatosAuditoriaSalida( ds, reqConsultaTransferencias );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_cta_ordenante", TipoDato = TipoDato.VarChar, ObjValue = reqConsultaTransferencias.str_num_cta_ordenante.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@dt_fecha_ini", TipoDato = TipoDato.VarChar, ObjValue = reqConsultaTransferencias.str_fecha_inicio.ToString() } );
