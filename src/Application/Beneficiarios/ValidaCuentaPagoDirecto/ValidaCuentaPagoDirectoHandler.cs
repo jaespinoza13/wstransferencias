@@ -94,7 +94,7 @@ public class ValidaCuentaPagoDirectoHandler : RequestHandler<ReqValidaCuentaPago
                     {
                         res_banred.codigo = "000";
                         //Solo para pruebas
-                        respuesta.str_nombre = "            ";
+                        respuesta.str_nombre = "USUARIO PRUEBAS";
                         respuesta.str_res_info_adicional = "TRANSACCIÓN EXITOSA";
                     }
                     else
