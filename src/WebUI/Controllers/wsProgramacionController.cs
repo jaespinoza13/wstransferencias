@@ -63,10 +63,42 @@ namespace WebUI.Controllers
             return BadRequest();
         }
 
+        [HttpPost( "ADD_PROGRAMACION_TRANS" )]
+        public IActionResult AddTransferencia(ReqAddProgramacionTrans reqAddProgramacionTrans)
+        {
+            ResAddProgramacionTrans respuesta = new();
+
+            var proceso = _settings.ProcesoTransferencia.Find( e => e.proceso == reqAddProgramacionTrans!.str_nemonico_tipo_transferencia );
+
+            if (proceso != null)
+            {
+                reqAddProgramacionTrans!.str_srv_transfer = proceso.servicio;
+
+                if (proceso.tipo == "interna")
+                {
+                    respuesta = Mediator.Send( reqAddProgramacionTrans ).Result;
+                }
+                else if (proceso.tipo == "externa")
+                {
+                    respuesta = Mediator.Send( reqAddProgramacionTrans ).Result;
+                }
+                return Ok( respuesta );
+            }
+
+            return BadRequest();
+        }
+
         [HttpPost( "GET_CONTRATO_PT" )]
         public async Task<ResGetContratoPT> GetContratoPT(ReqGetContratoPT reqGetContratoPT)
         {
             return await Mediator.Send( reqGetContratoPT );
+        }  
+        
+        
+        [HttpPost( "GET_TRANSF_PROGRAMADAS" )]
+        public async Task<ResGetTransfProgramadas> GetTransfProgramadas(ReqGetTransfProgramadas reqGetTransfProgramadas)
+        {
+            return await Mediator.Send( reqGetTransfProgramadas );
         }
     }
 }

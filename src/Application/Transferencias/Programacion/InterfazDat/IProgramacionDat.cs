@@ -8,7 +8,9 @@ namespace Application.Programacion
     {
         RespuestaTransaccion GetDatosInicialesPT(ReqGetDatosInicialesPT reqGetDatosInicialesPT);
         RespuestaTransaccion ValidaProgramacionTrans(ReqValidaProgramacionTrans reqValidaProgramacionTrans);
+        RespuestaTransaccion AddProgramacionTrans(ReqAddProgramacionTrans reqAddProgramacionTrans);
         RespuestaTransaccion GetContratoPT(ReqGetContratoPT reqGetContratoPT);
+        RespuestaTransaccion GetTransfProgramadas(ReqGetTransfProgramadas reqGetTransfProgramadas);
        
     }
 }
