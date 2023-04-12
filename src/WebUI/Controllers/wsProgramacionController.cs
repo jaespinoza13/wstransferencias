@@ -18,7 +18,7 @@ namespace WebUI.Controllers
 
     [Route( "api/wsProgramacion" )]
     [ApiController]
-    [ServiceFilter( typeof( DailyRequestFilter ) )]
+    //[ServiceFilter( typeof( DailyRequestFilter ) )]
     //[Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.Socio )]
     //[ServiceFilter( typeof( CryptographyAESFilter ) )]
     //[ServiceFilter( typeof( ClaimControlFilter ) )]
@@ -93,7 +93,6 @@ namespace WebUI.Controllers
         {
             return await Mediator.Send( reqGetContratoPT );
         }  
-        
         
         [HttpPost( "GET_TRANSF_PROGRAMADAS" )]
         public async Task<ResGetTransfProgramadas> GetTransfProgramadas(ReqGetTransfProgramadas reqGetTransfProgramadas)
