@@ -115,6 +115,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 DatosSolicitud ds = new();
                 Funciones.llenarDatosAuditoriaSalida( ds, reqAddProgramacionTrans );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqAddProgramacionTrans.str_ente } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_dia_transf", TipoDato = TipoDato.Integer, ObjValue = reqAddProgramacionTrans.int_dia_transf.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nemo_tipo_trans", TipoDato = TipoDato.VarChar, ObjValue = reqAddProgramacionTrans.str_nemonico_tipo_transferencia } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_cta_ordenante", TipoDato = TipoDato.Integer, ObjValue = reqAddProgramacionTrans.str_id_cta_ordenante } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_cta_beneficiario", TipoDato = TipoDato.Integer, ObjValue = reqAddProgramacionTrans.str_id_cta_beneficiario } );
@@ -124,7 +125,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@dtt_fecha_desde", TipoDato = TipoDato.VarChar, ObjValue = reqAddProgramacionTrans.str_fecha_desde.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@dtt_fecha_hasta", TipoDato = TipoDato.VarChar, ObjValue = reqAddProgramacionTrans.str_fecha_hasta.ToString() } );
 
-                ds.NombreSP = "add_programacion_trans";
+                ds.NombreSP = "add_programacion_transf";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = _objClienteDal.ExecuteDataSet( ds );

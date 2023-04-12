@@ -15,6 +15,7 @@ public class ReqAddProgramacionTrans : Header, IRequest<ResAddProgramacionTrans>
     public string str_fecha_desde { get; set; } = string.Empty;
     public string str_fecha_hasta { get; set; } = string.Empty;
     public string str_otp { get; set; } = string.Empty;
+    public int int_dia_transf { get; set; }
     public void DecryptAES(ResGetKeys Key)
     {
         str_id_cta_ordenante = CryptographyAES.Decrypt( str_id_cta_ordenante!, Key.str_llave_simetrica );

@@ -7,6 +7,7 @@ namespace Application.Programacion;
 
 public class ResGetTransfProgramadas : ResComun
 {
-    public DatosInicialesPT datos { get; set; } = new();
+    public List<TransferenciasProgramadas>? lst_tranferencias { get; set; }
+
 }
 

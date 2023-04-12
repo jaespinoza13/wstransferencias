@@ -38,7 +38,7 @@ public class GetTransfProgramadasHandler : RequestHandler<ReqGetTransfProgramada
             respuesta.str_res_codigo = res_tran.codigo;
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
 
-            respuesta.datos = Conversions.ConvertConjuntoDatosToClass<DatosInicialesPT>( (ConjuntoDatos)res_tran.cuerpo );
+            respuesta.lst_tranferencias = Conversions.ConvertConjuntoDatosToListClass<TransferenciasProgramadas>( (ConjuntoDatos)res_tran.cuerpo);
             _logs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
             return respuesta;
 
