@@ -40,7 +40,7 @@ public class AddProgramacionTransHandler : RequestHandler<ReqAddProgramacionTran
 
         try
         {
-            var requiereOtp = _wsOtp.ValidaRequiereOtp( reqAddProgramacionTrans, "PROGRAMACION_TRANS" ).Result;
+            var requiereOtp = _wsOtp.ValidaRequiereOtp( reqAddProgramacionTrans, "ADD_PROGRAMACION_TRANS" ).Result;
 
             var ejecutarSolicitud = false;
             if (requiereOtp)
