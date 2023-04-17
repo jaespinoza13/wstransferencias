@@ -46,7 +46,7 @@ public class AddProgramacionTransHandler : RequestHandler<ReqAddProgramacionTran
             if (requiereOtp)
             {
                 var res_tran_otp = _wsOtp.ValidaOtp( reqAddProgramacionTrans ).Result;
-                if (res_tran.codigo.Equals( "000" ))
+                if (res_tran_otp.codigo.Equals( "000" ))
                     ejecutarSolicitud = true;
                 else
                 {
