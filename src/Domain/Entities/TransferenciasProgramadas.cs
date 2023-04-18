@@ -14,6 +14,7 @@ namespace Domain.Entities
         public string str_id_cta_beneficiario  { get; set; } = String.Empty;
         public string str_nombre_ben  { get; set; } = String.Empty; 
         public string str_num_cta_ben  { get; set; } = String.Empty; 
+        public string str_nombre_ifi { get; set; } = String.Empty; 
         public string str_acronimo_producto  { get; set; } = String.Empty;
         public string str_fecha_inicio  { get; set; } = String.Empty;
         public string str_fecha_fin  { get; set; } = String.Empty;
