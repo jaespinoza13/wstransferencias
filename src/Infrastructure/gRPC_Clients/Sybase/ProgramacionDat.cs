@@ -216,6 +216,40 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 throw new ArgumentException( reqGetTransfProgramadas.str_id_transaccion )!;
             }
             return respuesta;
+        } public RespuestaTransaccion DelProgramacionTrans(ReqDelProgramacionTrans reqDelProgramacionTrans)
+        {
+            RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            try
+            {
+
+                DatosSolicitud ds = new ();
+                Funciones.llenarDatosAuditoriaSalida( ds, reqDelProgramacionTrans );
+
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_pt", TipoDato = TipoDato.Integer, ObjValue = reqDelProgramacionTrans.int_id.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqDelProgramacionTrans.str_ente } );
+
+                ds.NombreSP = "del_programacion_transf";
+                ds.NombreBD = _settings.DB_meg_servicios;
+
+                var resultado = _objClienteDal.ExecuteDataSet( ds );
+                var lst_valores = new List<ParametroSalidaValores>();
+
+                foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
+                var str_codigo = lst_valores.Find( x => x.StrNameParameter == "@int_o_error_cod" )!.ObjValue;
+                var str_error = lst_valores.Find( x => x.StrNameParameter == "@str_o_error" )!.ObjValue.Trim();
+                respuesta.codigo = str_codigo.ToString().Trim().PadLeft( 3, '0' );
+                respuesta.cuerpo = Funciones.ObtenerDatos( resultado );
+                respuesta.diccionario.Add( "str_error", str_error.ToString() );
+
+            }
+            catch (Exception exception)
+            {
+                respuesta.codigo = "003";
+                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                _logsService.SaveExcepcionDataBaseSybase( reqDelProgramacionTrans, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                throw new ArgumentException( reqDelProgramacionTrans.str_id_transaccion )!;
+            }
+            return respuesta;
         }
 
     }

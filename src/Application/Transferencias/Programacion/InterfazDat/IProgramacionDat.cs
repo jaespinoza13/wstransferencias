@@ -11,6 +11,7 @@ namespace Application.Programacion
         RespuestaTransaccion AddProgramacionTrans(ReqAddProgramacionTrans reqAddProgramacionTrans);
         RespuestaTransaccion GetContratoPT(ReqGetContratoPT reqGetContratoPT);
         RespuestaTransaccion GetTransfProgramadas(ReqGetTransfProgramadas reqGetTransfProgramadas);
+        RespuestaTransaccion DelProgramacionTrans(ReqDelProgramacionTrans reqDelProgramacionTrans);
        
     }
 }
