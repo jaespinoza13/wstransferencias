@@ -93,12 +93,19 @@ namespace WebUI.Controllers
         public async Task<ResGetContratoPT> GetContratoPT(ReqGetContratoPT reqGetContratoPT)
         {
             return await Mediator.Send( reqGetContratoPT );
-        }  
-        
+        }
+
         [HttpPost( "GET_TRANSF_PROGRAMADAS" )]
-        public async Task<ResGetTransfProgramadas> GetTransfProgramadas(ReqGetTransfProgramadas reqGetTransfProgramadas)
+        public async Task<ResGetTransfProgramadas> DelTransferencia(ReqGetTransfProgramadas reqGetTransfProgramadas)
         {
             return await Mediator.Send( reqGetTransfProgramadas );
         }
+
+        [HttpPost( "DEL_PROGRAMACION_TRANS" )]
+        public async Task<ResDelProgramacionTrans> GetTransfProgramadas(ReqDelProgramacionTrans reqDelProgramacionTrans)
+        {
+            return await Mediator.Send( reqDelProgramacionTrans );
+        }
+
     }
 }
