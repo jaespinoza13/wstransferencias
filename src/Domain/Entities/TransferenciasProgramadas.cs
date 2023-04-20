@@ -21,6 +21,7 @@ namespace Domain.Entities
         public string int_dia_transf  { get; set; } = String.Empty;
         public string dec_monto_tran  { get; set; } = String.Empty; 
         public string str_observacion { get; set; } = String.Empty;
+        public string str_avatar { get; set; } = String.Empty;
 
     }
 }
