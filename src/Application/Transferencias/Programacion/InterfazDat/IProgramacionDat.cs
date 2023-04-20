@@ -12,6 +12,7 @@ namespace Application.Programacion
         RespuestaTransaccion GetContratoPT(ReqGetContratoPT reqGetContratoPT);
         RespuestaTransaccion GetTransfProgramadas(ReqGetTransfProgramadas reqGetTransfProgramadas);
         RespuestaTransaccion DelProgramacionTrans(ReqDelProgramacionTrans reqDelProgramacionTrans);
+        RespuestaTransaccion UpdProgramacionTrans(ReqUpdProgramacionTrans reqUpdProgramacionTrans);
        
     }
 }

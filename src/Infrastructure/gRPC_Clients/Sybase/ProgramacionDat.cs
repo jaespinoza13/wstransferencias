@@ -106,7 +106,8 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 throw new ArgumentException( reqValidaProgramacionTrans.str_id_transaccion )!;
             }
             return respuesta;
-        }    public RespuestaTransaccion AddProgramacionTrans(ReqAddProgramacionTrans reqAddProgramacionTrans)
+        }    
+        public RespuestaTransaccion AddProgramacionTrans(ReqAddProgramacionTrans reqAddProgramacionTrans)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try
@@ -145,6 +146,49 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
                 _logsService.SaveExcepcionDataBaseSybase( reqAddProgramacionTrans, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
                 throw new ArgumentException( reqAddProgramacionTrans.str_id_transaccion )!;
+            }
+            return respuesta;
+        }
+         public RespuestaTransaccion UpdProgramacionTrans(ReqUpdProgramacionTrans reqUpdProgramacionTrans)
+        {
+            RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            try
+            {
+
+                DatosSolicitud ds = new();
+                Funciones.llenarDatosAuditoriaSalida( ds, reqUpdProgramacionTrans );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_pt", TipoDato = TipoDato.Integer, ObjValue = reqUpdProgramacionTrans.int_id.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqUpdProgramacionTrans.str_ente } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_dia_transf", TipoDato = TipoDato.Integer, ObjValue = reqUpdProgramacionTrans.int_dia_transf.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nemo_tipo_trans", TipoDato = TipoDato.VarChar, ObjValue = reqUpdProgramacionTrans.str_nemonico_tipo_transferencia } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_cta_ordenante", TipoDato = TipoDato.Integer, ObjValue = reqUpdProgramacionTrans.str_id_cta_ordenante } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_cta_beneficiario", TipoDato = TipoDato.Integer, ObjValue = reqUpdProgramacionTrans.str_id_cta_beneficiario } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@mny_monto", TipoDato = TipoDato.Decimal, ObjValue = reqUpdProgramacionTrans.dec_monto_tran.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_observacion", TipoDato = TipoDato.VarChar, ObjValue = String.IsNullOrEmpty( reqUpdProgramacionTrans.str_observacion ) ? "" : reqUpdProgramacionTrans.str_observacion } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_tipo_servicio", TipoDato = TipoDato.VarChar, ObjValue = reqUpdProgramacionTrans.str_srv_transfer } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@dtt_fecha_desde", TipoDato = TipoDato.VarChar, ObjValue = reqUpdProgramacionTrans.str_fecha_desde.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@dtt_fecha_hasta", TipoDato = TipoDato.VarChar, ObjValue = reqUpdProgramacionTrans.str_fecha_hasta.ToString() } );
+
+                ds.NombreSP = "upd_programacion_transf";
+                ds.NombreBD = _settings.DB_meg_servicios;
+
+                var resultado = _objClienteDal.ExecuteDataSet( ds );
+                var lst_valores = new List<ParametroSalidaValores>();
+
+                foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
+                var str_codigo = lst_valores.Find( x => x.StrNameParameter == "@int_o_error_cod" )!.ObjValue;
+                var str_error = lst_valores.Find( x => x.StrNameParameter == "@str_o_error" )!.ObjValue.Trim();
+                respuesta.codigo = str_codigo.ToString().Trim().PadLeft( 3, '0' );
+                respuesta.cuerpo = Funciones.ObtenerDatos( resultado );
+                respuesta.diccionario.Add( "str_error", str_error.ToString() );
+
+            }
+            catch (Exception exception)
+            {
+                respuesta.codigo = "003";
+                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                _logsService.SaveExcepcionDataBaseSybase( reqUpdProgramacionTrans, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                throw new ArgumentException( reqUpdProgramacionTrans.str_id_transaccion )!;
             }
             return respuesta;
         }

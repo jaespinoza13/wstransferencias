@@ -43,7 +43,11 @@ public class ValidaProgramacionTransHandler : RequestHandler<ReqValidaProgramaci
             var res_tran = _programacionDat.ValidaProgramacionTrans( reqValidaProgramacionTrans );
 
             if (res_tran.codigo.Equals( "000" ))
-                respuesta.bl_requiere_otp = _wsOtp.ValidaRequiereOtp( reqValidaProgramacionTrans, "ADD_PROGRAMACION_TRANS" ).Result;
+                if (reqValidaProgramacionTrans.int_id==0)
+                    respuesta.bl_requiere_otp = _wsOtp.ValidaRequiereOtp( reqValidaProgramacionTrans, "ADD_PROGRAMACION_TRANS" ).Result;
+                else
+                    respuesta.bl_requiere_otp = _wsOtp.ValidaRequiereOtp( reqValidaProgramacionTrans, "UPD_PROGRAMACION_TRANS" ).Result;
+
             respuesta.str_res_codigo = res_tran.codigo;
             respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals( "000" )) ? "OK" : "ERR";
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();

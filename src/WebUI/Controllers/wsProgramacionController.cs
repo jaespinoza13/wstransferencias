@@ -19,10 +19,10 @@ namespace WebUI.Controllers
     [Route( "api/wsProgramacion" )]
     [ApiController]
     [ServiceFilter( typeof( DailyRequestFilter ) )]
-    //[Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.Socio )]
-    //[ServiceFilter( typeof( CryptographyAESFilter ) )]
-    //[ServiceFilter( typeof( ClaimControlFilter ) )]
-    //[ServiceFilter( typeof( SessionControlFilter ) )]
+    [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.Socio )]
+    [ServiceFilter( typeof( CryptographyAESFilter ) )]
+    [ServiceFilter( typeof( ClaimControlFilter ) )]
+    [ServiceFilter( typeof( SessionControlFilter ) )]
 
     [ProducesResponseType( StatusCodes.Status200OK )]
     [ProducesResponseType( StatusCodes.Status400BadRequest )]
@@ -40,7 +40,7 @@ namespace WebUI.Controllers
         }
 
         [HttpPost( "VALIDA_PROGRAMACION_TRANS" )]
-        public IActionResult ValidaTransferencia(ReqValidaProgramacionTrans reqValidaProgramacionTrans)
+        public IActionResult ValidaProgramacionTrans(ReqValidaProgramacionTrans reqValidaProgramacionTrans)
         {
             ResValidaProgramacionTrans respuesta = new();
 
@@ -49,15 +49,7 @@ namespace WebUI.Controllers
             if (proceso != null)
             {
                 reqValidaProgramacionTrans!.str_srv_transfer = proceso.servicio;
-
-                if (proceso.tipo == "interna")
-                {
-                    respuesta = Mediator.Send( reqValidaProgramacionTrans ).Result;
-                }
-                else if (proceso.tipo == "externa")
-                {
-                    respuesta = Mediator.Send( reqValidaProgramacionTrans ).Result;
-                }
+                respuesta = Mediator.Send( reqValidaProgramacionTrans ).Result;
                 return Ok( respuesta );
             }
 
@@ -65,7 +57,7 @@ namespace WebUI.Controllers
         }
 
         [HttpPost( "ADD_PROGRAMACION_TRANS" )]
-        public IActionResult AddTransferencia(ReqAddProgramacionTrans reqAddProgramacionTrans)
+        public IActionResult AddProgramacionTrans(ReqAddProgramacionTrans reqAddProgramacionTrans)
         {
             ResAddProgramacionTrans respuesta = new();
 
@@ -74,15 +66,22 @@ namespace WebUI.Controllers
             if (proceso != null)
             {
                 reqAddProgramacionTrans!.str_srv_transfer = proceso.servicio;
+                respuesta = Mediator.Send( reqAddProgramacionTrans ).Result;
+                return Ok( respuesta );
+            }
 
-                if (proceso.tipo == "interna")
-                {
-                    respuesta = Mediator.Send( reqAddProgramacionTrans ).Result;
-                }
-                else if (proceso.tipo == "externa")
-                {
-                    respuesta = Mediator.Send( reqAddProgramacionTrans ).Result;
-                }
+            return BadRequest();
+        }  [HttpPost( "UPD_PROGRAMACION_TRANS" )]
+        public IActionResult UpdTransferencia(ReqUpdProgramacionTrans reqUpdProgramacionTrans)
+        {
+            ResUpdProgramacionTrans respuesta = new();
+
+            var proceso = _settings.ProcesoTransferencia.Find( e => e.proceso == reqUpdProgramacionTrans!.str_nemonico_tipo_transferencia );
+
+            if (proceso != null)
+            {
+                reqUpdProgramacionTrans!.str_srv_transfer = proceso.servicio;
+                respuesta = Mediator.Send( reqUpdProgramacionTrans ).Result;
                 return Ok( respuesta );
             }
 

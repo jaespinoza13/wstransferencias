@@ -3,7 +3,7 @@ using Application.Common.ISO20022.Models;
 using Application.Common.Cryptography;
 
 namespace Application.Programacion;
-public class ReqValidaProgramacionTrans : Header, IRequest<ResValidaProgramacionTrans>
+public class ReqUpdProgramacionTrans : Header, IRequest<ResUpdProgramacionTrans>
 
 {
     public string? str_nemonico_tipo_transferencia { get; set; }
@@ -14,7 +14,10 @@ public class ReqValidaProgramacionTrans : Header, IRequest<ResValidaProgramacion
     public string str_srv_transfer { get; set; } = string.Empty;
     public string str_fecha_desde { get; set; } = string.Empty;
     public string str_fecha_hasta { get; set; } = string.Empty;
-    public int int_id { get; set; } = 0;
+    public string str_otp { get; set; } = string.Empty;
+    public int int_dia_transf { get; set; }
+    public int int_id { get; set; }
+
     public void DecryptAES(ResGetKeys Key)
     {
         str_id_cta_ordenante = CryptographyAES.Decrypt( str_id_cta_ordenante!, Key.str_llave_simetrica );
