@@ -91,10 +91,8 @@ public class AddTransferenciaExternaHandler : RequestHandler<AddTransferenciaExt
                 {
                     
                     var cabecera = Functions.LlenarCabeceraSolicitud( reqAddTransferencia );
-                    int int_realiza_pd = 0;
-                    var res_pago_directo = ejecutar_pago_directo( datos_validados, cabecera, respuesta.str_id_transaccion, out int_realiza_pd );
+                    var res_pago_directo = ejecutar_pago_directo( datos_validados, cabecera, respuesta.str_id_transaccion );
                     //respuesta.str_res_codigo = res_tran.codigo;
-                    respuesta.objAddTransferencia.int_enviar_banred = int_realiza_pd;
                     respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
                 }
                 else
@@ -123,7 +121,7 @@ public class AddTransferenciaExternaHandler : RequestHandler<AddTransferenciaExt
     }
 
 
-    public RespuestaTransaccion ejecutar_pago_directo(ValidacionTransaccion datos_validados, Cabecera cabecera, String str_id_transaccion, out int int_realiza_pd)
+    public RespuestaTransaccion ejecutar_pago_directo(ValidacionTransaccion datos_validados, Cabecera cabecera, String str_id_transaccion)
     {
         RespuestaTransaccion respuesta = new RespuestaTransaccion();
         try
@@ -178,8 +176,7 @@ public class AddTransferenciaExternaHandler : RequestHandler<AddTransferenciaExt
             sol_tran.cuerpo = datos_para_validacion_banred;
             sol_tran.cabecera = cabecera;
 
-            var respuesta_pd = _validacionesPagoDirecto.ProcesarSolicitud( sol_tran, str_id_transaccion );
-            int_realiza_pd = getEvaluarRespuesta( respuesta_pd );
+            _validacionesPagoDirecto.ProcesarSolicitud( sol_tran, str_id_transaccion );
         }
         catch (Exception ex)
         {
@@ -189,23 +186,4 @@ public class AddTransferenciaExternaHandler : RequestHandler<AddTransferenciaExt
         return respuesta;
     }
 
-    /// <summary>
-    /// Evaluar respouesta enviada por banred
-    /// </summary>
-    /// <param name="respuesta"></param>
-    /// <returns></returns>
-    private int getEvaluarRespuesta(RespuestaTransaccion respuesta)
-    {
-        int int_pago_directo = 0;
-        try
-        {
-            if (respuesta.codigo == "0000")
-                int_pago_directo = 1;
-        }
-        catch
-        {
-            // Se captura pero no se genera excepcion porque no es necesario
-        }
-        return int_pago_directo;
-    }
 }
