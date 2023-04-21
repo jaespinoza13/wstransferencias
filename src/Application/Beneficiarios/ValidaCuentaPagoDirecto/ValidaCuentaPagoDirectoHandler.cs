@@ -60,7 +60,6 @@ public class ValidaCuentaPagoDirectoHandler : RequestHandler<ReqValidaCuentaPago
 
             if (res_obtiene_datos.codigo.Equals( "000" ))
             {
-
                 var datosValidaCuenta = Conversions.ConvertConjuntoDatosToClass<Transaccion>( (ConjuntoDatos)res_obtiene_datos.cuerpo );
 
                 var res_validacion_transferencia = JsonSerializer.Deserialize<ValidacionTransaccion>( JsonSerializer.Serialize( datosValidaCuenta ));
@@ -94,7 +93,7 @@ public class ValidaCuentaPagoDirectoHandler : RequestHandler<ReqValidaCuentaPago
                     {
                         res_banred.codigo = "000";
                         //Solo para pruebas
-                        respuesta.str_nombre = "USUARIO MEGONLINE";
+                        respuesta.str_nombre = "USUARIO PRUEBAS";
                         respuesta.str_res_info_adicional = "TRANSACCIÓN EXITOSA";
                     }
                     else
