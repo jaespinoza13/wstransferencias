@@ -22,6 +22,6 @@ namespace Domain.Entities
         public string dec_monto_tran  { get; set; } = String.Empty; 
         public string str_observacion { get; set; } = String.Empty;
         public string str_avatar { get; set; } = String.Empty;
-
+        public string str_correo { get; set; } = String.Empty;
     }
 }
