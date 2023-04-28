@@ -260,7 +260,39 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 throw new ArgumentException( reqGetTransfProgramadas.str_id_transaccion )!;
             }
             return respuesta;
-        } public RespuestaTransaccion DelProgramacionTrans(ReqDelProgramacionTrans reqDelProgramacionTrans)
+        } 
+        public RespuestaTransaccion GetTransfEjecucion(ReqGetTransfEjecucion reqGetTransfEjecucion)
+        {
+            RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            try
+            {
+
+                DatosSolicitud ds = new DatosSolicitud();
+                Funciones.llenarDatosAuditoriaSalida( ds, reqGetTransfEjecucion );
+                ds.NombreSP = "get_transf_ejecucion";
+                ds.NombreBD = _settings.DB_meg_servicios;
+
+                var resultado = _objClienteDal.ExecuteDataSet( ds );
+                var lst_valores = new List<ParametroSalidaValores>();
+
+                foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
+                var str_codigo = lst_valores.Find( x => x.StrNameParameter == "@int_o_error_cod" )!.ObjValue;
+                var str_error = lst_valores.Find( x => x.StrNameParameter == "@str_o_error" )!.ObjValue.Trim();
+                respuesta.codigo = str_codigo.ToString().Trim().PadLeft( 3, '0' );
+                respuesta.cuerpo = Funciones.ObtenerDatos( resultado );
+                respuesta.diccionario.Add( "str_error", str_error.ToString() );
+
+            }
+            catch (Exception exception)
+            {
+                respuesta.codigo = "003";
+                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                _logsService.SaveExcepcionDataBaseSybase( reqGetTransfEjecucion, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                throw new ArgumentException( reqGetTransfEjecucion.str_id_transaccion )!;
+            }
+            return respuesta;
+        } 
+        public RespuestaTransaccion DelProgramacionTrans(ReqDelProgramacionTrans reqDelProgramacionTrans)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try

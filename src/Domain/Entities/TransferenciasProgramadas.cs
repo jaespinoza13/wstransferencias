@@ -23,5 +23,6 @@ namespace Domain.Entities
         public string str_observacion { get; set; } = String.Empty;
         public string str_avatar { get; set; } = String.Empty;
         public string str_correo { get; set; } = String.Empty;
+        public string str_descripcion_tipo_producto { get; set; } = String.Empty;
     }
 }
