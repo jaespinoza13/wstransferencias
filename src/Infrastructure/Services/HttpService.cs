@@ -89,7 +89,7 @@ public class HttpService : IHttpService
 
                 _logs.SaveHttpErrorLogs( JsonSerializer.Deserialize<dynamic>( serializedData ), MethodBase.GetCurrentMethod()!.Name, "HttpService", res_servicio, str_id_transaccion );
             }
-
+			client.Dispose();
             return respuesta;
         }
         catch (Exception ex)

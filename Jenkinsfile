@@ -7,13 +7,15 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '1.3.0'
-        VERSION_PRODUCCION  = '1.2.0'
+        VERSION_DESPLIEGUE  = '1.3.1'
+        VERSION_PRODUCCION  = '1.3.0'
         NOMBRE_CONTENEDOR   = 'servicio-transferencias'
         NOMBRE_IMAGEN       = 'ws_transferencias'
         PUERTO              = '9003'
         PUERTO_CONTENEDOR   = '80'
+		RUTA_CONFIG 		= '/config/wsTransferencias/'
         RUTA_LOGS           = '/app/wsTransferencias'
+		RUTA_COMPROBANTES   = '/plantillas/comprobantes/'
     }
 
     stages {
@@ -41,23 +43,11 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying ...'
-                sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
-                        --name ${NOMBRE_CONTENEDOR} \
-                        -v ${RUTA_LOGS}:/app/Logs/ \
-                        -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
+                sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
                         -e TZ=${TZ} \
-                        -e secretKey=${SECRETKEY} \
-                        -e Key_token_pub=${SECRET_KEY_TOKEN_PUB} \
-                        -e Key_encrypt_token=${SECRET_KEY_ENCRYPT_TOKEN} \
-                        -e issuer=${ISSUER} \
-                        -e ApiSettings__GrpcSettings__client_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
-                        -e ApiSettings__GrpcSettings__client_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
-                        -e ApiSettings__Endpoints__servicio_ws_otp=${ENDPOINT_WS_OTP} \
-                        -e ApiSettings__Endpoints__servicio_ws_alfresco=${ENDPOINT_WS_ALFRESCO} \
-                        -e ApiSettings__Endpoints__servicio_ws_banred=${ENDPOINT_WS_BANRED} \
-                        -e ApiSettings__EndpointsAuth__auth_ws_transferencias=${AUTH_WS_TRANSFERENCIAS} \
-                        -e ApiSettings__EndpointsAuth__auth_ws_otp=${AUTH_WS_OTP} \
-                        -e ApiSettings__EndpointsAuth__auth_ws_banred=${AUTH_WS_BANRED} \
+						-v ${RUTA_LOGS}:/app/Logs/ \
+						-v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
+                        -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
                         ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
                     '''
             }
@@ -66,7 +56,7 @@ pipeline {
         stage('Restart') {
             steps {
                 echo 'Restarting ...'
-                 sh 'docker restart ${NOMBRE_CONTENEDOR}'
+                sh 'docker restart ${NOMBRE_CONTENEDOR}'
             }
         }
     }
@@ -79,24 +69,12 @@ pipeline {
 
         failure {
             sh  'docker rm -f ${NOMBRE_CONTENEDOR}'
-            sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
-                    --name ${NOMBRE_CONTENEDOR} \
-                    -v ${RUTA_LOGS}:/app/Logs/ \
+            sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
+					-e TZ=${TZ} \
+					-v ${RUTA_LOGS}:/app/Logs/ \
+					-v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
                     -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
-                    -e TZ=${TZ} \
-                    -e secretKey=${SECRETKEY} \
-                    -e Key_token_pub=${SECRET_KEY_TOKEN_PUB} \
-                        -e Key_encrypt_token=${SECRET_KEY_ENCRYPT_TOKEN} \
-                    -e issuer=${ISSUER} \
-                    -e ApiSettings__GrpcSettings__client_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
-                    -e ApiSettings__GrpcSettings__client_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
-                    -e ApiSettings__Endpoints__servicio_ws_otp=${ENDPOINT_WS_OTP} \
-                    -e ApiSettings__Endpoints__servicio_ws_alfresco=${ENDPOINT_WS_ALFRESCO} \
-                    -e ApiSettings__Endpoints__servicio_ws_banred=${ENDPOINT_WS_BANRED} \
-                    -e ApiSettings__EndpointsAuth__auth_ws_transferencias=${AUTH_WS_TRANSFERENCIAS} \
-                    -e ApiSettings__EndpointsAuth__auth_ws_otp=${AUTH_WS_OTP} \
-                    -e ApiSettings__EndpointsAuth__auth_ws_banred=${AUTH_WS_BANRED} \
-                    ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
+					${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
                 '''
             slackSend color: '#FE2D00', failOnError:true, message:"Despliegue fallido 😬 - ${env.JOB_NAME} he reversado a la versión ${VERSION_PRODUCCION} - (<${env.BUILD_URL}|Open>)"
         }
