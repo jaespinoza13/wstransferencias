@@ -111,7 +111,6 @@ public class ValidaTransferenciaExternaHandler : RequestHandler<ValidaTransferen
                             respuesta_error_validacion.str_res_codigo = _settings.codigo_error_datos_incorrectos_coopmego;
                         }
                         respuesta.str_res_info_adicional = _parametersInMemory.FindErrorCode( "1033" ).str_descripcion;
-
                     }
                 }
 

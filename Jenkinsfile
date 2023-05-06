@@ -7,14 +7,15 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '1.0.0'
-        VERSION_PRODUCCION  = '0.0.0'
+        VERSION_DESPLIEGUE  = '1.1.0'
+        VERSION_PRODUCCION  = '1.0.0'
         NOMBRE_CONTENEDOR   = 'servicio-transferencias-movil'
         NOMBRE_IMAGEN       = 'ws_transferencias_movil'
         PUERTO              = '8003'
         PUERTO_CONTENEDOR   = '80'
 		RUTA_CONFIG 		= '/config/wsTransferencias/'
         RUTA_LOGS           = '/app/wsTransferencias'
+		RUTA_COMPROBANTES   = '/plantillas/comprobantes/'
     }
 
     stages {
@@ -51,10 +52,11 @@ pipeline {
                     '''
             }
         }
+		
         stage('Restart') {
             steps {
                 echo 'Restarting ...'
-                 sh 'docker restart ${NOMBRE_CONTENEDOR}'
+                sh 'docker restart ${NOMBRE_CONTENEDOR}'
             }
         }
     }
