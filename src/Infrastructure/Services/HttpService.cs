@@ -65,7 +65,7 @@ public class HttpService : IHttpService
             HttpClient client = new();
             client.BaseAddress = new Uri( serviceAddress );
             client.DefaultRequestHeaders.Add( "Authorization", authorizationType + " " + auth );
-            client.Timeout = TimeSpan.FromSeconds( _settings.timeOutHttp );
+            client.Timeout = TimeSpan.FromSeconds( _settings.timeOutHttpBanRed );
 
             var httpContent = new StringContent( serializedData, Encoding.UTF8, "application/json" );
 
@@ -99,4 +99,5 @@ public class HttpService : IHttpService
             throw new Exception( data!.str_id_transaccion )!;
         }
     }
+   
 }

@@ -84,7 +84,7 @@ public class ValidacionesPagoDirectoHandler : IValidacionesPagoDirecto
             sol_tran.cuerpo = datos_para_validacion_banred;
             sol_tran.cabecera = cabecera;
 
-            return ProcesarSolicitud( sol_tran, str_id_transaccion );
+           return ProcesarSolicitud( sol_tran, str_id_transaccion );
         }
         catch (Exception)
         {
@@ -119,7 +119,6 @@ public class ValidacionesPagoDirectoHandler : IValidacionesPagoDirecto
         catch (Exception exception)
         {
             _logs.SaveHttpErrorLogs( respuesta, MethodBase.GetCurrentMethod()!.Name, _clase, exception, str_id_transaccion );
-            throw new ArgumentException( str_id_transaccion );
         }
         return respuesta;
     }
