@@ -24,7 +24,7 @@ public class ValidaUpdateBeneficiarioHandler : IRequestHandler<ReqValidaUpdateBe
         ResValidaUpdateBeneficiario respuesta = new();
         respuesta.LlenarResHeader( reqValidaUpdateBeneficiario );
 
-        await _logs.SaveHeaderLogs( reqValidaUpdateBeneficiario, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+        _logs.SaveHeaderLogs( reqValidaUpdateBeneficiario, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
 
         try
         {
@@ -34,12 +34,12 @@ public class ValidaUpdateBeneficiarioHandler : IRequestHandler<ReqValidaUpdateBe
             respuesta.str_res_info_adicional = String.Empty;
             respuesta.bl_requiere_otp = bl_requiere_otp;
 
-            await _logs.SaveResponseLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+            _logs.SaveResponseLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
             return respuesta;
         }
         catch (Exception exception)
         {
-            await _logs.SaveExceptionLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase, exception );
+            _logs.SaveExceptionLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase, exception );
             throw new ArgumentException( respuesta.str_id_transaccion );
         }
     }

@@ -32,7 +32,7 @@ public class ValidaOtrasCuentasBeneficiarioHandler : IRequestHandler<ReqValidaOt
         ResValidaOtrasCuentasBeneficiario respuesta = new();
         respuesta.LlenarResHeader( reqValidaOtrasCuentasBeneficiario );
 
-        await _logs.SaveHeaderLogs( reqValidaOtrasCuentasBeneficiario, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+        _logs.SaveHeaderLogs( reqValidaOtrasCuentasBeneficiario, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
 
         try
         {
@@ -48,12 +48,12 @@ public class ValidaOtrasCuentasBeneficiarioHandler : IRequestHandler<ReqValidaOt
             respuesta.str_res_codigo = res_tran.codigo;
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
             respuesta.str_res_estado_transaccion = res_tran.codigo.Equals( "000" ) ? "OK" : "ERR";
-            await _logs.SaveResponseLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+            _logs.SaveResponseLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
             return respuesta;
         }
         catch (Exception exception)
         {
-            await _logs.SaveExceptionLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase, exception );
+            _logs.SaveExceptionLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase, exception );
             throw new ArgumentException( respuesta.str_id_transaccion );
         }
     }
