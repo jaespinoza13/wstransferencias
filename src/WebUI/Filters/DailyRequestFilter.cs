@@ -20,7 +20,7 @@ public class DailyRequestFilter : IActionFilter
             //DAILY REQUEST FILTER
             var endpoint = context.HttpContext.Request.Path;
             string[] operacion = endpoint.Value!.Split( "/" );
-            _dailyRequest.controlPeticionesDiaras( operacion[3].ToUpper() );
+            Task.Run( () => _dailyRequest.controlPeticionesDiaras( operacion[3].ToUpper() ));
         }
         else
         {
