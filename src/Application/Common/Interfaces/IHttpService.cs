@@ -9,5 +9,7 @@ public interface IHttpService
                                         string parameters,
                                         string auth,
                                         string authorizationType,
-                                        string str_id_transaccion); 
+                                        string str_id_transaccion,
+                                        int timeout = 0
+        ); 
 }

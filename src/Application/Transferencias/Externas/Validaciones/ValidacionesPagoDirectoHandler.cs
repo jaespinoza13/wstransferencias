@@ -107,12 +107,12 @@ public class ValidacionesPagoDirectoHandler : IValidacionesPagoDirecto
                 case "TRCO":
                 case "TRTC":
                     string str_data = JsonSerializer.Serialize( sol_tran );
-                    respuesta = _httpService.PostRestServiceDataAsync<RespuestaTransaccion>( str_data, _settings.servicio_ws_banred, String.Empty, _settings.auth_ws_banred, AuthorizationType.BASIC, str_id_transaccion ).Result;
+                    respuesta = _httpService.PostRestServiceDataAsync<RespuestaTransaccion>( str_data, _settings.servicio_ws_banred, String.Empty, _settings.auth_ws_banred, AuthorizationType.BASIC, str_id_transaccion,1 ).Result;
                     break;
 
                 default:
                     string str_data_validar = JsonSerializer.Serialize( sol_tran );
-                    respuesta = _httpService.PostRestServiceDataAsync<RespuestaTransaccion>( str_data_validar, _settings.servicio_ws_banred, String.Empty, _settings.auth_ws_banred, AuthorizationType.BASIC, str_id_transaccion ).Result;
+                    respuesta = _httpService.PostRestServiceDataAsync<RespuestaTransaccion>( str_data_validar, _settings.servicio_ws_banred, String.Empty, _settings.auth_ws_banred, AuthorizationType.BASIC, str_id_transaccion,1 ).Result;
                     break;
             }
         }
