@@ -58,14 +58,16 @@ public class HttpService : IHttpService
                                                         string parameters,
                                                         string auth,
                                                         string authorizationType,
-                                                        string str_id_transaccion)
+                                                        string str_id_transaccion,
+                                                        int timeout = 0)
     {
-        try
+        try 
         {
             HttpClient client = new();
             client.BaseAddress = new Uri( serviceAddress );
             client.DefaultRequestHeaders.Add( "Authorization", authorizationType + " " + auth );
-            client.Timeout = TimeSpan.FromSeconds( _settings.timeOutHttp );
+            client.Timeout = (timeout == 0) ? TimeSpan.FromSeconds( _settings.timeOutHttp ) :
+                TimeSpan.FromSeconds( _settings.timeOutHttpBanRed );
 
             var httpContent = new StringContent( serializedData, Encoding.UTF8, "application/json" );
 
@@ -89,7 +91,7 @@ public class HttpService : IHttpService
 
                 _logs.SaveHttpErrorLogs( JsonSerializer.Deserialize<dynamic>( serializedData ), MethodBase.GetCurrentMethod()!.Name, "HttpService", res_servicio, str_id_transaccion );
             }
-
+			client.Dispose();
             return respuesta;
         }
         catch (Exception ex)
@@ -99,4 +101,5 @@ public class HttpService : IHttpService
             throw new Exception( data!.str_id_transaccion )!;
         }
     }
+   
 }

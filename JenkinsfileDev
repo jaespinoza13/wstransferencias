@@ -9,8 +9,8 @@ pipeline {
     environment {
         VERSION_DESPLIEGUE  = '1.0.0'
         VERSION_PRODUCCION  = '0.0.0'
-        NOMBRE_CONTENEDOR   = 'servicio-transferencias-avatar'
-        NOMBRE_IMAGEN       = 'ws_transferencias_avatar'
+        NOMBRE_CONTENEDOR   = 'servicio-transferencias-soporte-pd'
+        NOMBRE_IMAGEN       = 'ws_transferencias_soporte_pd'
         PUERTO              = '5303'
         PUERTO_CONTENEDOR   = '80'
         RUTA_LOGS           = '/app/wsTransferencias'
@@ -54,7 +54,7 @@ pipeline {
                         -e ApiSettings__GrpcSettings__client_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
                         -e ApiSettings__Endpoints__servicio_ws_otp=${ENDPOINT_WS_OTP} \
                         -e ApiSettings__Endpoints__servicio_ws_alfresco=${ENDPOINT_WS_ALFRESCO} \
-                        -e ApiSettings__Endpoints__servicio_ws_banred=${ENDPOINT_WS_BANRED} \
+                        -e ApiSettings__Endpoints__servicio_ws_banred=${ENDPOINT_WS_BANRED_TIMER} \
                         -e ApiSettings__EndpointsAuth__auth_ws_transferencias=${AUTH_WS_TRANSFERENCIAS} \
                         -e ApiSettings__EndpointsAuth__auth_ws_otp=${AUTH_WS_OTP} \
                         -e ApiSettings__EndpointsAuth__auth_ws_banred=${AUTH_WS_BANRED} \
@@ -93,7 +93,7 @@ pipeline {
                     -e ApiSettings__GrpcSettings__client_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
                     -e ApiSettings__Endpoints__servicio_ws_otp=${ENDPOINT_WS_OTP} \
                     -e ApiSettings__Endpoints__servicio_ws_alfresco=${ENDPOINT_WS_ALFRESCO} \
-                    -e ApiSettings__Endpoints__servicio_ws_banred=${ENDPOINT_WS_BANRED} \
+                    -e ApiSettings__Endpoints__servicio_ws_banred=${ENDPOINT_WS_BANRED_TIMER} \
                     -e ApiSettings__EndpointsAuth__auth_ws_transferencias=${AUTH_WS_TRANSFERENCIAS} \
                     -e ApiSettings__EndpointsAuth__auth_ws_otp=${AUTH_WS_OTP} \
                     -e ApiSettings__EndpointsAuth__auth_ws_banred=${AUTH_WS_BANRED} \
