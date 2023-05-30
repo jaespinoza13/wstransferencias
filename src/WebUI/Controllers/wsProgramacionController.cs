@@ -70,7 +70,7 @@ namespace WebUI.Controllers
             }
 
             return BadRequest();
-        }  [HttpPost( "UPD_PROGRAMACION_TRANS" )]
+        }  [HttpPost( "UPD_PROGRAMACION_TRANS" )] 
         public IActionResult UpdTransferencia(ReqUpdProgramacionTrans reqUpdProgramacionTrans)
         {
             ResUpdProgramacionTrans respuesta = new();
