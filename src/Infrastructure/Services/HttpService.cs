@@ -61,7 +61,7 @@ public class HttpService : IHttpService
                                                         string str_id_transaccion,
                                                         int timeout = 0)
     {
-        try
+        try 
         {
             HttpClient client = new();
             client.BaseAddress = new Uri( serviceAddress );
