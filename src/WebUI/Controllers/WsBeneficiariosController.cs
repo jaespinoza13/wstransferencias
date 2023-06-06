@@ -12,7 +12,7 @@ using Domain.Types;
 
 namespace WebUI.Controllers
 {
-
+     
     [Route( "api/wsBeneficiarios" )]
     [ApiController]
     [ServiceFilter( typeof( DailyRequestFilter ) )]
