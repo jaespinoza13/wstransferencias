@@ -7,8 +7,8 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '1.3.1'
-        VERSION_PRODUCCION  = '1.3.0'
+        VERSION_DESPLIEGUE  = '1.3.3'
+        VERSION_PRODUCCION  = '1.3.2'
         NOMBRE_CONTENEDOR   = 'servicio-transferencias'
         NOMBRE_IMAGEN       = 'ws_transferencias'
         PUERTO              = '9003'
@@ -70,11 +70,11 @@ pipeline {
         failure {
             sh  'docker rm -f ${NOMBRE_CONTENEDOR}'
             sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
-					-e TZ=${TZ} \
+                    -e TZ=${TZ} \
 					-v ${RUTA_LOGS}:/app/Logs/ \
 					-v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
                     -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
-					${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
+                    ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
                 '''
             slackSend color: '#FE2D00', failOnError:true, message:"Despliegue fallido 😬 - ${env.JOB_NAME} he reversado a la versión ${VERSION_PRODUCCION} - (<${env.BUILD_URL}|Open>)"
         }

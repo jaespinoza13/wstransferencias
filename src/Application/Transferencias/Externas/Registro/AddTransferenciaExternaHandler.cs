@@ -177,7 +177,6 @@ public class AddTransferenciaExternaHandler : RequestHandler<AddTransferenciaExt
             sol_tran.cabecera = cabecera;
 
             _validacionesPagoDirecto.ProcesarSolicitud( sol_tran, str_id_transaccion );
-
         }
         catch (Exception ex)
         {
@@ -186,4 +185,5 @@ public class AddTransferenciaExternaHandler : RequestHandler<AddTransferenciaExt
         }
         return respuesta;
     }
+
 }

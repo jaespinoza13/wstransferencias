@@ -33,7 +33,7 @@ public class ComprobanteTransferenciaHandler : IRequestHandler<ReqComprobanteTra
         string operacion = "GET_COMPROBANTE_TRANSFERENCIA";
         ResComprobanteTransferencia respuesta = new();
         respuesta.LlenarResHeader( reqComprobanteTransferencia );
-        await _logs.SaveHeaderLogs( reqComprobanteTransferencia, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+        _logs.SaveHeaderLogs( reqComprobanteTransferencia, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
 
         try
         {
@@ -77,12 +77,12 @@ public class ComprobanteTransferenciaHandler : IRequestHandler<ReqComprobanteTra
             respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals( "000" )) ? "OK" : "ERR";
             respuesta.str_res_codigo = res_tran.codigo;
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
-            await _logs.SaveResponseLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+            _logs.SaveResponseLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
             return respuesta;
         }
         catch (Exception exception)
         {
-            await _logs.SaveExceptionLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase, exception );
+            _logs.SaveExceptionLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase, exception );
             throw new ArgumentException( respuesta.str_id_transaccion );
         }
     }
