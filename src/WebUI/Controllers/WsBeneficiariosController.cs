@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-//USE CASE
+//USE CASE.
 using Application.Common.ISO20022.Models;
 using Application.Beneficiarios;
 using Domain.Types;
