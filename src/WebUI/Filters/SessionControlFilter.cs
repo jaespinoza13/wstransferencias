@@ -15,7 +15,7 @@ namespace WebUI.Filters
         public void OnActionExecuted(ActionExecutedContext context)
         {
         }
-
+         
         public void OnActionExecuting(ActionExecutingContext context)
         {
             int estadoSesion = Convert.ToInt32( context.HttpContext.Request.Headers["int_estado"] );
