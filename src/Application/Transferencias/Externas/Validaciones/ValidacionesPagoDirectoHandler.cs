@@ -84,7 +84,7 @@ public class ValidacionesPagoDirectoHandler : IValidacionesPagoDirecto
             sol_tran.cuerpo = datos_para_validacion_banred;
             sol_tran.cabecera = cabecera;
 
-            return ProcesarSolicitud( sol_tran, str_id_transaccion );
+           return ProcesarSolicitud( sol_tran, str_id_transaccion );
         }
         catch (Exception)
         {
@@ -107,19 +107,18 @@ public class ValidacionesPagoDirectoHandler : IValidacionesPagoDirecto
                 case "TRCO":
                 case "TRTC":
                     string str_data = JsonSerializer.Serialize( sol_tran );
-                    respuesta = _httpService.PostRestServiceDataAsync<RespuestaTransaccion>( str_data, _settings.servicio_ws_banred, String.Empty, _settings.auth_ws_banred, AuthorizationType.BASIC, str_id_transaccion ).Result;
+                    respuesta = _httpService.PostRestServiceDataAsync<RespuestaTransaccion>( str_data, _settings.servicio_ws_banred, String.Empty, _settings.auth_ws_banred, AuthorizationType.BASIC, str_id_transaccion,1 ).Result;
                     break;
 
                 default:
                     string str_data_validar = JsonSerializer.Serialize( sol_tran );
-                    respuesta = _httpService.PostRestServiceDataAsync<RespuestaTransaccion>( str_data_validar, _settings.servicio_ws_banred, String.Empty, _settings.auth_ws_banred, AuthorizationType.BASIC, str_id_transaccion ).Result;
+                    respuesta = _httpService.PostRestServiceDataAsync<RespuestaTransaccion>( str_data_validar, _settings.servicio_ws_banred, String.Empty, _settings.auth_ws_banred, AuthorizationType.BASIC, str_id_transaccion,1 ).Result;
                     break;
             }
         }
         catch (Exception exception)
         {
             _logs.SaveHttpErrorLogs( respuesta, MethodBase.GetCurrentMethod()!.Name, _clase, exception, str_id_transaccion );
-            throw new ArgumentException( str_id_transaccion );
         }
         return respuesta;
     }

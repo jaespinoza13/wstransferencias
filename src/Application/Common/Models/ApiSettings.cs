@@ -41,6 +41,7 @@ namespace Application.Common.Models
 
         public bool valida_peticiones_diarias { get; set; }
         public int timeOutHttp { get; set; }
+        public int timeOutHttpBanRed { get; set; }
 
 
         public string servicio_ws_otp { get; set; } = String.Empty;
