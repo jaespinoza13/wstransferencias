@@ -28,7 +28,7 @@ public class ValidaRegistroBeneficiarioHandler : IRequestHandler<ReqValidaRegist
         string operacion = "VALIDAR_REGISTRO_BENEFICIARIO";
         ResValidaRegistroBeneficiario respuesta = new();
         respuesta.LlenarResHeader( reqValidaRegistroBeneficiario );
-        await _logs.SaveHeaderLogs( reqValidaRegistroBeneficiario, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+        _logs.SaveHeaderLogs( reqValidaRegistroBeneficiario, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
 
         try
         {
@@ -42,12 +42,12 @@ public class ValidaRegistroBeneficiarioHandler : IRequestHandler<ReqValidaRegist
             respuesta.str_res_codigo = res_tran.codigo;
             respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals( "000" ) ? "OK" : "ERR";
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"];
-            await _logs.SaveResponseLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+            _logs.SaveResponseLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
             return respuesta;
         }
         catch (Exception exception)
         {
-            await _logs.SaveExceptionLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase, exception );
+            _logs.SaveExceptionLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase, exception );
             throw new ArgumentException( respuesta.str_id_transaccion );
         }
     }

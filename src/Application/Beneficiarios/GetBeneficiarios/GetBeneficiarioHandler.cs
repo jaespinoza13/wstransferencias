@@ -29,7 +29,7 @@ public class GetBeneficiarioHandler : IRequestHandler<ReqGetBeneficiarios, ResGe
         string str_operacion = "GET_BENEFICIARIO";
         ResGetBeneficiarios respuesta = new();
         respuesta.LlenarResHeader( reqGetBeneficiarios );
-        await _logs.SaveHeaderLogs( reqGetBeneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+        _logs.SaveHeaderLogs( reqGetBeneficiarios, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
 
         try
         {
@@ -39,13 +39,13 @@ public class GetBeneficiarioHandler : IRequestHandler<ReqGetBeneficiarios, ResGe
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
 
             respuesta.lst_beneficiarios = Conversions.ConvertConjuntoDatosToListClass<Beneficiario>( (ConjuntoDatos)res_tran.cuerpo );
-            await _logs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+            _logs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
             return respuesta;
 
         }
         catch (Exception exception)
         {
-            await _logs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase, exception );
+            _logs.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase, exception );
             throw new ArgumentException( respuesta.str_id_transaccion );
         }
 
