@@ -26,7 +26,7 @@ public class GetTransfEjecucionHandler : RequestHandler<ReqGetTransfEjecucion, R
 
     protected override ResGetTransfEjecucion Handle(ReqGetTransfEjecucion reqGetTransfEjecucion)
     {
-        string str_operacion = "GET_TRANS_PROGRAMADAS";
+        string str_operacion = "GET_TRANS_EJECUCION";
         ResGetTransfEjecucion respuesta = new();
         respuesta.LlenarResHeader( reqGetTransfEjecucion );
         _logs.SaveHeaderLogs( reqGetTransfEjecucion, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
@@ -38,7 +38,7 @@ public class GetTransfEjecucionHandler : RequestHandler<ReqGetTransfEjecucion, R
             respuesta.str_res_codigo = res_tran.codigo;
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
 
-            respuesta.lst_tranferencias = Conversions.ConvertConjuntoDatosToListClass<TransferenciasProgramadas>( (ConjuntoDatos)res_tran.cuerpo);
+            respuesta.lst_tranferencias = Conversions.ConvertConjuntoDatosToListClass<TransferenciasEjecucion>( (ConjuntoDatos)res_tran.cuerpo);
             _logs.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
             return respuesta;
 
