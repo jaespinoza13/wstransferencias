@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Programacion;
 using Microsoft.Extensions.Options;
 using Application.Common.Models;
+using Application.Transferencias.DTO;
+using Application.Transferencias.Internas;
+using Application.Transferencias.Externas.Validaciones;
+using Application.Transferencias.Externas.Registro;
 
 namespace WebUI.Controllers
 {
@@ -26,6 +30,52 @@ namespace WebUI.Controllers
         {
             return await Mediator.Send( reqGetTransfEjecucion );
         }
+        [HttpPost( "VALIDA_TRANSFERENCIA" )]
+        public IActionResult ValidaTransferencia(ReqValidaTransferencia reqValidaTransferencia)
+        {
+            ResValidaTransferencia respuesta = new();
 
+            var proceso = _settings.ProcesoTransferencia.Find( e => e.proceso == reqValidaTransferencia!.str_nemonico_tipo_transferencia );
+
+            if (proceso != null)
+            {
+                reqValidaTransferencia!.str_srv_transfer = proceso.servicio;
+
+                if (proceso.tipo == "interna")
+                {
+                    respuesta = Mediator.Send( new ValidaTransferenciaInternaCommand( reqValidaTransferencia ) ).Result;
+                }
+                else if (proceso.tipo == "externa")
+                {
+                    respuesta = Mediator.Send( new ValidaTransferenciaExternaCommand( reqValidaTransferencia ) ).Result;
+                }
+                return Ok( respuesta );
+            }
+
+            return BadRequest();
+        }
+
+
+        [HttpPost( "ADD_TRANSFERENCIA" )]
+        public IActionResult RegistraTransferencia(ReqAddTransferencia reqAddTransferencia)
+        {
+            ResAddTransferencia respuesta = new();
+
+            var proceso = _settings.ProcesoTransferencia.Find( e => e.proceso == reqAddTransferencia!.str_nemonico_tipo_transferencia );
+
+            if (proceso != null)
+            {
+                if (proceso.tipo == "interna")
+                {
+                    respuesta = Mediator.Send( new AddTransferenciaInternaCommand( reqAddTransferencia ) ).Result;
+                }
+                else if (proceso.tipo == "externa")
+                {
+                    respuesta = Mediator.Send( new AddTransferenciaExternaCommand( reqAddTransferencia ) ).Result;
+                }
+                return Ok( respuesta );
+            }
+            return NotFound();
+        }
     }
 }
