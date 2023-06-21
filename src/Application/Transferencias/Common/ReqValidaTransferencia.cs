@@ -17,6 +17,9 @@ namespace Application.Transferencias.DTO
         public string str_srv_transfer { get; set; } = string.Empty;
         public string str_id_log { get; set; } = string.Empty;
         public int int_subcategoria_gasto { get; set; } = 0;
+
+        public int int_id_programacion { get; set; } = 0;
+
         public void DecryptAES(ResGetKeys Key)
         {
             str_id_cta_ordenante = CryptographyAES.Decrypt( str_id_cta_ordenante!, Key.str_llave_simetrica );
