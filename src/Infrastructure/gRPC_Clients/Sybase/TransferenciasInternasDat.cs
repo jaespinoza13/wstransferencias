@@ -97,6 +97,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_correo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = req_add_transferencia_interna.str_correo_beneficiario } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_solicitud", TipoDato = TipoDato.Integer, ObjValue = req_add_transferencia_interna.int_solicitud.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = req_add_transferencia_interna.str_ente.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_programacion", TipoDato = TipoDato.Integer, ObjValue = req_add_transferencia_interna.int_id_programacion.ToString() } );
 
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer } );
 
