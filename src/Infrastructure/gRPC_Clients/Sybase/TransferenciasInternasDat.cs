@@ -51,8 +51,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_referencia_trans", TipoDato = TipoDato.VarChar, ObjValue = req_validar_transferencia.str_id_servicio } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_subcategoria_gasto", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.int_subcategoria_gasto.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_programacion", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.int_id_programacion.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_transf_pro", TipoDato = TipoDato.Integer, ObjValue = req_validar_transferencia.int_id_transf_pro.ToString() } );
-
+                
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_id_solicitud", TipoDato = TipoDato.Integer } );
 
                 ds.NombreSP = "validar_transfer_interna_v3";

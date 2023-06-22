@@ -18,7 +18,6 @@ namespace Application.Transferencias.DTO
         public string str_id_log { get; set; } = string.Empty;
         public int int_subcategoria_gasto { get; set; } = 0;
         public int int_id_programacion { get; set; } = 0;
-        public int int_id_transf_pro { get; set; } = 0;
 
         public void DecryptAES(ResGetKeys Key)
         {
