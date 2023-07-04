@@ -7,11 +7,11 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '1.2.0'
-        VERSION_PRODUCCION  = '1.1.0'
-        NOMBRE_CONTENEDOR   = 'servicio-transferencias-movil'
-        NOMBRE_IMAGEN       = 'ws_transferencias_movil'
-        PUERTO              = '8003'
+        VERSION_DESPLIEGUE  = '1.4.0'
+        VERSION_PRODUCCION  = '1.3.4'
+        NOMBRE_CONTENEDOR   = 'servicio-transferencias'
+        NOMBRE_IMAGEN       = 'ws_transferencias'
+        PUERTO              = '9003'
         PUERTO_CONTENEDOR   = '80'
 		RUTA_CONFIG 		= '/config/wsTransferencias/'
         RUTA_LOGS           = '/app/wsTransferencias'
@@ -46,7 +46,7 @@ pipeline {
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
                         -e TZ=${TZ} \
 						-v ${RUTA_LOGS}:/app/Logs/ \
-						-v ${RUTA_CONFIG}appsettings_preprod_migracion_bmo.json:/app/appsettings.json \
+						-v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
                         -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
                         ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
                     '''
@@ -72,7 +72,7 @@ pipeline {
             sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
                     -e TZ=${TZ} \
 					-v ${RUTA_LOGS}:/app/Logs/ \
-					-v ${RUTA_CONFIG}appsettings_preprod_migracion_bmo.json:/app/appsettings.json \
+					-v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
                     -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
                     ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
                 '''
