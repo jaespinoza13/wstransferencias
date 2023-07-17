@@ -125,6 +125,8 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_tipo_servicio", TipoDato = TipoDato.VarChar, ObjValue = reqAddProgramacionTrans.str_srv_transfer } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@dtt_fecha_desde", TipoDato = TipoDato.VarChar, ObjValue = reqAddProgramacionTrans.str_fecha_desde.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@dtt_fecha_hasta", TipoDato = TipoDato.VarChar, ObjValue = reqAddProgramacionTrans.str_fecha_hasta.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_correo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = reqAddProgramacionTrans.str_correo_beneficiario } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_contrato", TipoDato = TipoDato.VarChar, ObjValue = reqAddProgramacionTrans.str_id_contrato } );
 
                 ds.NombreSP = "add_programacion_transf";
                 ds.NombreBD = _settings.DB_meg_servicios;
@@ -292,7 +294,41 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             return respuesta;
         } 
-        public RespuestaTransaccion DelProgramacionTrans(ReqDelProgramacionTrans reqDelProgramacionTrans)
+        public RespuestaTransaccion AddIntentoFallido(ReqAddIntentoFallido reqAddIntentoFallido)
+        {
+            RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            try
+            {
+
+                DatosSolicitud ds = new ();
+                Funciones.llenarDatosAuditoriaSalida( ds, reqAddIntentoFallido );
+
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_pt", TipoDato = TipoDato.Integer, ObjValue = reqAddIntentoFallido.int_id.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqAddIntentoFallido.str_ente } );
+
+                ds.NombreSP = "add_intento_fallido_pt";
+                ds.NombreBD = _settings.DB_meg_servicios;
+
+                var resultado = _objClienteDal.ExecuteDataSet( ds );
+                var lst_valores = new List<ParametroSalidaValores>();
+
+                foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
+                var str_codigo = lst_valores.Find( x => x.StrNameParameter == "@int_o_error_cod" )!.ObjValue;
+                var str_error = lst_valores.Find( x => x.StrNameParameter == "@str_o_error" )!.ObjValue.Trim();
+                respuesta.codigo = str_codigo.ToString().Trim().PadLeft( 3, '0' );
+                respuesta.cuerpo = Funciones.ObtenerDatos( resultado );
+                respuesta.diccionario.Add( "str_error", str_error.ToString() );
+
+            }
+            catch (Exception exception)
+            {
+                respuesta.codigo = "003";
+                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                _logsService.SaveExcepcionDataBaseSybase( reqAddIntentoFallido, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                throw new ArgumentException( reqAddIntentoFallido.str_id_transaccion )!;
+            }
+            return respuesta;
+        }  public RespuestaTransaccion DelProgramacionTrans(ReqDelProgramacionTrans reqDelProgramacionTrans)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
             try

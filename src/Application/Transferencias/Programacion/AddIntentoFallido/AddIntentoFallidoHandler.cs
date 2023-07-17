@@ -13,7 +13,7 @@ using System.Text.Json;
 
 namespace Application.Programacion;
 
-public class DelProgramacionTransHandler : RequestHandler<ReqDelProgramacionTrans, ResDelProgramacionTrans>
+public class AddIntentoFallidoHandler : RequestHandler<ReqAddIntentoFallido, ResAddIntentoFallido>
 
 {
     private readonly ILogs _logsService;
@@ -22,7 +22,7 @@ public class DelProgramacionTransHandler : RequestHandler<ReqDelProgramacionTran
     private readonly IProgramacionDat _programacionDat;
 
 
-    public DelProgramacionTransHandler(ILogs logs, IProgramacionDat programacionDat, IWsOtp wsOtp)
+    public AddIntentoFallidoHandler(ILogs logs, IProgramacionDat programacionDat, IWsOtp wsOtp)
     {
         str_clase = GetType().FullName!;
         _logsService = logs;
@@ -30,17 +30,20 @@ public class DelProgramacionTransHandler : RequestHandler<ReqDelProgramacionTran
         _wsOtp = wsOtp;
     }
 
-    protected override ResDelProgramacionTrans Handle(ReqDelProgramacionTrans reqDelProgramacionTrans)
+    protected override ResAddIntentoFallido Handle(ReqAddIntentoFallido reqAddIntentoFallido)
     {
-        string str_operacion = "DEL_PROGRAMACION_TRANS";
-        ResDelProgramacionTrans respuesta = new();
-        respuesta.LlenarResHeader( reqDelProgramacionTrans );
+        string str_operacion = "ADD_INTENTO_FALLIDO";
+        ResAddIntentoFallido respuesta = new();
+        respuesta.LlenarResHeader( reqAddIntentoFallido );
         var res_tran = new RespuestaTransaccion();
-        _logsService.SaveHeaderLogs( reqDelProgramacionTrans, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+        _logsService.SaveHeaderLogs( reqAddIntentoFallido, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
 
         try
         {
-            res_tran = _programacionDat.DelProgramacionTrans( reqDelProgramacionTrans );
+           
+             res_tran = _programacionDat.AddIntentoFallido( reqAddIntentoFallido );
+            
+
             respuesta.str_res_codigo = res_tran.codigo;
             respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals( "000" )) ? "OK" : "ERR";
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();

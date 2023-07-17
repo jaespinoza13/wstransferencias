@@ -14,6 +14,7 @@ namespace Application.Programacion
         RespuestaTransaccion GetTransfEjecucion(ReqGetTransfEjecucion reqGetTransfEjecucion);
         RespuestaTransaccion DelProgramacionTrans(ReqDelProgramacionTrans reqDelProgramacionTrans);
         RespuestaTransaccion UpdProgramacionTrans(ReqUpdProgramacionTrans reqUpdProgramacionTrans);
+        RespuestaTransaccion AddIntentoFallido(ReqAddIntentoFallido reqAddIntentoFallido);
        
     }
 }
