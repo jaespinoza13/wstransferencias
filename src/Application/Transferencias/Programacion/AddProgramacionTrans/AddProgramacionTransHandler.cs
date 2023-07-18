@@ -22,7 +22,6 @@ public class AddProgramacionTransHandler : RequestHandler<ReqAddProgramacionTran
     private readonly IProgramacionDat _programacionDat;
     private readonly IWsAlfresco _wsAlfresco;
     private readonly ApiSettings _ApiSettings;
-    private const string str_operacion = "ADD_PROGRAMACION_TRANS";
 
 
     public AddProgramacionTransHandler(IOptionsMonitor<ApiSettings> option, ILogs logs, IProgramacionDat programacionDat, IWsOtp wsOtp, IWsAlfresco wsAlfresco)

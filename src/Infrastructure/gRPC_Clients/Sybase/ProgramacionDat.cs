@@ -170,6 +170,8 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_tipo_servicio", TipoDato = TipoDato.VarChar, ObjValue = reqUpdProgramacionTrans.str_srv_transfer } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@dtt_fecha_desde", TipoDato = TipoDato.VarChar, ObjValue = reqUpdProgramacionTrans.str_fecha_desde.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@dtt_fecha_hasta", TipoDato = TipoDato.VarChar, ObjValue = reqUpdProgramacionTrans.str_fecha_hasta.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_correo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = reqUpdProgramacionTrans.str_correo_beneficiario } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_id_contrato", TipoDato = TipoDato.VarChar, ObjValue = reqUpdProgramacionTrans.str_id_contrato } );
 
                 ds.NombreSP = "upd_programacion_transf";
                 ds.NombreBD = _settings.DB_meg_servicios;
