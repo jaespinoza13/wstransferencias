@@ -42,8 +42,6 @@ public class AddIntentoFallidoHandler : RequestHandler<ReqAddIntentoFallido, Res
         {
            
              res_tran = _programacionDat.AddIntentoFallido( reqAddIntentoFallido );
-            
-
             respuesta.str_res_codigo = res_tran.codigo;
             respuesta.str_res_estado_transaccion = (res_tran.codigo.Equals( "000" )) ? "OK" : "ERR";
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();

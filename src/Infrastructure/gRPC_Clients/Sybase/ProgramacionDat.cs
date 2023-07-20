@@ -305,7 +305,9 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 DatosSolicitud ds = new ();
                 Funciones.llenarDatosAuditoriaSalida( ds, reqAddIntentoFallido );
 
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_pt", TipoDato = TipoDato.Integer, ObjValue = reqAddIntentoFallido.int_id.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_programacion", TipoDato = TipoDato.Integer, ObjValue = reqAddIntentoFallido.int_id.ToString() } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_codigo_respuesta", TipoDato = TipoDato.VarChar, ObjValue = reqAddIntentoFallido.str_codigo_respuesta} );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_mensaje_respuesta", TipoDato = TipoDato.VarChar, ObjValue = reqAddIntentoFallido.str_mensaje_respuesta} );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqAddIntentoFallido.str_ente } );
 
                 ds.NombreSP = "add_intento_fallido_pt";
