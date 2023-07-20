@@ -77,5 +77,12 @@ namespace WebUI.Controllers
             }
             return NotFound();
         }
+       
+        [HttpPost( "ADD_INTENTO_FALLITO_PT" )]
+        public async Task<ResAddIntentoFallido> GetContratoPT(ReqAddIntentoFallido reqAddIntentoFallido)
+        {
+            return await Mediator.Send( reqAddIntentoFallido );
+        }
+
     }
 }
