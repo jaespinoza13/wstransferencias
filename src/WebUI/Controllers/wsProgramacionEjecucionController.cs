@@ -14,7 +14,7 @@ using Application.Transferencias.Externas.Registro;
 namespace WebUI.Controllers
 {
 
-    [Route( "api/wsProgramacion" )]
+    [Route( "api/wsProgramacion" )] 
     [ApiController]
     [ProducesResponseType( StatusCodes.Status200OK )]
     [ProducesResponseType( StatusCodes.Status400BadRequest )]
