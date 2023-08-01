@@ -67,6 +67,14 @@ public static class ConfigureServices
         services.AddTransient<CryptographyAESFilter>();
         services.AddTransient<ClaimControlFilter>();
         services.AddTransient<SessionControlFilter>();
+        services.AddScoped<ClientIpCheckActionFilter>( container =>
+        {
+            var loggerFactory = container.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger<ClientIpCheckActionFilter>();
+
+            return new ClientIpCheckActionFilter( configuration.GetValue<string>( "AdminSafeList" )
+               , logger );
+        } );
 
         //SWAGGER
         services.AddEndpointsApiExplorer();
