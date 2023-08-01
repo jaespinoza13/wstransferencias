@@ -16,8 +16,9 @@ public class ClientIpCheckActionFilter : ActionFilterAttribute
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         var remoteIp = context.HttpContext.Connection.RemoteIpAddress;
+        var remoteIpLocal = context.HttpContext.Connection.LocalIpAddress;
         _logger.LogDebug( "Remote IpAddress: {RemoteIp}", remoteIp );
-        Console.WriteLine( "Remote IpAddress: "+ remoteIp );
+        Console.WriteLine( "Remote IpAddress: "+ remoteIp+" ----- local "+ remoteIpLocal );
         var ip = _safelist.Split( ';' );
         var badIp = true;
 
