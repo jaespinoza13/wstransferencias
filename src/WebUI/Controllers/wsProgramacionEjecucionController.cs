@@ -10,13 +10,16 @@ using Application.Transferencias.DTO;
 using Application.Transferencias.Internas;
 using Application.Transferencias.Externas.Validaciones;
 using Application.Transferencias.Externas.Registro;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Domain.Types;
 
 namespace WebUI.Controllers
 {
 
     [Route( "api/wsProgramacion" )] 
     [ApiController]
-    [ServiceFilter( typeof( ClientIpCheckActionFilter ) )]
+    [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Rol.InvitadoInterno )]
     [ProducesResponseType( StatusCodes.Status200OK )]
     [ProducesResponseType( StatusCodes.Status400BadRequest )]
     [ProducesResponseType( StatusCodes.Status401Unauthorized )]
