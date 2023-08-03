@@ -14,5 +14,8 @@ namespace Domain.Entities
         public string str_tipo_transferencia { get; set; } = String.Empty;
         public string str_id_beneficiario { get; set; } = String.Empty;
         public string str_observaciones { get; set; } = String.Empty;
+        public string str_nemonico_canal_pt { get; set; } = String.Empty;
+        public string str_usuario_canal_pt { get; set; } = String.Empty;
+
     }
 }
