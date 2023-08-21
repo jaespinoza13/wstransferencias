@@ -282,6 +282,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_cta", TipoDato = TipoDato.VarChar, ObjValue = reqValidaOtrasCuentasBeneficiario.str_num_cta } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqValidaOtrasCuentasBeneficiario.str_ente } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_celular", TipoDato = TipoDato.VarChar, ObjValue = reqValidaOtrasCuentasBeneficiario.str_num_celular } );
 
                 //Variables de auditoria
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_sistema", TipoDato = TipoDato.Integer, ObjValue = reqValidaOtrasCuentasBeneficiario.str_id_sistema } );
