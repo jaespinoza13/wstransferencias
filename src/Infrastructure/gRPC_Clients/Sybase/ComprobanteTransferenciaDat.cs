@@ -66,7 +66,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
-                await _logsService.SaveExcepcionDataBaseSybase( reqComprobanteTransferencia, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                _logsService.SaveExcepcionDataBaseSybase( reqComprobanteTransferencia, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
                 throw new Exception( reqComprobanteTransferencia.str_id_transaccion )!;
 
             }

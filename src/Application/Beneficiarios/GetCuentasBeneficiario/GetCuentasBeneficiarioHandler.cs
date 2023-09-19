@@ -33,7 +33,7 @@ public class GetCuentasBeneficiarioHandler : IRequestHandler<ReqGetCuentasBenefi
         ResGetCuentasBeneficiario respuesta = new();
         respuesta.LlenarResHeader( reqGetCuentasBeneficiario );
 
-        await _logs.SaveHeaderLogs( reqGetCuentasBeneficiario, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+        _logs.SaveHeaderLogs( reqGetCuentasBeneficiario, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
 
         string imagen = String.Empty;
 
@@ -74,12 +74,12 @@ public class GetCuentasBeneficiarioHandler : IRequestHandler<ReqGetCuentasBenefi
             
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString();
 
-            await _logs.SaveResponseLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
+            _logs.SaveResponseLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase );
             return respuesta;
         }
         catch (Exception exception)
         {
-            await _logs.SaveExceptionLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase, exception );
+            _logs.SaveExceptionLogs( respuesta, operacion, MethodBase.GetCurrentMethod()!.Name, _clase, exception );
             throw new ArgumentException( respuesta.str_id_transaccion );
         }
 
