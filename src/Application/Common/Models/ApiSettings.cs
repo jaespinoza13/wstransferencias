@@ -69,5 +69,8 @@ namespace Application.Common.Models
         public string logos_canales { get; set; } = String.Empty;
         #endregion
 
+
+        public string avatar_url { get; set; } = String.Empty;
+
     }
 }

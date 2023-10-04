@@ -97,6 +97,7 @@ public static class ConfigureServices
         services.Configure<ApiSettings>( configuration.GetSection( "ApiSettings:ControlExcepciones" ) );
         services.Configure<ApiSettings>( configuration.GetSection( "ApiSettings:TemplatesPath" ) );
         services.Configure<ApiSettings>( configuration.GetSection( "ApiSettings:LogosPath" ) );
+        services.Configure<ApiSettings>( configuration.GetSection( "ApiSettings:AzurePaths" ) );
 
         return services;
     }
