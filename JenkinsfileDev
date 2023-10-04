@@ -9,8 +9,8 @@ pipeline {
     environment {
         VERSION_DESPLIEGUE  = '1.0.0'
         VERSION_PRODUCCION  = '0.0.0'
-        NOMBRE_CONTENEDOR   = 'servicio-transferencias-soporte-pd'
-        NOMBRE_IMAGEN       = 'ws_transferencias_soporte_pd'
+        NOMBRE_CONTENEDOR   = 'servicio-transferencias-soporte-avatar'
+        NOMBRE_IMAGEN       = 'ws_transferencias_soporte_avatar'
         PUERTO              = '5303'
         PUERTO_CONTENEDOR   = '80'
         RUTA_LOGS           = '/app/wsTransferencias'
