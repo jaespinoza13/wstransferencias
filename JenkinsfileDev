@@ -73,7 +73,6 @@ pipeline {
     }
 
     post {
-
         success {
             slackSend color: '#BADA55', message: "Despliegue exitoso  - ${env.JOB_NAME} versión publicada ${VERSION_DESPLIEGUE} (<${env.BUILD_URL}|Open>)"
         }
