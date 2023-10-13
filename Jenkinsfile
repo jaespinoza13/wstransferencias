@@ -11,7 +11,7 @@ pipeline {
         VERSION_PRODUCCION  = '1.3.4'
         NOMBRE_CONTENEDOR   = 'servicio-transferencias'
         NOMBRE_IMAGEN       = 'ws_transferencias'
-        PUERTO              = '9003'
+        PUERTO              = '8003'
         PUERTO_CONTENEDOR   = '80'
 		RUTA_CONFIG 		= '/config/wsTransferencias/'
         RUTA_LOGS           = '/app/wsTransferencias'
@@ -46,7 +46,7 @@ pipeline {
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
                         -e TZ=${TZ} \
 						-v ${RUTA_LOGS}:/app/Logs/ \
-						-v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
+						-v ${RUTA_CONFIG}appsettings_trn_controladas.json:/app/appsettings.json \
                         -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
                         ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
                     '''
@@ -72,7 +72,7 @@ pipeline {
             sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
                     -e TZ=${TZ} \
 					-v ${RUTA_LOGS}:/app/Logs/ \
-					-v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
+					-v ${RUTA_CONFIG}appsettings_trn_controladas.json:/app/appsettings.json \
                     -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
                     ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
                 '''
