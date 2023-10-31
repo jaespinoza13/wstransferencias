@@ -7,11 +7,11 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '0.1.0'
-        VERSION_PRODUCCION  = '0.0.0'
-        NOMBRE_CONTENEDOR   = 'servicio-transferencias-preproduccion'
-        NOMBRE_IMAGEN       = 'ws_transferencias_preproduccion'
-        PUERTO              = '8003'
+        VERSION_DESPLIEGUE  = '1.4.0'
+        VERSION_PRODUCCION  = '1.3.4'
+        NOMBRE_CONTENEDOR   = 'servicio-transferencias'
+        NOMBRE_IMAGEN       = 'ws_transferencias'
+        PUERTO              = '9003'
         PUERTO_CONTENEDOR   = '80'
 		RUTA_CONFIG 		= '/config/wsTransferencias/'
         RUTA_LOGS           = '/app/wsTransferencias'
