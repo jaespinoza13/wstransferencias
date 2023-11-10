@@ -14,6 +14,7 @@ public class LogsService : ILogs
     private readonly InfoLog infoLog = new();
     private readonly ApiSettings _settings;
     private readonly IMongoDat _mongoDat;
+
     public LogsService(IOptionsMonitor<ApiSettings> options, IMongoDat mongoDat)
     {
         this._settings = options.CurrentValue;

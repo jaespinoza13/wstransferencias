@@ -67,7 +67,7 @@ public static class ConfigureServices
         services.AddTransient<CryptographyAESFilter>();
         services.AddTransient<ClaimControlFilter>();
         services.AddTransient<SessionControlFilter>();
-
+    
         //SWAGGER
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen( c =>

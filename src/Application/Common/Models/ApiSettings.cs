@@ -70,6 +70,13 @@ namespace Application.Common.Models
         public string logos_canales { get; set; } = String.Empty;
         #endregion
 
+        #region  Alfresco
+        public string path_archivos_base { get; set; } = String.Empty;
+        public string path_archivos_contratos      { get; set; } = String.Empty;
+         public string modelo_documento_alfresco    { get; set; } = String.Empty;
+         public string doc_extencion                { get; set; } = String.Empty;
+        #endregion
+
 
         public string avatar_url { get; set; } = String.Empty;
 

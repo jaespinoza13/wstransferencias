@@ -7,8 +7,8 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '1.4.0'
-        VERSION_PRODUCCION  = '1.3.4'
+        VERSION_DESPLIEGUE  = '1.5.0'
+        VERSION_PRODUCCION  = '1.4.0'
         NOMBRE_CONTENEDOR   = 'servicio-transferencias'
         NOMBRE_IMAGEN       = 'ws_transferencias'
         PUERTO              = '9003'

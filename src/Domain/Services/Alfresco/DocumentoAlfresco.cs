@@ -1,5 +1,4 @@
-﻿
-namespace Domain.Services.Alfresco
+﻿namespace Domain.Services.Alfresco
 {
     public class DocumentoAlfresco
     {
@@ -13,11 +12,15 @@ namespace Domain.Services.Alfresco
         public string str_nombre { get; set; } = String.Empty;
         public string str_observacion { get; set; } = String.Empty;
         public string str_doc_extencion { get; set; } = String.Empty;
-        public string file_bytes { get; set; } = String.Empty;
+        //public string file_bytes { get; set; } = String.Empty;
+        public byte[] file_bytes { get; set; } = Array.Empty<byte>();
+
         public int int_sistema { get; set; }
         public int int_oficina { get; set; }
         public int int_perfil { get; set; }
         public string str_usuario { get; set; } = String.Empty;
         public string str_terminal { get; set; } = String.Empty;
+        public string str_tipo_documento { get; set; } = String.Empty;
+        public string str_subtipo_documento { get; set; } = String.Empty;
     }
 }
