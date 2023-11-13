@@ -9,8 +9,8 @@ pipeline {
     environment {
         VERSION_DESPLIEGUE  = '1.0.0'
         VERSION_PRODUCCION  = '0.0.0'
-        NOMBRE_CONTENEDOR   = 'servicio-transferencias-programacion'
-        NOMBRE_IMAGEN       = 'ws_transferencias_programacion'
+        NOMBRE_CONTENEDOR   = 'servicio-transferencias-soporte-avatar'
+        NOMBRE_IMAGEN       = 'ws_transferencias_soporte_avatar'
         PUERTO              = '5303'
         PUERTO_CONTENEDOR   = '80'
         RUTA_LOGS           = '/app/wsTransferencias'
@@ -73,7 +73,6 @@ pipeline {
     }
 
     post {
-
         success {
             slackSend color: '#BADA55', message: "Despliegue exitoso  - ${env.JOB_NAME} versión publicada ${VERSION_DESPLIEGUE} (<${env.BUILD_URL}|Open>)"
         }
