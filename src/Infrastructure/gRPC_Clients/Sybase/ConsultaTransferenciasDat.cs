@@ -49,7 +49,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
 
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_num_registros", TipoDato = TipoDato.Integer } );
 
-                ds.NombreSP = "get_con_transferencias_v2";
+                ds.NombreSP = "get_con_transferencias";
 
                 ds.NombreBD = _settings.DB_meg_servicios;
 

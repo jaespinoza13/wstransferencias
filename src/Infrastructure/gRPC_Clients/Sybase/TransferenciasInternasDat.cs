@@ -54,7 +54,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_id_solicitud", TipoDato = TipoDato.Integer } );
 
-                ds.NombreSP = "validar_transfer_interna_v3";
+                ds.NombreSP = "validar_transfer_interna";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = _objClienteDal.ExecuteDataSet( ds );
@@ -102,7 +102,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer } );
 
 
-                ds.NombreSP = "add_transferencia_interna_v3";
+                ds.NombreSP = "add_transferencia_interna";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = _objClienteDal.ExecuteDataSet( ds );

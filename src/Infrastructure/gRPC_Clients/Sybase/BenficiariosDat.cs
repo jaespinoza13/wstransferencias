@@ -42,7 +42,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nem_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = reqGetBeneficiarios.str_tipo_beneficiario } );
 
 
-                ds.NombreSP = "get_datos_beneficiarios2";
+                ds.NombreSP = "get_datos_beneficiarios";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = await _objClienteDal.ExecuteDataSetAsync( ds );
@@ -87,7 +87,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_favorito", TipoDato = TipoDato.Integer, ObjValue = reqAddBeneficiario.int_favorito.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_tarjeta_cred", TipoDato = TipoDato.Integer, ObjValue = reqAddBeneficiario.int_tipo_tarjeta.ToString() } );
 
-                ds.NombreSP = "add_cuentas_beneficiarios2";
+                ds.NombreSP = "add_cuentas_beneficiarios";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = _objClienteDal.ExecuteDataSet( ds );
@@ -132,7 +132,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_favorito", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.int_favorito.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_tarjeta_cred", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.int_tipo_tarjeta.ToString() } );
 
-                ds.NombreSP = "update_cuentas_beneficiarios2";
+                ds.NombreSP = "update_cuentas_beneficiarios";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = _objClienteDal.ExecuteNonQuery( ds );
@@ -171,7 +171,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_motivo_elimina", TipoDato = TipoDato.VarChar, ObjValue = reqDeleteBeneficiario.str_motivo_elimina } );
 
 
-                ds.NombreSP = "delete_cuentas_beneficiarios2";
+                ds.NombreSP = "delete_cuentas_beneficiarios";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = _objClienteDal.ExecuteNonQuery( ds );
@@ -248,7 +248,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqValidaRegistroBeneficiario.str_ente } );
 
 
-                ds.NombreSP = "validar_registro_beneficiario2";
+                ds.NombreSP = "validar_registro_beneficiario";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = await _objClienteDal.ExecuteNonQueryAsync( ds );
@@ -334,7 +334,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_cod_ifi", TipoDato = TipoDato.VarChar, ObjValue = reqValidaCuentaPagoDirecto.str_codigo_ifi } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_cuenta", TipoDato = TipoDato.Integer, ObjValue = reqValidaCuentaPagoDirecto.int_tipo_cuenta.ToString() } );
 
-                ds.NombreSP = "obtener_datos_pago_directo_v2";
+                ds.NombreSP = "obtener_datos_pago_directo";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = _objClienteDal.ExecuteDataSet( ds );
