@@ -296,7 +296,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_error", TipoDato = TipoDato.VarChar } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_error_cod", TipoDato = TipoDato.Integer } );
 
-                ds.NombreSP = "validar_benef_otras_ctas_mego";
+                ds.NombreSP = "validar_benef_otras_ctas_mego_2";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = await _objClienteDal.ExecuteDataSetAsync( ds );
