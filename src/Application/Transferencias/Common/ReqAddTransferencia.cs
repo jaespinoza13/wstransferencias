@@ -11,5 +11,6 @@ namespace Application.Transferencias.DTO
         public string? str_otp { get; set; }
         public string? str_id_log { get; set; }
         public int int_solicitud { get; set; }
+        public int int_id_programacion { get; set; }
     }
 }

@@ -38,6 +38,7 @@ namespace Application.Common.Models
         public List<int> lst_codigos_error_sistemas { get; set; } = new();
         public List<string> lst_nombres_parametros { get; set; } = new();
         public List<string> lst_canales_encriptar { get; set; } = new();
+        public List<string> lst_atributos_sin_logs { get; set; } = new();
 
         public bool valida_peticiones_diarias { get; set; }
         public int timeOutHttp { get; set; }
@@ -68,6 +69,16 @@ namespace Application.Common.Models
         public string pago_tarjetas { get; set; } = String.Empty;
         public string logos_canales { get; set; } = String.Empty;
         #endregion
+
+        #region  Alfresco
+        public string path_archivos_base { get; set; } = String.Empty;
+        public string path_archivos_contratos      { get; set; } = String.Empty;
+         public string modelo_documento_alfresco    { get; set; } = String.Empty;
+         public string doc_extencion                { get; set; } = String.Empty;
+        #endregion
+
+
+        public string avatar_url { get; set; } = String.Empty;
 
     }
 }

@@ -34,7 +34,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 DatosSolicitud ds = new();
 
-                Funciones.llenar_datos_auditoria_salida( ds, reqAddKeys );
+                Funciones.llenarDatosAuditoriaSalida( ds, reqAddKeys );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqAddKeys.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_modulo", TipoDato = TipoDato.VarChar, ObjValue = reqAddKeys.str_modulo } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_exponente", TipoDato = TipoDato.VarChar, ObjValue = reqAddKeys.str_exponente } );
@@ -78,7 +78,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 DatosSolicitud ds = new();
 
-                Funciones.llenar_datos_auditoria_salida( ds, reqGetKeys );
+                Funciones.llenarDatosAuditoriaSalida( ds, reqGetKeys );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_llave_secreta", TipoDato = TipoDato.VarChar, ObjValue = reqGetKeys.str_clave_secreta } );
 
 

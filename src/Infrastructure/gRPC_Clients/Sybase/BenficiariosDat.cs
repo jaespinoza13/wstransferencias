@@ -36,7 +36,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, reqGetBeneficiarios );
+                Funciones.llenarDatosAuditoriaSalida( ds, reqGetBeneficiarios );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqGetBeneficiarios.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nem_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = reqGetBeneficiarios.str_tipo_beneficiario } );
@@ -73,7 +73,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, reqAddBeneficiario );
+                Funciones.llenarDatosAuditoriaSalida( ds, reqAddBeneficiario );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_codigo_ifi", TipoDato = TipoDato.VarChar, ObjValue = reqAddBeneficiario.str_codigo_ifi } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_producto", TipoDato = TipoDato.Integer, ObjValue = reqAddBeneficiario.int_tipo_producto.ToString() } );
@@ -117,7 +117,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, reqUpdateBeneficiario );
+                Funciones.llenarDatosAuditoriaSalida( ds, reqUpdateBeneficiario );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_codigo_ifi", TipoDato = TipoDato.VarChar, ObjValue = reqUpdateBeneficiario.str_codigo_ifi } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_producto", TipoDato = TipoDato.Integer, ObjValue = reqUpdateBeneficiario.int_tipo_producto.ToString() } );
@@ -164,7 +164,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, reqDeleteBeneficiario );
+                Funciones.llenarDatosAuditoriaSalida( ds, reqDeleteBeneficiario );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqDeleteBeneficiario.str_id } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqDeleteBeneficiario.str_ente } );
@@ -202,7 +202,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, reqGetCuentasBeneficiario );
+                Funciones.llenarDatosAuditoriaSalida( ds, reqGetCuentasBeneficiario );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqGetCuentasBeneficiario.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nem_tipo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = reqGetCuentasBeneficiario.str_tipo_beneficiario.ToString() } );
@@ -239,7 +239,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, reqValidaRegistroBeneficiario );
+                Funciones.llenarDatosAuditoriaSalida( ds, reqValidaRegistroBeneficiario );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_codigo_ifi", TipoDato = TipoDato.VarChar, ObjValue = reqValidaRegistroBeneficiario.str_codigo_ifi } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_tipo_producto", TipoDato = TipoDato.Integer, ObjValue = reqValidaRegistroBeneficiario.int_tipo_producto.ToString() } );
@@ -327,7 +327,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, reqValidaCuentaPagoDirecto );
+                Funciones.llenarDatosAuditoriaSalida( ds, reqValidaCuentaPagoDirecto );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqValidaCuentaPagoDirecto.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_cuenta_origen", TipoDato = TipoDato.Integer, ObjValue = 0.ToString() } );
@@ -366,7 +366,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, reqUpdateFavoritoBeneficiario );
+                Funciones.llenarDatosAuditoriaSalida( ds, reqUpdateFavoritoBeneficiario );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqUpdateFavoritoBeneficiario.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqUpdateFavoritoBeneficiario.str_id } );

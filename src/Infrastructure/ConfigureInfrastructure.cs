@@ -12,6 +12,7 @@ using Infrastructure.SessionControl;
 using Application.Transferencias.Consulta;
 using Application.Beneficiarios;
 using Application.Transferencias;
+using Application.Programacion;
 
 namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureInfrastructure
@@ -41,6 +42,7 @@ public static class ConfigureInfrastructure
         services.AddSingleton<ITransferenciasInternasDat, TransferenciasInternasDat>();
         services.AddSingleton<IConsultaTransferencias, ConsultaTransferenciasDat>();
         services.AddSingleton<IComprobanteTransferencia, ComprobanteTransferenciaDat>();
+        services.AddSingleton<IProgramacionDat, ProgramacionDat>();
 
 
         return services;

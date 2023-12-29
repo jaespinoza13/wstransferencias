@@ -32,7 +32,7 @@ namespace Infrastructure.Common.Funciones
             return cd;
         }
 
-        public static void llenar_datos_auditoria_salida(DatosSolicitud ds, Header header)
+        public static void llenarDatosAuditoriaSalida(DatosSolicitud ds, Header header)
         {
             ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = header.str_id_transaccion });
             ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_sistema", TipoDato = TipoDato.Integer, ObjValue = header.str_id_sistema });

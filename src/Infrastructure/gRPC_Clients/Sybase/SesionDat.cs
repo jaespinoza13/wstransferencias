@@ -38,7 +38,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
-                Funciones.llenar_datos_auditoria_salida( ds, validaSesion );
+                Funciones.llenarDatosAuditoriaSalida( ds, validaSesion );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_login", TipoDato = TipoDato.Integer, ObjValue = validaSesion.str_id_usuario.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_estado", TipoDato = TipoDato.Integer, ObjValue = validaSesion.int_estado.ToString() } );
