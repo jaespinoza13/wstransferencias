@@ -156,7 +156,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
 
             }
             return respuesta;
-        }
+        } 
         public RespuestaTransaccion DeleteCuentaBeneficiario(ReqDeleteBeneficiario reqDeleteBeneficiario)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
