@@ -3,6 +3,7 @@ using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Transferencias;
 using Application.Transferencias.Consulta;
+using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
 using System.Reflection;
@@ -14,29 +15,28 @@ namespace Infrastructure.gRPC_Clients.Sybase
     {
 
         private readonly ApiSettings _settings;
-        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
+        private const string str_mensaje_error = "Error inesperado, intenta más tarde.";
 
-        public ConsultaTransferenciasDat(IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal)
+        public ConsultaTransferenciasDat(IOptionsMonitor<ApiSettings> options, ILogs logsService)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
 
             this.str_clase = GetType().FullName!;
-
-            _objClienteDal = objClienteDal;
-
         }
 
         public async Task<RespuestaTransaccion> ConsultaTransferencias(ReqConsultaTransferencias reqConsultaTransferencias)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
 
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqConsultaTransferencias );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_cta_ordenante", TipoDato = TipoDato.VarChar, ObjValue = reqConsultaTransferencias.str_num_cta_ordenante.ToString() } );
@@ -70,11 +70,10 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add( "str_error", str_mensaje_error );
                 _logsService.SaveExcepcionDataBaseSybase( reqConsultaTransferencias, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new Exception( reqConsultaTransferencias.str_id_transaccion )!;
-
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
 

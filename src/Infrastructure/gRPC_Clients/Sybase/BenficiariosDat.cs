@@ -13,29 +13,28 @@ namespace Infrastructure.gRPC_Clients.Sybase
     internal class BenficiariosDat : IBeneficiariosDat
     {
         private readonly ApiSettings _settings;
-        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
+        private const string str_mensaje_error = "Error inesperado, intenta más tarde.";
 
-        public BenficiariosDat(IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal)
+        public BenficiariosDat(IOptionsMonitor<ApiSettings> options, ILogs logsService)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
 
-            this.str_clase = GetType().FullName!; 
-
-            _objClienteDal = objClienteDal;
-
+            this.str_clase = GetType().FullName!;
         }
 
 
         public async Task<RespuestaTransaccion> GetDatosBeneficiarios(ReqGetBeneficiarios reqGetBeneficiarios)
         {
             var respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqGetBeneficiarios );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqGetBeneficiarios.str_ente } );
@@ -60,19 +59,21 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqGetBeneficiarios, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqGetBeneficiarios.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
         public RespuestaTransaccion AddBeneficiario(ReqAddBeneficiario reqAddBeneficiario)
         {
             var respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqAddBeneficiario );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_codigo_ifi", TipoDato = TipoDato.VarChar, ObjValue = reqAddBeneficiario.str_codigo_ifi } );
@@ -104,19 +105,21 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqAddBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqAddBeneficiario.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
         public RespuestaTransaccion UpdateCuentaBeneficiario(ReqUpdateBeneficiario reqUpdateBeneficiario)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqUpdateBeneficiario );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_codigo_ifi", TipoDato = TipoDato.VarChar, ObjValue = reqUpdateBeneficiario.str_codigo_ifi } );
@@ -150,20 +153,21 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqUpdateBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqUpdateBeneficiario.str_id_transaccion )!;
-
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
         public RespuestaTransaccion DeleteCuentaBeneficiario(ReqDeleteBeneficiario reqDeleteBeneficiario)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqDeleteBeneficiario );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id", TipoDato = TipoDato.Integer, ObjValue = reqDeleteBeneficiario.str_id } );
@@ -189,19 +193,21 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqDeleteBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqDeleteBeneficiario.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
         public async Task<RespuestaTransaccion> GetCuentasBeneciairioTrans(ReqGetCuentasBeneficiario reqGetCuentasBeneficiario)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqGetCuentasBeneficiario );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqGetCuentasBeneficiario.str_ente } );
@@ -226,19 +232,21 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqGetCuentasBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqGetCuentasBeneficiario.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
         public async Task<RespuestaTransaccion> ValidaRegistrBeneficiario(ReqValidaRegistroBeneficiario reqValidaRegistroBeneficiario)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqValidaRegistroBeneficiario );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_codigo_ifi", TipoDato = TipoDato.VarChar, ObjValue = reqValidaRegistroBeneficiario.str_codigo_ifi } );
@@ -266,19 +274,22 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqValidaRegistroBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqValidaRegistroBeneficiario.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
         public async Task<RespuestaTransaccion> ValidaOtrasCuentasBeneficiario(ReqValidaOtrasCuentasBeneficiario reqValidaOtrasCuentasBeneficiario)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
+
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_cta", TipoDato = TipoDato.VarChar, ObjValue = reqValidaOtrasCuentasBeneficiario.str_num_cta } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqValidaOtrasCuentasBeneficiario.str_ente } );
@@ -313,19 +324,21 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqValidaOtrasCuentasBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqValidaOtrasCuentasBeneficiario.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
         public RespuestaTransaccion GetDatosPagoDirecto(ReqValidaCuentaPagoDirecto reqValidaCuentaPagoDirecto)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqValidaCuentaPagoDirecto );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqValidaCuentaPagoDirecto.str_ente } );
@@ -352,19 +365,21 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqValidaCuentaPagoDirecto, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqValidaCuentaPagoDirecto.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
         public RespuestaTransaccion UpdateFavoritoBeneficiario(ReqUpdateFavoritoBeneficiario reqUpdateFavoritoBeneficiario)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqUpdateFavoritoBeneficiario );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqUpdateFavoritoBeneficiario.str_ente } );
@@ -389,11 +404,11 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqUpdateFavoritoBeneficiario, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqUpdateFavoritoBeneficiario.str_id_transaccion )!;
 
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
 

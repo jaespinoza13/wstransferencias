@@ -4,7 +4,7 @@ using AccesoDatosGrpcAse.Neg;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Programacion;
-using Application.Transferencias.DTO;
+using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
 using System.Reflection;
@@ -15,29 +15,29 @@ namespace Infrastructure.gRPC_Clients.Sybase
     internal class ProgramacionDat : IProgramacionDat
     {
         private readonly ApiSettings _settings;
-        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
+        private const string str_mensaje_error = "Error inesperado, intenta más tarde.";
 
-        public ProgramacionDat(IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal)
+        public ProgramacionDat(IOptionsMonitor<ApiSettings> options, ILogs logsService)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
 
             this.str_clase = GetType().FullName!;
-
-            _objClienteDal = objClienteDal;
-
         }
 
 
         public RespuestaTransaccion GetDatosInicialesPT(ReqGetDatosInicialesPT reqGetDatosInicialesPT)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
 
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqGetDatosInicialesPT );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqGetDatosInicialesPT.str_ente } );
@@ -60,19 +60,22 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqGetDatosInicialesPT, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqGetDatosInicialesPT.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
-          public RespuestaTransaccion ValidaProgramacionTrans(ReqValidaProgramacionTrans reqValidaProgramacionTrans)
+        public RespuestaTransaccion ValidaProgramacionTrans(ReqValidaProgramacionTrans reqValidaProgramacionTrans)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
 
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqValidaProgramacionTrans );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqValidaProgramacionTrans.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_nemo_tipo_trans", TipoDato = TipoDato.VarChar, ObjValue = reqValidaProgramacionTrans.str_nemonico_tipo_transferencia } );
@@ -101,19 +104,22 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqValidaProgramacionTrans, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqValidaProgramacionTrans.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
-        }    
+        }
         public RespuestaTransaccion AddProgramacionTrans(ReqAddProgramacionTrans reqAddProgramacionTrans)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
 
                 DatosSolicitud ds = new();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqAddProgramacionTrans );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqAddProgramacionTrans.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_dia_transf", TipoDato = TipoDato.Integer, ObjValue = reqAddProgramacionTrans.int_dia_transf.ToString() } );
@@ -145,19 +151,24 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqAddProgramacionTrans, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqAddProgramacionTrans.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
-         public RespuestaTransaccion UpdProgramacionTrans(ReqUpdProgramacionTrans reqUpdProgramacionTrans)
+        public RespuestaTransaccion UpdProgramacionTrans(ReqUpdProgramacionTrans reqUpdProgramacionTrans)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
 
                 DatosSolicitud ds = new();
+
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
+
                 Funciones.llenarDatosAuditoriaSalida( ds, reqUpdProgramacionTrans );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_pt", TipoDato = TipoDato.Integer, ObjValue = reqUpdProgramacionTrans.int_id.ToString() } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqUpdProgramacionTrans.str_ente } );
@@ -190,20 +201,23 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqUpdProgramacionTrans, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqUpdProgramacionTrans.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
 
         public RespuestaTransaccion GetContratoPT(ReqGetContratoPT reqGetContratoPT)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
 
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqGetContratoPT );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqGetContratoPT.str_ente } );
@@ -225,19 +239,22 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqGetContratoPT, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqGetContratoPT.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
-        } 
+        }
         public RespuestaTransaccion GetTransfProgramadas(ReqGetTransfProgramadas reqGetTransfProgramadas)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
 
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqGetTransfProgramadas );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqGetTransfProgramadas.str_ente } );
@@ -259,19 +276,22 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqGetTransfProgramadas, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqGetTransfProgramadas.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
-        } 
+        }
         public RespuestaTransaccion GetTransfEjecucion(ReqGetTransfEjecucion reqGetTransfEjecucion)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
 
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqGetTransfEjecucion );
                 ds.NombreSP = "get_transf_ejecucion";
                 ds.NombreBD = _settings.DB_meg_servicios;
@@ -290,24 +310,27 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqGetTransfEjecucion, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqGetTransfEjecucion.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
-        } 
+        }
         public RespuestaTransaccion AddIntentoFallido(ReqAddIntentoFallido reqAddIntentoFallido)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
 
-                DatosSolicitud ds = new ();
+                DatosSolicitud ds = new();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqAddIntentoFallido );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_programacion", TipoDato = TipoDato.Integer, ObjValue = reqAddIntentoFallido.int_id.ToString() } );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_codigo_respuesta", TipoDato = TipoDato.VarChar, ObjValue = reqAddIntentoFallido.str_codigo_respuesta} );
-                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_mensaje_respuesta", TipoDato = TipoDato.VarChar, ObjValue = reqAddIntentoFallido.str_mensaje_respuesta} );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_codigo_respuesta", TipoDato = TipoDato.VarChar, ObjValue = reqAddIntentoFallido.str_codigo_respuesta } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_mensaje_respuesta", TipoDato = TipoDato.VarChar, ObjValue = reqAddIntentoFallido.str_mensaje_respuesta } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqAddIntentoFallido.str_ente } );
 
                 ds.NombreSP = "add_intento_fallido_pt";
@@ -327,18 +350,22 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqAddIntentoFallido, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqAddIntentoFallido.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
-        }  public RespuestaTransaccion DelProgramacionTrans(ReqDelProgramacionTrans reqDelProgramacionTrans)
+        }
+        public RespuestaTransaccion DelProgramacionTrans(ReqDelProgramacionTrans reqDelProgramacionTrans)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
 
-                DatosSolicitud ds = new ();
+                DatosSolicitud ds = new();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqDelProgramacionTrans );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_pt", TipoDato = TipoDato.Integer, ObjValue = reqDelProgramacionTrans.int_id.ToString() } );
@@ -361,10 +388,10 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "003";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqDelProgramacionTrans, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqDelProgramacionTrans.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
 
