@@ -112,7 +112,7 @@ public class LogsService : ILogs
         infoLog.str_objeto = validacion!;
         infoLog.str_metodo = str_metodo;
         infoLog.str_fecha = validacion.dtt_fecha;
-        infoLog.str_id_transaccion = validacion.idHeader;
+        infoLog.str_id_transaccion = validacion.str_id_transaccion;
         infoLog.str_tipo = "s:<";
 
         // REGISTRA LOGS DE TEXTO 
