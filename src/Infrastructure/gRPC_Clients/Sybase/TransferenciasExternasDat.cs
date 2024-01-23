@@ -52,7 +52,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@int_id_solicitud", TipoDato = TipoDato.Integer } );
 
 
-                ds.NombreSP = "get_val_transf_interbancarias3";
+                ds.NombreSP = "get_val_transf_interbancarias";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = _objClienteDal.ExecuteDataSet( ds );
@@ -93,7 +93,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_comprobar_transfer", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.int_id_comprobar_transfer.ToString() } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@mny_o_monto_comision", TipoDato = TipoDato.Money } );
 
-                ds.NombreSP = "set_envio_transf_por_spi2";
+                ds.NombreSP = "set_envio_transf_por_spi";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = _objClienteDal.ExecuteDataSet( ds );
@@ -179,7 +179,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_correo_beneficiario", TipoDato = TipoDato.VarChar, ObjValue = req_transferencia.str_correo_beneficiario } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_programacion", TipoDato = TipoDato.Integer, ObjValue = req_transferencia.int_id_programacion.ToString() } );
 
-                ds.NombreSP = "add_transf_interbancarias3";
+                ds.NombreSP = "add_transf_interbancarias";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = _objClienteDal.ExecuteDataSet( ds );
