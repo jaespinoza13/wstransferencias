@@ -47,7 +47,7 @@ public class SqlInjectionValidationService : ISqlInjectionValidationService
 
         if (bln_encontro_palabra)
         {
-            validacion.idHeader = header.str_id_transaccion;
+            validacion.str_id_transaccion = header.str_id_transaccion;
             validacion.str_mensaje = "Solicitud con intento de inyección sql";
             validacion.str_informacion_adicional = "Listado de palabras encontradas " + JsonSerializer.Serialize( str_palabras_encontradas );
             validacion.str_servicio = str_operacion;

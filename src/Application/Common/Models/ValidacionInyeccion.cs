@@ -1,7 +1,7 @@
 ﻿namespace Application.Common.Models;
 public class ValidacionInyeccion
 {
-    public string idHeader { get; set; } = String.Empty;
+    public string str_id_transaccion { get; set; } = String.Empty;
     public string str_servicio { get; set; } = String.Empty;
     public string str_valor { get; set; } = String.Empty;
     public string str_campo { get; set; } = String.Empty;

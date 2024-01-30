@@ -64,7 +64,7 @@ public class LogsMongoDat : IMongoDat
         {
             var bjson = new
             {
-                idHeader = obj_respuesta.str_id_transaccion,
+                str_id_transaccion = obj_respuesta.str_id_transaccion,
                 str_id_servicio = obj_respuesta.str_id_servicio,
                 str_nemonico_canal = obj_respuesta.str_nemonico_canal,
                 dt_fecha_operacion = obj_respuesta.dt_fecha_operacion,
@@ -97,7 +97,7 @@ public class LogsMongoDat : IMongoDat
         {
             var bjson = new
             {
-                idHeader = obj_respuesta.str_id_transaccion,
+                str_id_transaccion = obj_respuesta.str_id_transaccion,
                 str_id_servicio = obj_respuesta.str_id_servicio,
                 str_nemonico_canal = obj_respuesta.str_nemonico_canal,
                 dt_fecha_operacion = obj_respuesta.dt_fecha_operacion,
