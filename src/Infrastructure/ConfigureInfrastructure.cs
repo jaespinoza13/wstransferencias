@@ -25,24 +25,24 @@ public static class ConfigureInfrastructure
         services.AddSingleton<IMongoDat, LogsMongoDat>();
         services.AddSingleton<IDailyRequest, DailyRequest>();
         services.AddSingleton<IParametersInMemory, ParametersInMemory>();
-        services.AddSingleton<IParametrosDat, ParametrosDat>();
+        services.AddTransient<IParametrosDat, ParametrosDat>();
         services.AddTransient<IHttpService, HttpService>();
         services.AddTransient<IWsAlfresco, WsAlfresco>();
         services.AddTransient<ISqlInjectionValidationService, SqlInjectionValidationService>();
         services.AddTransient<IWsOtp, WsOtp>();
-        services.AddSingleton<IOtpDat, OtpDat>();
+        services.AddTransient<IOtpDat, OtpDat>();
         services.AddTransient<ISessionControl, SessionControl>();
-        services.AddSingleton<ISesionDat, SesionDat>();
-        services.AddSingleton<IKeysDat, KeysDat>();
+        services.AddTransient<ISesionDat, SesionDat>();
+        services.AddTransient<IKeysDat, KeysDat>();
 
 
         //INTERFACES DE CASOS DE USO
-        services.AddSingleton<IBeneficiariosDat, BenficiariosDat>();
-        services.AddSingleton<ITransferenciasExternasDat, TransferenciasExternasDat>();
-        services.AddSingleton<ITransferenciasInternasDat, TransferenciasInternasDat>();
-        services.AddSingleton<IConsultaTransferencias, ConsultaTransferenciasDat>();
-        services.AddSingleton<IComprobanteTransferencia, ComprobanteTransferenciaDat>();
-        services.AddSingleton<IProgramacionDat, ProgramacionDat>();
+        services.AddTransient<IBeneficiariosDat, BenficiariosDat>();
+        services.AddTransient<ITransferenciasExternasDat, TransferenciasExternasDat>();
+        services.AddTransient<ITransferenciasInternasDat, TransferenciasInternasDat>();
+        services.AddTransient<IConsultaTransferencias, ConsultaTransferenciasDat>();
+        services.AddTransient<IComprobanteTransferencia, ComprobanteTransferenciaDat>();
+        services.AddTransient<IProgramacionDat, ProgramacionDat>();
 
 
         return services;

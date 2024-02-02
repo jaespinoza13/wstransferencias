@@ -2,6 +2,7 @@
 using Application.Common.Cryptography;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
 using System.Reflection;
@@ -13,27 +14,27 @@ namespace Infrastructure.gRPC_Clients.Sybase
     internal class KeysDat : IKeysDat
     {
         private readonly ApiSettings _settings;
-        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
+        private const string str_mensaje_error = "Error inesperado, intenta más tarde.";
 
-        public KeysDat(IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal)
+        public KeysDat(IOptionsMonitor<ApiSettings> options, ILogs logsService)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
 
             this.str_clase = GetType().FullName!;
-            _objClienteDal = objClienteDal;
         }
 
         public RespuestaTransaccion AddKeys(ReqAddKeys reqAddKeys)
         {
             var respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new();
-
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqAddKeys );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqAddKeys.str_ente } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_modulo", TipoDato = TipoDato.VarChar, ObjValue = reqAddKeys.str_modulo } );
@@ -61,10 +62,10 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqAddKeys, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqAddKeys.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
 
@@ -73,11 +74,12 @@ namespace Infrastructure.gRPC_Clients.Sybase
         public RespuestaTransaccion GetKeys(ReqGetKeys reqGetKeys)
         {
             var respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new();
-
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqGetKeys );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_llave_secreta", TipoDato = TipoDato.VarChar, ObjValue = reqGetKeys.str_clave_secreta } );
 
@@ -100,10 +102,10 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase( reqGetKeys, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( reqGetKeys.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
     }

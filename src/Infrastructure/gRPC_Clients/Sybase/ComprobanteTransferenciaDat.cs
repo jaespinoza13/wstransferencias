@@ -3,6 +3,7 @@ using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Transferencias;
 using Application.Transferencias.Comprobante;
+using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
 using System.Reflection;
@@ -14,29 +15,29 @@ namespace Infrastructure.gRPC_Clients.Sybase
     {
 
         private readonly ApiSettings _settings;
-        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
+        private const string str_mensaje_error = "Error inesperado, intenta más tarde.";
 
-        public ComprobanteTransferenciaDat(IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal)
+        public ComprobanteTransferenciaDat(IOptionsMonitor<ApiSettings> options, ILogs logsService)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
 
             this.str_clase = GetType().FullName!;
 
-            _objClienteDal = objClienteDal;
-
         }
 
         public async Task<RespuestaTransaccion> get_comprobante_transferencia(ReqComprobanteTransferencia reqComprobanteTransferencia)
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
 
                 DatosSolicitud ds = new DatosSolicitud();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
                 Funciones.llenarDatosAuditoriaSalida( ds, reqComprobanteTransferencia );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_num_referencia", TipoDato = TipoDato.Integer, ObjValue = reqComprobanteTransferencia.int_num_referencia.ToString() } );
@@ -65,11 +66,11 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add( "str_error", str_mensaje_error );
                 _logsService.SaveExcepcionDataBaseSybase( reqComprobanteTransferencia, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new Exception( reqComprobanteTransferencia.str_id_transaccion )!;
 
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
 
