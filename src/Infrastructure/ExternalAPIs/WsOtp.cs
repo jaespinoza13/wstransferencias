@@ -33,7 +33,6 @@ public class WsOtp : IWsOtp
     {
         var cabecera = new
         {
-
             int_id_sistema = Convert.ToInt32( header.str_id_sistema ),
             int_id_usuario = Convert.ToInt32( header.str_id_usuario ),
             str_usuario = header.str_login,

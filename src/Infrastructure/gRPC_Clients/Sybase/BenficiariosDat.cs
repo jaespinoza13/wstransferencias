@@ -1,4 +1,4 @@
-﻿using AccesoDatosGrpcAse.Neg;
+using AccesoDatosGrpcAse.Neg;
 using Application.Beneficiarios;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -282,6 +282,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_cta", TipoDato = TipoDato.VarChar, ObjValue = reqValidaOtrasCuentasBeneficiario.str_num_cta } );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente_registra", TipoDato = TipoDato.Integer, ObjValue = reqValidaOtrasCuentasBeneficiario.str_ente } );
+                ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_num_celular", TipoDato = TipoDato.VarChar, ObjValue = reqValidaOtrasCuentasBeneficiario.str_num_celular } );
 
                 //Variables de auditoria
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_sistema", TipoDato = TipoDato.Integer, ObjValue = reqValidaOtrasCuentasBeneficiario.str_id_sistema } );
@@ -295,7 +296,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_error", TipoDato = TipoDato.VarChar } );
                 ds.ListaPSalida.Add( new ParametroSalida { StrNameParameter = "@o_error_cod", TipoDato = TipoDato.Integer } );
 
-                ds.NombreSP = "validar_benef_otras_ctas_mego";
+                ds.NombreSP = "validar_benef_otras_ctas_mego2";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
                 var resultado = await _objClienteDal.ExecuteDataSetAsync( ds );
