@@ -7,10 +7,10 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '0.1.0'
+        VERSION_DESPLIEGUE  = '0.3.0'
         VERSION_PRODUCCION  = '0.0.0'
-        NOMBRE_CONTENEDOR   = 'cnt-ws-transferencias'
-        NOMBRE_IMAGEN       = 'img_ws_transferencias_mejoras'
+        NOMBRE_CONTENEDOR   = 'cnt-ws-transferencias-pc'
+        NOMBRE_IMAGEN       = 'img_ws_transferencias'
         PUERTO              = '8027'
         PUERTO_CONTENEDOR   = '80'
 		RUTA_CONFIG 		= '/config/wsTransferencias/'
