@@ -7,9 +7,9 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '0.3.0'
-        VERSION_PRODUCCION  = '0.0.0'
-        NOMBRE_CONTENEDOR   = 'cnt-ws-transferencias-pc'
+        VERSION_DESPLIEGUE  = '0.4.0'
+        VERSION_PRODUCCION  = '0.3.0'
+        NOMBRE_CONTENEDOR   = 'cnt-ws-transferencias-bmo-pc'
         NOMBRE_IMAGEN       = 'img_ws_transferencias'
         PUERTO              = '8027'
         PUERTO_CONTENEDOR   = '80'
