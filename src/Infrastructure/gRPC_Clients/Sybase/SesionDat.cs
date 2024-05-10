@@ -18,15 +18,14 @@ namespace Infrastructure.gRPC_Clients.Sybase
     internal class SesionDat : ISesionDat
     {
         private readonly ApiSettings _settings;
-        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
+        private const string str_mensaje_error = "Error inesperado, intenta más tarde.";
 
-        public SesionDat(IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal)
+        public SesionDat(IOptionsMonitor<ApiSettings> options, ILogs logsService)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
-            _objClienteDal = objClienteDal;
             this.str_clase = GetType().FullName!;
         }
 
@@ -34,10 +33,14 @@ namespace Infrastructure.gRPC_Clients.Sybase
         public RespuestaTransaccion ControlSesion(ValidaSesion validaSesion)
         {
             var respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new DatosSolicitud();
+
+                (grpcChannel, _objClienteDal) = Funciones.getConnection( _settings.client_grpc_sybase! );
+
                 Funciones.llenarDatosAuditoriaSalida( ds, validaSesion );
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_id_login", TipoDato = TipoDato.Integer, ObjValue = validaSesion.str_id_usuario.ToString() } );
@@ -62,10 +65,10 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add( "str_error", str_mensaje_error );
                 _logsService.SaveExcepcionDataBaseSybase( validaSesion, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException( validaSesion.str_id_transaccion );
             }
+            Funciones.setCloseConnection( grpcChannel );
             return respuesta;
         }
     }
