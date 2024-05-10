@@ -14,7 +14,7 @@ pipeline {
         PUERTO              = '9003'
         PUERTO_CONTENEDOR   = '80'
 		RUTA_CONFIG 		= '/config/wsTransferencias/'
-        RUTA_LOGS           = '/app/wsTransferenciasPC/'
+        RUTA_LOGS           = '/app/wsTransferencias/'
 		RUTA_COMPROBANTES   = '/plantillas/comprobantes/'
     }
 
@@ -36,7 +36,7 @@ pipeline {
         stage('Clean') {
             steps {
                 echo 'Cleaning ...'
-                sh 'docker rm -f servicio-transferencias'
+                sh 'docker rm -f ${NOMBRE_CONTENEDOR}'
             }
         }
 
