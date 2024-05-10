@@ -7,11 +7,11 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '0.4.0'
-        VERSION_PRODUCCION  = '0.3.0'
-        NOMBRE_CONTENEDOR   = 'cnt-ws-transferencias-bmo-pc'
+        VERSION_DESPLIEGUE  = '1.6.0'
+        VERSION_PRODUCCION  = '1.5.2'
+        NOMBRE_CONTENEDOR   = 'cnt-ws-transferencias'
         NOMBRE_IMAGEN       = 'img_ws_transferencias'
-        PUERTO              = '8027'
+        PUERTO              = '9003'
         PUERTO_CONTENEDOR   = '80'
 		RUTA_CONFIG 		= '/config/wsTransferencias/'
         RUTA_LOGS           = '/app/wsTransferenciasPC/'
@@ -36,7 +36,7 @@ pipeline {
         stage('Clean') {
             steps {
                 echo 'Cleaning ...'
-                sh 'docker rm -f ${NOMBRE_CONTENEDOR}'
+                sh 'docker rm -f servicio-transferencias'
             }
         }
 
@@ -46,7 +46,7 @@ pipeline {
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
                         -e TZ=${TZ} \
 						-v ${RUTA_LOGS}:/app/Logs/ \
-						-v ${RUTA_CONFIG}appsettings_bmo_mejoras.json:/app/appsettings.json \
+						-v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
                         -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
                         ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
                     '''
@@ -72,7 +72,7 @@ pipeline {
             sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
                     -e TZ=${TZ} \
 					-v ${RUTA_LOGS}:/app/Logs/ \
-					-v ${RUTA_CONFIG}appsettings_bmo_mejoras.json:/app/appsettings.json \
+					-v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
                     -v ${RUTA_COMPROBANTES}:/app/Comprobantes/ \
                     ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
                 '''
